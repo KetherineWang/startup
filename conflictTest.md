@@ -1,5 +1,5 @@
-Hongting (Ketherine) Wang\n
-CS 260 - Web Programming\n
-Professor Lee S. Jensen\n
-January 12, 2024\n
-GitHub - Practice using Git and resolving conflicts
+print(Hongting (Ketherine) Wang)
+print(CS 260 - Web Programming)
+print(Professor Lee S. Jensen)
+print(January 12, 2024)
+print(GitHub - Practice using Git and resolving conflicts)
