@@ -47,9 +47,9 @@ Startup Application for BYU CS 260
   - Efficiently updating and rendering components based on user interactions and real-time data.
 
 ### Design
-![Login Page Design](/LoginPageDesign.png)
-![Signup Page Design](/SignupPageDesign.png)
-![Game Entrance Page Design](/GameEntrancePageDesign.png)
-![Game Play Page Design](/GamePlayPageDesign.png)
-![User Score Page Design](/UserScorePageDesign.png)
-![Player Ranking Page Design](/PlayerRankingPageDesign.png)
+![Login Page Design](/Iamges/LoginPageDesign.png)
+![Signup Page Design](/Iamges/SignupPageDesign.png)
+![Game Entrance Page Design](/Iamges/GameEntrancePageDesign.png)
+![Game Play Page Design](/Iamges/GamePlayPageDesign.png)
+![User Score Page Design](/Iamges/UserScorePageDesign.png)
+![Player Ranking Page Design](/Iamges/PlayerRankingPageDesign.png)
