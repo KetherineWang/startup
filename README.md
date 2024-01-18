@@ -57,7 +57,7 @@ journey through the lyrical landscapes of his songs.
 ### Design
 ![Login Page Design](/Images/LoginPageDesign.png)
 ![Signup Page Design](/Images/SignupPageDesign.png)
-![Game Entrance Page Design](/Iamges/GameEntrancePageDesign.png)
+![Game Entrance Page Design](/Images/GameEntrancePageDesign.png)
 ![Game Play Page Design](/Images/GamePlayPageDesign.png)
 ![User Score Page Design](/Images/UserScorePageDesign.png)
 ![Player Ranking Page Design](/Images/PlayerRankingPageDesign.png)
