@@ -4,7 +4,14 @@ Startup Application for BYU CS 260
 ## Specification Deliverable
 
 ### Elevator Pitch
-
+Imagine diving into the world where melody meets poetry - this is the essence of this startup application, a unique 
+game centered around the enchanting lyrics of Keshi, the celebrated Vietnamese R&B singer-songwriter. Music is an art 
+form that weaves together the beauty of tunes and the depth of words, and Keshi's creations are a testament to this 
+magic. For those already familiar with his music, the game offers a new lens to appreciate the intricacies of his 
+lyrics. And for new listeners, it is an inviting gateway to discover the captivating melodies behind these words. This 
+app does not just entertain; it connects users to the art of music in a way that is interactive, engaging, and deeply 
+personal. Whether you are a long-time fan or just curious about Keshi's artistry, the game promises to be an immersive 
+journey through the lyrical landscapes of his songs.
 
 ### Key Features
 1. Secure account creation and login.
@@ -21,7 +28,8 @@ Startup Application for BYU CS 260
 ### Technologies
 - **HTML**
   - Structure for the game's main pages, login/sign-up forms, and gameplay interface.
-  - Organizational elements for displaying the lyric sentences, correct song name, and corresponding YouTube link, input field for the user's guess, like button for the user to react, and showing the user's score and player ranking.
+  - Organizational elements for displaying the lyric sentences, correct song name, and corresponding YouTube link, 
+  input field for the user's guess, like button for the user to react, and showing the user's score and player ranking.
 - **CSS**
   - Styling for the application, ensuring a visually appealing interface.
   - Responsive design for various screen sizes, and animation effects for transitions and notifications.
