@@ -48,3 +48,8 @@ Startup Application for BYU CS 260
 
 ### Design
 ![Login Page Design](/LoginPageDesign.png)
+![Signup Page Design](/SignupPageDesign.png)
+![Game Entrance Page Design](/GameEntrancePageDesign.png)
+![Game Play Page Design](/GamePlayPageDesign.png)
+![User Score Page Design](/UserScorePageDesign.png)
+![Player Ranking Page Design](/PlayerRankingPageDesign.png)
