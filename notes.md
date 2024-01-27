@@ -58,3 +58,55 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - SSL = Secure Sockets Layer
     - IETF - Internet Engineering Task Force
     - ACME = Automatic Certificate Management Environment
+
+# The Console
+- Before the creation of graphical user interfaces, all computing systems were simple console environments consisting of a prompt for inputting a command and the display of the command output.
+- All of the original programming tools ran as console applications.
+- The console tradition is still actively used by professional developers and most programming tools execute within a console window.
+- Also known as the command line, shell, or terminal, the console window is an essential web development tool.
+- The console provides access to the file system and allows for the execution of command line applications.
+- All operating systems come with a default console.
+- In order for you to successfully use the console for web programming, it must be POSIX compliant.
+- POSIX compliance means that it supports a standard set of console commands.
+- Both Mac and Linus support POSIX.
+- One of the primary purposes of a console application is to view the files on the computer.
+- The files on a computer are organized into a tree structure of nodes called directories.
+- At any given point in time, the console is located at one of the directories in the file system.
+- The other primary purpose of the console is to execute commands.
+- The input and output of commands can also be chained using special characters.
+    - "|" = Take the output from the command on the left and pipe or pass it to the command on the right.
+    - ">" = Redirect output to a file. Overwrites the file if it exists.
+    - ">>" = Redirect output to a file. Appends if file exists.
+- There are also keystrokes that have special meaning in the console.
+    - CTRL-R = Use type ahead to find previous commands.
+    - CTRL-C = Kill the currently running command
+- Acronyms and Terms
+    - POSIX = Portable Operating System Interface
+- Commands
+    - echo = output the parameters of the command
+    - cd = change directory
+    - mkdir = make directory
+    - rmdir = remove directory
+    - rm = remove file(s)
+    - mv = move file(s)
+    - cp = copy file(s)
+    - ls = list files
+    - curl = command line client URL browser
+    - grep = regular expression search
+    - find = find files
+    - top = view running processes with CPU and memory usage
+    - df = view disk statistics
+    - cat = output the content of a file
+    - less = interactively output the contents of a file
+    - wc = count the words in a file
+    - ps = view the currently running processes
+    - kill = kill a currently running process
+    - sudo = execute a command as a super user (admin)
+    - ssh = create a secure shell on a remote computer
+    - scp = securely copy files to a remote computer
+    - history = show the history of commands
+    - ping = check if a website is up
+    - tracert - trace the connections to a website
+    - dig = show the DNS information for a domain
+    - man = look up a command in the manual
+    - pwd = present working directory
