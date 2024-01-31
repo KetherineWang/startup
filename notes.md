@@ -2,11 +2,11 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 
 # Amazon Web Services - Route 53
 - Use a domain name to represent the web application to make it easy to remember and secure.
-- A domain name can be used to create DNS records that will map domain names to IP address (A records) or other domain names (CNAME records).
+- A domain name can be used to create DNS records that will map domain names to IP addresses (A records) or other domain names (CNAME records).
 - DNS Records
-    - Root Domain DNS Record = yourdomain
-    - Subdomain DNS Record = *.yourdomain
-        - `*` represents wildcard.
+    - Root Domain DNS Record = `yourdomain`
+    - Subdomain DNS Record = `*.yourdomain`
+        - `*` represents a wildcard.
     - Both root domain DNS record and subdomain DNS record have a record type, A.
 - Other Records Types
     - The name server (NS) record contains the names of the authoritative name servers that authorize the user to place DNS records in the DNS server. 
@@ -21,17 +21,17 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 
 # HTTPS, TLS, and Web Certificates
 - Usually, only websites that do commerce need a secure connection.
-- The web moved from simple document servers (Web 1.0) to full on web applications (Web 2.0).
+- The web moved from simple document servers (Web 1.0) to full-on web applications (Web 2.0).
 - Web 2.0 accepts information from users and displays that information within the application.
-- Without a secure connection, anyone that has access to the network traffic, at any point, from the user's computer to the server handling the request could easily capture all the data sent in either direction.
+- Without a secure connection, anyone who has access to the network traffic, at any point, from the user's computer to the server handling the request could easily capture all the data sent in either direction.
 - HTTPS and TLS
     - The secure version of HTTP is called Secure Hypertext Transport Protocol (HTTPS).
     - This is basically HTTP with a negotiated secure connection that happens before any data is exchanged.
     - Having a secure connection means that all the data is encrypted using the TLS protocol.
-    - TLS is sometimes referred to by a now unsecure predecessor protocol named SSL.
+    - TLS is sometimes referred to by a now unsecured predecessor protocol named SSL.
     - TLS works by negotiating a shared secret that is then used to encrypt data.
     - `curl -v -s https://byu.edu > /dev/null`
-        - The actual negotiation that happens can be seen by using the console browser based application `curl`, along with the `-v` parameter to see the verbose output of the HTTPS exchange.
+        - The actual negotiation that happens can be seen by using the console browser-based application `curl`, along with the `-v` parameter to see the verbose output of the HTTPS exchange.
         - The `> /dev/null` redirection throws away the actual HTTP response, since we only care about the negotiation, by redirecting the output to the null device.
     - A core piece of the handshake of the negotiation is the exchange of a web certificate that identifies the domain name of the server creating the secure connection.
     - The browser will compare the certificate domain name to the one represented in the URL, and if they do not match, or the certificate is invalid or out of date, it will display a massive warning.
@@ -64,14 +64,14 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - All of the original programming tools ran as console applications.
 - The console tradition is still actively used by professional developers and most programming tools execute within a console window.
 - Also known as the command line, shell, or terminal, the console window is an essential web development tool.
-- The console provides access to the file system and allows for the execution of command line applications.
+- The console provides access to the file system and allows for the execution of command-line applications.
 - All operating systems come with a default console.
 - In order to successfully use the console for web programming, it must be POSIX compliant.
 - POSIX compliance means that it supports a standard set of console commands.
 - Both Mac and Linus support POSIX.
 - One of the primary purposes of a console application is to view the files on the computer.
 - The files on a computer are organized into a tree structure of nodes called directories.
-- At any given point in time, the console is located at one of the directories in the file system.
+- At any given point in time, the console is located in one of the directories in the file system.
 - The other primary purpose of the console is to execute commands.
 - The input and output of commands can also be chained using special characters.
     - `|` = Take the output from the command on the left and pipe or pass it to the command on the right.
@@ -149,7 +149,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - Form Element
     - The main purpose of the form `element` is to submit the values of the inputs it contains.
     - Before JavaScript was introduced, the `form` container element was essential because it was the only way for the browser to send the input data to a web server as part of a request to process the input and generate a new web page displaying the result of the input.
-    - For example, in a single page application, the JavaScript will dynamically rebuild the HTML elements to reflect the results of the user interaction.
+    - For example, in a single-page application, the JavaScript will dynamically rebuild the HTML elements to reflect the results of the user interaction.
     - With this ability, the data may not even be sent to the server.
     - This greatly reduces the necessity of the `form` element, but it is often still used simply as a container.
 - Example:
@@ -198,7 +198,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - This means that they will not accept a value that is not, for example, a number, a URL, outside of a range, or an email address.
     - The `required` attribute can also be specified on an input element to mark it as requiring a value before it can be submitted.
     - The `pattern` attribute exists on `text`, `search`, `url`, `tel`, `email`, and `password` inputs.
-    - When present, the `pattern` attribute provides a regular expression that must match for the input to be considered as valid.
+    - When present, the `pattern` attribute provides a regular expression that must match for the input to be considered valid.
     - Validation should also be built into HavaScript for checking input data to ensure everything is valid before it is submitted.
     - All of the input elements support functions for determining their validation state.
     - Additionally, there are CSS style selectors for visualizing the validity of the input.
@@ -218,7 +218,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
             - `.*`: This part of the pattern is a regular expression that matches any sequence of characters (including no characters at all). The dot `.` represents any character (except newline), and the asterisk `*` means "zero or more occurrences of the preceding element."
     - `<!-- Submit form with POST method and enctype="multipart/form-data" to send file contents. -->`
         - `POST` Method: When a form is submitted with the `method="post"` attribute, the form data is sent in the request body, not in the URL. This is typically used for sending large amounts of data and is more secure than `GET` because the data does not appear in the URL.
-        - `enctype="multipart/form-data"`: This attribute specifies how the form data should be encoded when submitting it to the server. The `enctype="multipart/form-data"` is necessary when a form includes any `<input type="file">` elements because it allows files to be uploaded to the server. It is used when the form is meant to perform file upload along with other text fields.
+        - `enctype="multipart/form-data"`: This attribute specifies how the form data should be encoded when submitting it to the server. The `enctype="multipart/form-data"` is necessary when a form includes any `<input type="file">` elements because it allows files to be uploaded to the server. It is used when the form is meant to perform file uploads along with other text fields.
     - `<input type="tel" id="tel" name="varTel" placeholder="###-####" pattern="\d{3}-\d{4}" />`
         - The `pattern="\d{3}-\d{4}"` attribute in an HTML `<input type="tel">` element is a regular expression that specifies a validation pattern the inputted data must match for the form to be submitted. Let's break down what this specific pattern means:
             - `\d`: This represents a digit (0-9). It is a shorthand character class in regular expressions that matches any single digit.
@@ -233,7 +233,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - The `img`, `audio`, and `video` elements are all simple references to an external file, but `svg` and `canvas` both contain the code to render a visual image that can even be animated.
 - External Media
     - The media tags that reference external media all take a URL as an attribute.
-    - The path represented by the URL can either be a relative path or full path.
+    - The path represented by the URL can either be a relative path or a full path.
     -  A full path includes the protocol. domain name, and path to the file.
         - https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg
     - A relative path references a file that is served from the same location as the HTML page rendering the element.
@@ -248,22 +248,22 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - Audio
     - To include an audio file in the content, use the `audio` element and specify the `src` attribute with the URL to the source audio file.
     - The `controls` attribute can be included to enable the user to control the audio playback.
-    - If the `controls` are not displayed, then there is no visual representation of the audio in the rendered page.
+    - If the `controls` are not displayed, then there is no visual representation of the audio on the rendered page.
     - The `autoplay` attribute starts the audio playing as soon as the audio file is loaded, and the `loop` attribute keeps it playing over and over.
     - Note that automatically playing audio is strongly discouraged unless a way for the user to opt-in to that behavior is provided.
         - `<audio controls src="testAudio.mp3"></audio>`
 - Video
     - To include a video in the content, use the `video` element and specify the `src` attribute with the URL to the source video.
     - Like the `audio` element, the `controls` or `autoplay` attributes can be included.
-    - Note that the `crossorigin="anonymous"` attribute may need to be included if requesting fils from a different domain than the one serving your content.
+    - Note that the `crossorigin="anonymous"` attribute may need to be included if requesting files from a different domain than the one serving the content.
 - Example:
 - `<video controls width="300" crossorigin="anonymous">`
     - `<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />`
 - `</video>`
 - Internal Media
-- The internal media elements `svg` and `canvas` allow you to actually create images directly within your HTML.
+- The internal media elements `svg` and `canvas` allow the programmer to actually create images directly within the HTML.
     - Scalable Vector Graphics (SVG)
-        - SCG is an extremely powerful and widely supported way to render graphics inline in your HTML.
+        - SCG is an extremely powerful and widely supported way to render graphics inline in HTML.
 - Example:
 - `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" stroke="red" fill="red" style="border: 1px solid #000000">`
     - `<circle cx="150" cy="100" r="50" />`
@@ -302,3 +302,74 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - In other words, inline elements do not disrupt the flow of a block element's content.
     - For example, the block element `div` could have an inline element `b` in order to bring attention to a portion of its sub-text.
     - Likewise, a `p` element could have a `span` to mark the paragraph's sub-text as a person's name.
+
+# Startup HTML
+- An HTML file is needed for each of the main components of the application.
+- The default component of the application must be represented in a file named `index.html` since that is the file a browser will load by default.
+- A placeholder is needed for all the technologies that will eventually be needed to represent the application.
+    - Application data: A rendering of application data that will eventually populate.
+    - For Simon, this is the simple SVG graphic buttons, the user name, and a random inspirational quote.
+    - Authentication: An input for the user to create an account and login.
+    - The user's name should be displayed after they log in.
+    - Database data: A rendering of application data that is stored in the database.
+    - For Simon, this is the highest score of all players.
+    - WebSocket data: A rendering of data that is received from the server.
+    - This may be real-time data sent from other users (e.g. chat or scoring data), or real-time data that the service is generating (e.g. stock prices or latest high scores).
+    - For Simon, this updates every time another user creates or ends a game.
+- Once the application is developed to where it is wanted, it needs to be released to the production environment.
+- `./deployFiles.sh -k <yourpemkey> -h <yourdomain> -s startup`
+- Doing this will make this deliverable of the startup available from `https://startup.yourdomainname`.
+
+# Simon HTML
+- index.html
+    - `<meta charset="UTF-8" />`
+        - A metadata element in HTML is used to provide information about the HTML document, which is not displayed directly on the web page itself. This information is primarily intended for web browsers, search engines, and other automated systems that process the web page. Metadata elements are placed within the `<head>` section of an HTML document.
+        - `UTF-8`: This is a character encoding that encompasses almost all characters and symbols in use around the world. By specifying UTF-8, you ensure that the browser correctly interprets the text in your HTML document. This is especially important for displaying non-ASCII characters like those found in many languages other than English. Without this specification, browsers might default to a different encoding, potentially misinterpreting special characters in your document.
+    - `<link rel="icon" href="favicon.ico" />`
+        - `<link>` Tag: This tag defines the relationship between the current document and an external resource. It is placed within the `<head>` section of an HTML document.
+        - `rel="icon"`: The `rel` (relationship) attribute specifies the type of relationship that the document has with the linked resource. In this case, `icon` indicates that the linked resource is an icon representing the document.
+        - `href="favicon.ico"`: The href attribute specifies the path to the icon file. In this example, it points to a file named favicon.ico. This file should be located in the same directory as the HTML file or the path should be adjusted to point to the correct location where the icon file is stored.
+    - `<hr />`
+        - The `<hr />` tag in HTML is used to create a horizontal rule or line across the webpage. It serves as a thematic break in an HTML page, often to divide content or to denote a shift in topic within a page. It is self-closing.
+    - `<br />`
+        - The `<br />` tag in HTML is used to insert a line break in the text. It stands for "break" and is typically employed to create a new line in the content, without starting a new paragraph. It is self-closing.
+- play.html
+    - The `class` attribute
+        - CSS Styling: The primary reason for using the class attribute is to define a specific scope for CSS styling. By assigning a class to an HTML element, you can target that element in your CSS stylesheet to apply specific styles. For example, any CSS rules defined for the class `player-name` will apply to all elements with that class.
+        - JavaScript Interaction: Classes can also be used as selectors in JavaScript to manipulate elements. For instance, you can easily select all elements with the class player-name and apply JavaScript functions to them.
+    - When to use `<div>`?
+        - Grouping Elements: `<div>` is commonly used to group together elements for styling purposes. By placing a set of elements inside a `<div>`, you can apply CSS styles to them collectively, rather than individually.
+        - Layout Purposes: `<div>` elements are often used as containers to create different sections or areas within a web page, such as headers, footers, navigation bars, or content sections. 
+        - Applying CSS Classes or IDs: When you want to apply specific CSS classes or IDs to a part of your webpage for styling or scripting purposes, wrapping these elements in a `<div>` can be an efficient way to do this.
+        - JavaScript Targeting: If you need a container to target with JavaScript—for instance, to dynamically load content or handle user interactions—a `<div>` can serve as a useful hook.
+    - `<svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">`
+        - `aria-hidden="true"`
+            - Accessibility: The attribute tells assistive technologies to skip the SVG element. This is useful when the SVG is purely decorative and does not contribute to the understanding of the page's content, or when an alternative representation of the SVG content is provided elsewhere on the page.
+            - Screen Readers: Screen readers and other assistive technologies will not read or describe the content of the SVG element. This helps prevent redundant or irrelevant information from being announced to users who rely on these technologies.
+        - `<path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />`
+            - `d="M 95,5 95,95 5,95 Q 5,5 95,5"`
+                - `M 95,5`: The `M` command stands for "moveto". It moves the pen to a new location without drawing anything. Here, it moves to the point (95,5).
+                - `95,95 5,95`: After moving to (95,5), the pen draws a line to (95,95), then another line to (5,95). This is implied by the lack of a command letter before the coordinates, meaning it continues the last command, which in this case is drawing a line.
+                - `Q 5,5 95,5`: The Q command stands for a quadratic Bézier curve. This curve requires two points: the control point and the endpoint. The control point (5,5) determines the curvature, and the endpoint (95,5) is where the curve finishes.
+- deployFiles.sh
+    - Shebang (`#!/bin/bash`)
+        - This line indicates that the script should be executed using Bash, a common Unix shell.
+    - Option Parsing (`getopts`)
+        - The `getopts` command is used to parse command-line options. In this script, it looks for three options: `-k`, `-h`, and `-s`.
+            - `-k` is for specifying a PEM key file, which is likely used for SSH authentication.
+            - `-h` is for specifying the hostname of the remote server.
+            - `-s` is for specifying the service name.
+    - Variables (`key`, `hostname`, `service`)
+        - These variables are assigned the values provided from the command line options.
+    - Input Validation
+        - The script checks if any of the variables key, hostname, or service are empty. If any are, it prints an error message and exits.
+    - Deployment Notification
+        - If all required parameters are provided, the script prints a message indicating that it's deploying files for the specified service to the specified hostname using the provided key.
+    - Step 1: Clearing Previous Distribution
+        - The script logs into the remote server (`ubuntu@$hostname`) using SSH with the specified key.
+        - Once logged in, it removes the existing `public` directory within the specified service's directory and then creates a new `public` directory.
+            - `rm -rf services/${service}/public`: Removes the existing public directory.
+            - `mkdir -p services/${service}/public`: Creates a new public directory, along with any necessary parent directories.
+    - Step 2: Copying Distribution Package
+        - The script then uses scp (secure copy) to copy the distribution package to the target server.
+            - `scp -r -i "$key" * ubuntu@$hostname:services/$service/public`: This copies all files (`*`) from the current directory on the local machine to the `public` directory of the service on the remote server.
