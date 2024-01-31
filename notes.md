@@ -1,12 +1,12 @@
 I learned git add ., git commit -m, git push, git fetch, git status, git pull, and how to resolve merge conflicts.
 
 # Amazon Web Services - Route 53
-- Use a domain name to represent your web application to make it easy to remember and secure.
+- Use a domain name to represent the web application to make it easy to remember and secure.
 - A domain name can be used to create DNS records that will map domain names to IP address (A records) or other domain names (CNAME records).
 - DNS Records
     - Root Domain DNS Record = yourdomain
     - Subdomain DNS Record = *.yourdomain
-        - "*" represents wildcard.
+        - `*` represents wildcard.
     - Both root domain DNS record and subdomain DNS record have a record type, A.
 - Other Records Types
     - The name server (NS) record contains the names of the authoritative name servers that authorize the user to place DNS records in the DNS server. 
@@ -30,9 +30,9 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - Having a secure connection means that all the data is encrypted using the TLS protocol.
     - TLS is sometimes referred to by a now unsecure predecessor protocol named SSL.
     - TLS works by negotiating a shared secret that is then used to encrypt data.
-    - "curl -v -s https://byu.edu > /dev/null"
-        - The actual negotiation that happens can be seen by using the console browser based application "curl", along with the "-v" parameter to see the verbose output of the HTTPS exchange.
-        - The "> /dev/null" redirection throws away the actual HTTP response, since we only care about the negotiation, by redirecting the output to the null device.
+    - `curl -v -s https://byu.edu > /dev/null`
+        - The actual negotiation that happens can be seen by using the console browser based application `curl`, along with the `-v` parameter to see the verbose output of the HTTPS exchange.
+        - The `> /dev/null` redirection throws away the actual HTTP response, since we only care about the negotiation, by redirecting the output to the null device.
     - A core piece of the handshake of the negotiation is the exchange of a web certificate that identifies the domain name of the server creating the secure connection.
     - The browser will compare the certificate domain name to the one represented in the URL, and if they do not match, or the certificate is invalid or out of date, it will display a massive warning.
 - Web Certificates
@@ -66,7 +66,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - Also known as the command line, shell, or terminal, the console window is an essential web development tool.
 - The console provides access to the file system and allows for the execution of command line applications.
 - All operating systems come with a default console.
-- In order for you to successfully use the console for web programming, it must be POSIX compliant.
+- In order to successfully use the console for web programming, it must be POSIX compliant.
 - POSIX compliance means that it supports a standard set of console commands.
 - Both Mac and Linus support POSIX.
 - One of the primary purposes of a console application is to view the files on the computer.
@@ -74,39 +74,217 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - At any given point in time, the console is located at one of the directories in the file system.
 - The other primary purpose of the console is to execute commands.
 - The input and output of commands can also be chained using special characters.
-    - "|" = Take the output from the command on the left and pipe or pass it to the command on the right.
-    - ">" = Redirect output to a file. Overwrites the file if it exists.
-    - ">>" = Redirect output to a file. Appends if file exists.
+    - `|` = Take the output from the command on the left and pipe or pass it to the command on the right.
+    - `>` = Redirect output to a file. Overwrites the file if it exists.
+    - `>>` = Redirect output to a file. Appends if file exists.
 - There are also keystrokes that have special meaning in the console.
-    - CTRL-R = Use type ahead to find previous commands.
-    - CTRL-C = Kill the currently running command
+    - `CTRL-R`= Use type ahead to find previous commands.
+    - `CTRL-C` = Kill the currently running command
 - Acronyms and Terms
     - POSIX = Portable Operating System Interface
 - Commands
-    - echo = output the parameters of the command
-    - cd = change directory
-    - mkdir = make directory
-    - rmdir = remove directory
-    - rm = remove file(s)
-    - mv = move file(s)
-    - cp = copy file(s)
-    - ls = list files
-    - curl = command line client URL browser
-    - grep = regular expression search
-    - find = find files
-    - top = view running processes with CPU and memory usage
-    - df = view disk statistics
-    - cat = output the content of a file
-    - less = interactively output the contents of a file
-    - wc = count the words in a file
-    - ps = view the currently running processes
-    - kill = kill a currently running process
-    - sudo = execute a command as a super user (admin)
-    - ssh = create a secure shell on a remote computer
-    - scp = securely copy files to a remote computer
-    - history = show the history of commands
-    - ping = check if a website is up
-    - tracert - trace the connections to a website
-    - dig = show the DNS information for a domain
-    - man = look up a command in the manual
-    - pwd = present working directory
+    - `echo` = output the parameters of the command
+    - `cd` = change directory
+    - `mkdir` = make directory
+    - `rmdir` = remove directory
+    - `rm` = remove file(s)
+    - `mv` = move file(s)
+    - `cp` = copy file(s)
+    - `ls` = list files
+    - `curl` = command line client URL browser
+    - `grep` = regular expression search
+    - `find` = find files
+    - `top` = view running processes with CPU and memory usage
+    - `df` = view disk statistics
+    - `cat` = output the content of a file
+    - `less` = interactively output the contents of a file
+    - `wc` = count the words in a file
+    - `ps` = view the currently running processes
+    - `kill` = kill a currently running process
+    - `sudo` = execute a command as a super user (admin)
+    - `ssh` = create a secure shell on a remote computer
+    - `scp` = securely copy files to a remote computer
+    - `history` = show the history of commands
+    - `ping` = check if a website is up
+    - `tracert` - trace the connections to a website
+    - `dig` = show the DNS information for a domain
+    - `man` = look up a command in the manual
+    - `pwd` = present working directory
+
+# HTML Input
+- HTML Elements
+    - `form`
+        - Input container and submission 
+        - `<form action="form.html" method="post">`
+            - The `method="post"` attribute in an HTML form specifies how the browser should send form data to the server. When using `method="post"`, the form data is sent in the body of the HTTP request, not in the URL.
+            - The `POST` method is typically used for forms that change server data (like database updates), while the `GET` method is used for forms that request data without side effects (like a search form).
+    - `fieldset`
+        - Labeled input group
+        - `<fieldset> ... </fieldset>`
+            - The `<fieldset>` tag in HTML is used to group related elements within a form. It draws a box around the related form items, making the form easier to understand and navigate. This is particularly useful when a form has multiple sections or categories of inputs.
+    - `input`
+        - Multiple types of user input
+            - `<input type=" />`
+    - `select`
+        - Selection dropdown
+        - `<select><option>1</option></select>`
+    - `optgroup`
+        - Grouped selection dropdown
+        - `<optgroup><option>1</option></optgroup>`
+    - `option`
+        - Selection option
+        - `<option selected>option2</option>`
+    - `textarea`
+        - Multiline text input
+        - `<textarea></textarea>`
+    - `label`
+        - Individual input label
+        - `<label for="range">Range: </label>`
+    - `output`
+        - Output of input
+        - `<output for="range">0</output>`
+    - `meter`
+        - Display value with a known range
+        - `<meter min="0" max="100" value="50"></meter>`
+- Form Element
+    - The main purpose of the form `element` is to submit the values of the inputs it contains.
+    - Before JavaScript was introduced, the `form` container element was essential because it was the only way for the browser to send the input data to a web server as part of a request to process the input and generate a new web page displaying the result of the input.
+    - For example, in a single page application, the JavaScript will dynamically rebuild the HTML elements to reflect the results of the user interaction.
+    - With this ability, the data may not even be sent to the server.
+    - This greatly reduces the necessity of the `form` element, but it is often still used simply as a container.
+- Example:
+- `<form action="submission.html" method="post">`
+    - `<label for="ta">TextArea: </label>`
+    - `<textarea id="ta" name="ta-id">`
+- `Some text`
+    - `</textarea>`
+    - `<button type="submit">Submit</button>`
+- `</form>`
+    - The `for` attribute in the `<label>` tag specifies which form element a label is bound to. In this case, `for="ta"` means that this label is associated with the form element that has the id of `"ta"`.
+    - The `id` attribute specifies a unique id for the HTML element. It is used here to link the `<textarea>` with its `<label>`. Since the id is  `"ta"`, it matches the `for="ta"` in the `<label>`, establishing the connection between them.
+    - The `name` attribute is named `"ta-id"` in the `<textarea>`. This is important for when the form is submitted. The data entered into this `<textarea>` will be sent to the server as part of the HTTP request with `"ta-id"` as the key. For instance, if a user types "Hello" in the textarea, the server receives this data in the form of ta-id=Hello.
+    - Pressing the submit button sends the following data to the web server.
+    - The browser generates the data by combining the textarea's `name` attribute with the current value of the textarea.
+        - ta-id=Some+text
+- Input Elements
+    - The input elements represent many different input types.
+    - The type of input is set with the `type` attribute.
+    - Different input types include different flavors of textual, numeric, date, and color inputs.
+        - `text` = single line textual value
+        - `pass` = obscured password
+        - `email` = email address
+        - `tel` = telephone number
+        - `url` = URL address
+        - `number` = numerical value
+        - `checkbox` = inclusive selection
+        - `radio` = exclusive selection
+        - `range` = range limited number
+        - `date` = year, month, day
+        - `datetime-local` = date and time
+        - `month` = year, month
+        - `week` = week of year
+        - `color` = color
+        - `file` = local file
+        - `submit` = button to trigger form submission
+    - In order to create an input, the desired `type` attribute is specified along with any other attribute associated with that specific input.
+- Example: `<label for="checkbox1">Check me</label> <input type="checkbox" name="varCheckbox" value="checkbox1" checked />`
+    - Most input elements share some common attributes.
+        - `name` = The name of the input. This is submitted as the name of the input if used in a form.
+        - `disabled` = Disables the ability for the user to interact with the input.
+        - `value` = The initial value of the input
+        - `required` = Signifies that a value is required in order to be valid.
+- Input Validation
+    - Several of the input elements have validation built into them.
+    - This means that they will not accept a value that is not, for example, a number, a URL, outside of a range, or an email address.
+    - The `required` attribute can also be specified on an input element to mark it as requiring a value before it can be submitted.
+    - The `pattern` attribute exists on `text`, `search`, `url`, `tel`, `email`, and `password` inputs.
+    - When present, the `pattern` attribute provides a regular expression that must match for the input to be considered as valid.
+    - Validation should also be built into HavaScript for checking input data to ensure everything is valid before it is submitted.
+    - All of the input elements support functions for determining their validation state.
+    - Additionally, there are CSS style selectors for visualizing the validity of the input.
+    - In order to have a good user experience, it is critical that sufficient user feedback is provided early in the input process.
+    - A good design will give feedback as, or before, the user begins to input.
+    - A poor design will keep the user guessing as to why the data is not being accepted, or even if it was accepted.
+- CodenPen Assignment
+    - `<ul>`
+        - In HTML, the `<ul>` tag stands for "Unordered List." It is a way to create a list of items that do not have a specific order or hierarchy. The `<ul>` tag is typically used for bulleted lists, where the order of items is not important.
+        - Here is how to use the `<ul>` tag:
+            - Wrap the entire list with `<ul>` tags.
+            - Each item in the list is placed within an `<li>` (List Item) tag.
+    - `<input type="text" id="text" name="varText" placeholder="text here" required pattern="[Aa].*" />`
+        - The `pattern="[Aa].*"` attribute in HTML is used within an `<input>` element, typically of `type="text"` or similar, to specify a regular expression that the input's value must match in order for the form to be submitted.
+        - Here is a breakdown of what this specific pattern means:
+            - `Aa`: This part of the pattern means that the input value must start with either an uppercase "A" or a lowercase "a".
+            - `.*`: This part of the pattern is a regular expression that matches any sequence of characters (including no characters at all). The dot `.` represents any character (except newline), and the asterisk `*` means "zero or more occurrences of the preceding element."
+    - `<!-- Submit form with POST method and enctype="multipart/form-data" to send file contents. -->`
+        - `POST` Method: When a form is submitted with the `method="post"` attribute, the form data is sent in the request body, not in the URL. This is typically used for sending large amounts of data and is more secure than `GET` because the data does not appear in the URL.
+        - `enctype="multipart/form-data"`: This attribute specifies how the form data should be encoded when submitting it to the server. The `enctype="multipart/form-data"` is necessary when a form includes any `<input type="file">` elements because it allows files to be uploaded to the server. It is used when the form is meant to perform file upload along with other text fields.
+    - `<input type="tel" id="tel" name="varTel" placeholder="###-####" pattern="\d{3}-\d{4}" />`
+        - The `pattern="\d{3}-\d{4}"` attribute in an HTML `<input type="tel">` element is a regular expression that specifies a validation pattern the inputted data must match for the form to be submitted. Let's break down what this specific pattern means:
+            - `\d`: This represents a digit (0-9). It is a shorthand character class in regular expressions that matches any single digit.
+            - `{3}`: This quantifier specifies that exactly three occurrences of the preceding element (in this case, a digit) must be present.
+            - `-`: This is a literal dash character. It must appear exactly as it is in the user's input.
+            - `\d{4}`: This means that four digits must follow the dash.
+    - `<output id="rangeOutput" for="range">0</output>`
+        - The `<output>` element in conjunction with the `<input type="range">` serves as a way to display the current value of the range input dynamically. This is particularly useful for providing immediate visual feedback to the user, as the default range input does not always show the current value while it is being adjusted.
+
+# HTML Media
+- The HTML elements that represent media include `img`, `augio`, `video`, `svg`, and `canvas`.
+- The `img`, `audio`, and `video` elements are all simple references to an external file, but `svg` and `canvas` both contain the code to rende a visual image that can even be animated.
+- External Media
+    - The media tags that reference external media all take a URL as an attribute.
+    - The path represented by the URL can either be a relative path or full path.
+    -  A full path includes the protocol. domain name, and path to the file.
+        - https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg
+    - A relative path references a file that is served from the same location as the HTML page rendering the element.
+    - The path should be made as relative as possible so that the code can be moved around without having to actually adjust all of the external page references.
+    - For example, if the HTML page is located in a directory with a subdirectory named `images` that contains a file named `photo.jpg`, a relative path would be used as follows.
+        - images/photo.jpg
+- Image
+    - To include an image in the content, use the `img` element and specify the `src` attribute with the URL to the source image.
+    - In order to support accessibility, an `alt` attribute should also be included that describes the image.
+    - A full `img` element would look like the following:
+        - `<img alt="mountain landscape" src="https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg" />`
+- Audio
+    - To include an audio file in the content, use the `audio` element and specify the `src` attribute with the URL to the source audio file.
+    - The `controls` attribute can be included to enable the user to control the audio playback.
+    - If the `controls` are not displayed, then there is no visual representation of the audio in the rendered page.
+    - The `autoplay` attribute starts the audio playing as soon as the audio file is loaded, and the `loop` aatribute keeps it playing over and over.
+    - Note that automatically playing audio is strongly discouraged unless a way for the user to opt-in to that behavior is provided.
+        - `<audio controls src="testAudio.mp3"></audio>`
+- Video
+    - To include a video in the content, use the `video` element and specify the `src` attribute with the URL to the source video.
+    - Like the `audio` element, the `controls` or `autuplay` attributes can be included.
+    - Note that the `crossorigin="anonymous"` attribute may need to be included if requesting fils from a different domain than the one serving your content.
+- Exmaple:
+- `<video controls width="300" crossorigin="anonymous">`
+    - `<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />`
+- `</video>`
+- Internal Media
+    - Scalable Vector Graphics (SVG)
+        - 
+    - Canvas
+
+# HTML Structure
+- The two major purposes of HTML is to provide structure and content to the web application.
+- Some of the common HTML structural elements include `body`, `header`, `footer`, `main`, `section`, `aside`, `p`, `table`, `ol/ul`, `div`, and `span`.
+- HTML Structural Elements
+    - `p` = paragraph
+    - `b` = bold
+    - `nav` = navigation
+    - `div` = division
+    - `aside` = content that does not fit the content flow of the sections
+- Tags
+    - `<a>` = anchor
+        - Each `<a>` element has an `href` attribute that points to the respective websites.
+    - `<tr>` = table row
+    - `<th>` = table header
+    - `<td>` = table data
+- Properly representing the page structure using the elements is important not only so it makes logical sense to a programming, but also so that automated tools like search indexing crawlers and accessibility screen readers can correctly interpret the document.
+- Block and Inline
+    - There is a distinction between structure elements that are block vs. inline.
+    - A block element is meant to be a distinct block in the flow of the content structure.
+    - An inline element is meant to be inline with the content flow of a block element.
+    - In other words, inline elements do not disrupt the flow of a block element's content.
+    - For example, the block element `div` could have an inline element `b` in order to brign attention to a portion of its sub-text.
+    - Likewise, a `p` element could have a `span` to mark the paragraph's sub-text as a person's name.
