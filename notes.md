@@ -360,11 +360,11 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
             - `-h` is for specifying the hostname of the remote server.
             - `-s` is for specifying the service name.
     - Variables (`key`, `hostname`, `service`)
-        - These variables are assigned the values provided from the command line options.
+        - These variables are assigned the values provided by the command line options.
     - Input Validation
         - The script checks if any of the variables key, hostname, or service are empty. If any are, it prints an error message and exits.
     - Deployment Notification
-        - If all required parameters are provided, the script prints a message indicating that it's deploying files for the specified service to the specified hostname using the provided key.
+        - If all required parameters are provided, the script prints a message indicating that it is deploying files for the specified service to the specified hostname using the provided key.
     - Step 1: Clearing Previous Distribution
         - The script logs into the remote server (`ubuntu@$hostname`) using SSH with the specified key.
         - Once logged in, it removes the existing `public` directory within the specified service's directory and then creates a new `public` directory.
