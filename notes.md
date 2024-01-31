@@ -230,7 +230,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 
 # HTML Media
 - The HTML elements that represent media include `img`, `augio`, `video`, `svg`, and `canvas`.
-- The `img`, `audio`, and `video` elements are all simple references to an external file, but `svg` and `canvas` both contain the code to rende a visual image that can even be animated.
+- The `img`, `audio`, and `video` elements are all simple references to an external file, but `svg` and `canvas` both contain the code to render a visual image that can even be animated.
 - External Media
     - The media tags that reference external media all take a URL as an attribute.
     - The path represented by the URL can either be a relative path or full path.
@@ -249,21 +249,35 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - To include an audio file in the content, use the `audio` element and specify the `src` attribute with the URL to the source audio file.
     - The `controls` attribute can be included to enable the user to control the audio playback.
     - If the `controls` are not displayed, then there is no visual representation of the audio in the rendered page.
-    - The `autoplay` attribute starts the audio playing as soon as the audio file is loaded, and the `loop` aatribute keeps it playing over and over.
+    - The `autoplay` attribute starts the audio playing as soon as the audio file is loaded, and the `loop` attribute keeps it playing over and over.
     - Note that automatically playing audio is strongly discouraged unless a way for the user to opt-in to that behavior is provided.
         - `<audio controls src="testAudio.mp3"></audio>`
 - Video
     - To include a video in the content, use the `video` element and specify the `src` attribute with the URL to the source video.
-    - Like the `audio` element, the `controls` or `autuplay` attributes can be included.
+    - Like the `audio` element, the `controls` or `autoplay` attributes can be included.
     - Note that the `crossorigin="anonymous"` attribute may need to be included if requesting fils from a different domain than the one serving your content.
-- Exmaple:
+- Example:
 - `<video controls width="300" crossorigin="anonymous">`
     - `<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />`
 - `</video>`
 - Internal Media
+- The internal media elements `svg` and `canvas` allow you to actually create images directly within your HTML.
     - Scalable Vector Graphics (SVG)
-        - 
+        - SCG is an extremely powerful and widely supported way to render graphics inline in your HTML.
+- Example:
+- `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" stroke="red" fill="red" style="border: 1px solid #000000">`
+    - `<circle cx="150" cy="100" r="50" />`
+- `</svg>`
+    - `viewBox="0 0 300 200"`: This attribute defines the position and dimension, in user space, of an SVG viewport. Here, it is creating a viewport of 300 units wide and 200 units high.
+    - `xmlns="http://www.w3.org/2000/svg"`: This specifies the XML namespace for SVG. It is necessary for the SVG to be correctly interpreted.
+    - `stroke="red"` and `fill="red"`: These attributes set the stroke (border) and fill (interior) colors of all shapes contained within this SVG element to red.
+    - `style="border: 1px solid #000000"`: This applies CSS styling to the SVG element, giving it a 1-pixel solid black border.
+    - `cx="150"` and `cy="100"`: These attributes define the x and y coordinates of the center of the circle. Given the viewBox size, this places the center of the circle in the middle of the SVG element.
+    - `r="50"`: This sets the radius of the circle to 50 units.
+        - Some amazing visualizations can be produced combined with JavaScript and CSS.
     - Canvas
+        - The `canvas` element was introduced to HTML in order to facilitate 2D drawing and animation.
+        - The HTML for the `canvas` element is fairly simple, but actually drawing on the canvas requires JavaScript support.
 
 # HTML Structure
 - The two major purposes of HTML is to provide structure and content to the web application.
@@ -280,11 +294,11 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - `<tr>` = table row
     - `<th>` = table header
     - `<td>` = table data
-- Properly representing the page structure using the elements is important not only so it makes logical sense to a programming, but also so that automated tools like search indexing crawlers and accessibility screen readers can correctly interpret the document.
+- Properly representing the page structure using the elements is important not only so it makes logical sense to a programmer, but also so that automated tools like search indexing crawlers and accessibility screen readers can correctly interpret the document.
 - Block and Inline
     - There is a distinction between structure elements that are block vs. inline.
     - A block element is meant to be a distinct block in the flow of the content structure.
     - An inline element is meant to be inline with the content flow of a block element.
     - In other words, inline elements do not disrupt the flow of a block element's content.
-    - For example, the block element `div` could have an inline element `b` in order to brign attention to a portion of its sub-text.
+    - For example, the block element `div` could have an inline element `b` in order to bring attention to a portion of its sub-text.
     - Likewise, a `p` element could have a `span` to mark the paragraph's sub-text as a person's name.
