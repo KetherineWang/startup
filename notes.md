@@ -373,3 +373,9 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - Step 2: Copying Distribution Package
         - The script then uses scp (secure copy) to copy the distribution package to the target server.
             - `scp -r -i "$key" * ubuntu@$hostname:services/$service/public`: This copies all files (`*`) from the current directory on the local machine to the `public` directory of the service on the remote server.
+
+# Startup HTML Deliverable
+- In HTML, the `<input>` tag is used for creating interactive fields where users can enter data. For example, text fields, checkboxes, radio buttons, and submit buttons are all created using the `<input>` tag.
+- On the other hand, the `<p>` tag is used for defining paragraphs of text. It is a block-level element that represents a block of text that can be styled with CSS to change its appearance.
+- The `id` attribute is for singular, and the `class` attribute is for broad.
+- The `target="_blank"` attribute in an `<a>` (anchor) tag specifies that the linked document (the href URL) should open in a new tab or window rather than in the current frame or window. This is commonly used when the website designer wants to keep their website open in the user's browser while also directing them to an external site or resource.
