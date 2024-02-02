@@ -381,3 +381,9 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - `method="get"`: The method attribute specifies how to send form data. The `get` method appends the form data to the URL in name/value pairs. It is visible to everyone (it will be displayed in the browser's address bar) and has limits on the amount of information to send (maximum URL length is around 2048 characters).
 - `action="play.html"`: The action attribute defines the location (a URL) where the form's collected data should be sent when it is submitted. In this case, the data is sent to a web page named `play.html`, which is where the server-side processing would take place.
 - The `target="_blank"` attribute in an `<a>` (anchor) tag specifies that the linked document (the href URL) should open in a new tab or window rather than in the current frame or window. This is commonly used when the website designer wants to keep their website open in the user's browser while also directing them to an external site or resource.
+- `<div>` (Division element):
+    - It is a block-level element, which means it starts on a new line and takes up the full width available horizontally.
+    - `<div>` elements are typically used to group larger blocks of content or to create layout structures.
+- `<span>` (Span element):
+    - It is an inline element, meaning it does not start on a new line and only takes up as much width as necessary.
+    - `<span>` elements are typically used to wrap a small portion of text or other inline elements for styling purposes or for applying JavaScript actions.
