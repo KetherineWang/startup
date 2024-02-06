@@ -61,3 +61,24 @@ journey through the lyrical landscapes of his songs.
 ![Game Play Page Design](/Images/GamePlayPageDesign.png)
 ![User Score Page Design](/Images/UserScorePageDesign.png)
 ![Player Ranking Page Design](/Images/PlayerRankingPageDesign.png)
+
+## HTML Deliverable
+- **HTML Pages**: six HTML pages that represent:
+  - the user login or "Home" page (index.html), 
+  - the user signup or registration page (singup.html),
+  - the game entrace page where selection buttons of "New Game" or "Back to Home" are provided (game.html),
+  - the game play interface or "Play" page (play.html),
+  - the player score display page displaying the individual player's current score only (score.html),
+  - and the top scores or "Rank" page showcasing the top 10 highest scores from all players (rank.html).
+- **Page Links**: The page links of index.html (Home), play.html (Play), and rank.html (Rank) are provided in the navigation bar or menu at the top of each of the three pages.
+  - The "Sign up" link on the user login or "Home" page (index.html) redirects to the user signup or registration page (signup.html).
+  - The "Register" button on the user signup or registration page (signup.html) redirects back to the user login or "Home" page (index.html).
+  - The "Login to Play" button on the user login or "Home" page (index.html) redirects to the game entrance page (game.html).
+  - The "New Game" button on the game entrance page (game.html) redirects to the game play interface or "Play" page (play.html).
+  - The "Back to Home" button on the game entrance page (game.html) redirects back to the user login or "Home" page (index.html).
+  - The "End Game..." button on the game play interface or "Play" page redirects to the player score display page (score.html).
+  - The "New Game" button on the player score display page (score.html) redirects back to the game play interface or "Play" page (play.html).
+  - The "View Rank" button on the player score display page (score.html) redirects to the top scores or "Rank" page (rank.html).
+- **HEAD, BODY, HEADER, MAIN, FOOTER**: The user login or "Home" page (index.html), the game play interface or "Play" page (play.html), and the top scores or "Rank" page (rank.html), each of the three pages has a head section, and a header, main, and footer section enclosed within the body section.
+  - The user signup or registration page (signup.html) and the game entrance page (game.html) have a head section, and a main and footer section enclosed within the body section. The header section which includes a navigation bar or menu of the three main page links (Home, index.html; Play, play.html; Rank, rank.html) are not included on these secondary pages. 
+  
