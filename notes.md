@@ -387,3 +387,160 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - `<span>` (Span element):
     - It is an inline element, meaning it does not start on a new line and only takes up as much width as necessary.
     - `<span>` elements are typically used to wrap a small portion of text or other inline elements for styling purposes or for applying JavaScript actions.
+
+# Cascading Style Sheets
+- In modern web applications, CSS styling focuses more on helping the developer create complex renderings of dynamic content that is responsive to the actions of the user and the device the application is rendered on.
+- With CSS, a web programmer can animate the page, deploy custom fonts, respond to user actions, and dynamically alter the entire layout of the page based on the size of a device and its orientation.
+- Functionally, CSS is primarily concerned with defining `rulesets`, or simply `rules`.
+- A rule is comprised of a `selector` that selects the elements to apply the rule to, and one or more `declarations` that represent the `property` to style with the given `property value`.
+- Associating CSS with HTML
+    - There are three ways that CSS can be associated with HTML.
+    - The first way is to use the `style` attribute of an HTML element and explicitly assign one or more declarations.
+        - `<p style="color:green">CSS</p>`
+    - The next way to associate CSS is to use the HTML `style` element to define CSS rules within the HTML document.
+    - The `style` element should appear in the `head` element of the document so that the rules apply to all elements of the document.
+        - `<head>`
+            - `<style>`
+                - `p {`
+                    - `color: green;`
+                - `}`
+            - `</style>`
+        - `</head>`
+        - `<body>`
+            - `<p>CSS</p>`
+        - `</body>`
+    - The final way to associate CSS is to use the HTML `link` element to create a hyperlink reference to an external file containing CSS rules.
+    The `link` element must appear in the `head` element of the document.
+        - `<link rel="stylesheet" href="styles.css" />`
+- Cascading Styles
+    - Because elements inherit the rules applied to their parents, it often ends up with the same declaration property applied to a single element multiple times. 
+    - In this case, the rules cascade down from the highest nodes in the DOM tree to the lowest level.
+    - Any declaration property defined at a lower level will override the higher declaration.
+- The Box Model
+    - CSS defines everything as boxes.
+    - When applying styles, they are being applied to a region of the display that is a rectangular box.
+    - Within an element's box, there are several internal boxes.
+    - The innermost box holds the element's content, where things like the text or image of an element are displayed.
+    - Next comes the padding, which will inherit things like the background color.
+    - After padding is the border, which has properties like color, thickness, and line style.
+    - The final box is the margin, which is considered external to the actual styling of the box and therefore only represents whitespace.
+    - By default, the width and height of an element are defined by the width and height of the content box.
+    - The `box-sizing` CSS property can be changed from the default value of `content-box` to `border-box` in order to redefine the width and height to also include the padding and the border.
+    - This often makes it easier to style elements when their visual size matches their actual size.
+- CSS Versions
+    - Beginning with CSS3, the specification was divided into modules so that they could be implemented at different levels of maturity.
+- Acronyms and Terms
+    - DOM = Document Object Model
+
+# CSS Selectors
+- Example
+- `<body>`
+  - `<h1>Departments</h1>`
+  - `<p>welcome message</p>`
+  - `<section id="physics">`
+    - `<h2>Physics</h2>`
+    - `<p class="introduction">Introduction</p>`
+    - `<p>Text</p>`
+    - `<p class="summary">Summary</p>`
+  - `</section>`
+  - `<section id="chemistry">`
+    - `<h2>Chemistry</h2>`
+    - `<p class="introduction">Introduction</p>`
+    - `<p>Text</p>`
+    - `<p class="summary">Summary</p>`
+  - `</section>`
+- `</body>`
+- The CSS rule selector can take many forms.
+- By default, every browser defines a base set of styles that it applies to all HTML, which varies slight from browser to browser.
+
+# CSS Flexbox
+- The `flex` display layout is useful when partitioning your application into areas that responsively move around as the window resizes or the orientation changes.
+- In order to demonstrate the power of flex, we will build an application that has a header, footer, and a main content area that is split into two sections, with controls on the left and content on the right.
+- `<body>`
+    - `<header>`
+        - `<h1>CSS flex &amp; media query</h1>`
+    - `</header>`
+    - `<main>`
+        - `<section>`
+            - `<h2>Controls</h2>`
+        - `</section>`
+        - `<section>`
+            - `<h2>Content</h2>`
+        - `</section>`
+    - `</main>`
+    - `<footer>`
+        - `<h2>Footer</h2>`
+    - `</footer>`
+- `</body>`
+- Flexbox
+    - Flexbox Container: The element on which it is applied `display: flex` or `display: inline-flex` becomes a Flexbox container
+    - `flex-direction`: This property defines the main axis of the container and thus the direction in which the flex items are laid out. By default, it is set to `row`, which means items are placed in a horizontal line. When you set `flex-direction: column;`, you change the main axis to vertical, so the flex items stack vertically.
+- We make the body element into a responsive Flexbox by including the CSS `display` property with the value of `flex`.
+- This tells the browser that all of the children of this element are to be displayed in a flex-flow.
+- We want our top-level Flexbox children to be column-oriented so we add the `flex-direction` property with a value of `column`.
+    - In the HTML example above, if we were to apply Flexbox, typically to the `<body>` element, the top-level Flexbox children would be `<header>`, `<main>`, and `<footer>`.
+- We then add some simple other declarations to zero out the margin and fill the entire viewport with our application frame.
+- `body {`
+    - `display: flex;`
+    - `flex-direction: column;`
+    - `margin: 0;`
+    - `height: 100vh;`
+- `}`
+- To get the division of space for the Flexbox children correct, we add the following flex properties to each of the children.
+    - `<header>` - `flex: 0 80px` - Zero means it will not grow and 80px means it has a starting basis height of 80 pixels. This creates a fixed-size box.
+        - The `flex` property is a shorthand that combines the `flex-grow`, `flex-shrink`, and `flex-basis` properties.
+        - `flex-grow` = 0
+        - `flex-basis` = 80px
+        - If the `flex-direction` were a row, `flex-basis` would apply to the width instead of the height.
+        - The absence of a value for `flex-shrink` in the shorthand `flex: 0 80px` means it defaults to its initial value, which is 1. This means the element can shrink if necessary, down from its initial size, to prevent overflow of the container.
+    - `<footer>` - `flex: 0 30px` - Like the header, it will not grow and has a height of 30 pixels.
+    - `<main>` - `flex: 1` - One means it will get one fractional unit of growth, and since it is the only child with a non-zero growth value, it will get all the remaining space. Main also gets some additional properties because we want to also be a Flexbox container for the controls and content area. So we set its display for to be `flex` and specify the  `flex-direction` to be a row so that the children are oriented side by side.
+- `header {`
+  - `flex: 0 80px;`
+  - `background: hsl(223, 57%, 38%);`
+- `}`
+- `footer {`
+  - `flex: 0 30px;`
+  - `background: hsl(180, 10%, 10%);`
+- `}`
+- `main {`
+  - `flex: 1;`
+  - `display: flex;`
+  - `flex-direction: row;`
+- `}`
+- Now we just need to add CSS to the control and content areas represented by the two child section elements.
+- We want the controls to have 25% of the space and the content to have the remaining.
+- So we set the `flex` property value to 1 and 3 respectively.
+- That means that the controls get one unit of space and the content gets three units of space.
+- No matter how we resize things this ratio will responsively remain.
+- `section:nth-child(1) {`
+  - `flex: 1;`
+  - `background-color: hsl(180, 10%, 80%);`
+- `}`
+- `section:nth-child(2) {`
+  - `flex: 3;`
+  - `background-color: white;`
+- `}`
+- Media Query
+    - We can add some media queries that drop the header and footer if the viewport gets too short, and orient the main sections as rows if it gets too narrow.
+    - To support the narrow screen (portrait mode), we include a media query that detects when we are in portrait orientation and sets the `flex-direction` of the main element to be column instead of row.
+    - This causes the children to be stacked on top of each other instead of side by side.
+    - To handle making our header and footer disappear when the screen is too short to display them, we use a media query that triggers when our viewport height has a maximum value of 700 pixels.
+    - When that is true, we change the `display` property for both the header and the footer to `none` so that they will be hidden.
+    - When that happens, the main element becomes the only child and since it has a flex value of 1, it takes over everything.
+- `text-align` affects the alignment of text and inline elements within their containing block-level element. It centers the content inside the element but does not affect the element's positioning within its parent container.
+- `justify-content` in a Flexbox context is used to align flex items along the main axis of the flex container. For a row (`flex-direction: row;`), this would horizontally align items within the container, and for a column (`flex-direction: column;`), it would vertically align them. This property is crucial for spacing flex items within their container.
+- `align-items` is used to align flex items along the cross axis (perpendicular to the main axis) of the flex container. In a row layout (`flex-direction: row;`), align-items controls the vertical alignment of items, and in a column layout (`flex-direction: column;`), it controls the horizontal alignment.
+
+# Simon CSS
+- This application deliverable demonstrates the use of basic CSS for styling and a responsive design.
+- The addition of CSS makes our application visually appealing and adds intuitive user interface elements, but it is still not functional due to the lack of interactivity.
+- This deliverable adds a single CSS file (`main.css`) that contains the CSS for the entire application.
+- Each of the HTML files references the CSS file using the `link` element.
+    - `<link rel="stylesheet" href="main.css" />`
+- Flex is used to delimit the header, main, and footer elements, which makes them responsive to different screen sizes.
+- The use of absolute positioning relative to the parent element for the game controls. ???
+- The selection based on class attributes to style elements. 
+- The override of Bootstrap in order to keep the menu from changing the flex direction to column on small screens. ???
+- The use of `@media` selectors to hide content when the screen is too small.
+- As the application get more complicated, we will break up the CSS into individual files that correspond to the component they style.
