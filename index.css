@@ -1,0 +1,75 @@
+body {
+    background-image: url("Images/2Soon.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    margin: 0;
+}
+
+header {
+    background-color: rgb(30, 40, 30);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.login-box {
+    background-color: rgb(50, 60, 50);
+    padding: 20px;
+    border-radius: 10px;
+    width: 800px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.lyrics {
+    font-family: 'Caveat', cursive;
+    text-align: center;
+    color: #F5F5F5;
+    background-color: rgb(50, 60, 50);
+    padding: 20px;
+    border-radius: 30px;
+    margin: auto;
+    width: 70%
+}
+    
+.lyrics h2 {
+    font-family: 'Arial', sans-serif;
+    color: white;
+    margin-bottom: 15px;
+    font-size: 2.5em;
+}
+
+.lyrics h3 {
+    font-family: 'Arial', sans-serif;
+    color: rgb(170, 150, 100);
+    margin-bottom: 15px;
+    font-size: 2.0em;
+}
+
+.lyrics p {
+    font-size: 2.0em;
+    line-height: 1.5;
+    text-shadow: 3px 4px 5px black;
+}
+
+footer {
+    background-color: rgb(30, 40, 30);
+}
+
+.form-label {
+    font-size: 20px;
+}
+  
+#signup-prompt {
+    font-size: 20px;
+}
