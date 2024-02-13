@@ -3,7 +3,6 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: "Open Sans", sans-serif;
-  font-weight: 500;
 }
 
 header {
@@ -21,10 +20,6 @@ main {
 
 footer {
   flex: 0;
-}
-
-h1 {
-  font-size: 200px
 }
 
 .nav-tabs {
