@@ -2,7 +2,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Arial', sans-serif;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
 }
 
 header {
@@ -23,7 +24,7 @@ footer {
 }
 
 h1 {
-  font-size: 80px;
+  font-size: 200px
 }
 
 .nav-tabs {

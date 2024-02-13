@@ -16,14 +16,14 @@ form {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 500px
 }
-
 
 .login-box {
     background-color: rgb(50, 60, 50);
     padding: 20px;
     border-radius: 10px;
-    width: 800px;
+    width: 600px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -36,30 +36,36 @@ form {
     text-align: center;
     color: #F5F5F5;
     background-color: rgb(50, 60, 50);
-    padding: 20px;
-    border-radius: 30px;
+    padding: 50px;
+    border-radius: 50px;
     margin: auto;
     width: 70%
 }
     
 .lyrics h2 {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
     color: white;
-    margin-bottom: 15px;
+    margin-top: 50px;
+    margin-bottom: 25px;
     font-size: 2.5em;
+    text-shadow: 6px 7px 8px black;
 }
 
 .lyrics h3 {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
     color: rgb(170, 150, 100);
     margin-bottom: 15px;
     font-size: 2.0em;
+    text-shadow: 5px 6px 7px black;
 }
 
 .lyrics p {
+    padding: 30px;
     font-size: 2.0em;
     line-height: 1.5;
-    text-shadow: 3px 4px 5px black;
+    text-shadow: 4px 5px 6px black;
 }
 
 footer {
