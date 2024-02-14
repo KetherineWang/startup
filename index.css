@@ -1,42 +1,12 @@
 body {
     background-image: url("Images/2Soon.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100%;
-    margin: 0;
 }
 
 header {
-    background-color: rgb(30, 40, 30);
+    background-color: rgb(30, 40, 30, 0.800);
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 500px
-}
-
-.login-box {
-    background-color: rgb(50, 60, 50);
-    padding: 20px;
-    border-radius: 10px;
-    width: 600px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.header-title h1 {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 500;
-    font-size: 50px;
-    margin-top: 15px;
-}
+.welcome
 
 .welcome-text h1 {
     font-family: 'Open Sans', sans-serif;
@@ -44,22 +14,16 @@ form {
     font-size: 45px;
 }
 
-.login-form h2 {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 500;
-    font-size: 30px;
-}
-
-.form-label {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-}
-
-.form-control {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
+.login-box {
+    background-color: rgb(50, 60, 50);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
   
 #signup-prompt {
@@ -71,23 +35,27 @@ form {
 @keyframes gradientShift {
     0% {
       background: linear-gradient(45deg, rgb(50, 60, 50), rgb(60, 70, 60));
-      box-shadow: 0 0 30px rgba(255,255,255,0.75);
+      box-shadow: 0 0 30px rgba(255 ,255 ,255 , 0.75);
     }
+
     25% {
       background: linear-gradient(135deg, rgb(60, 70, 60), rgb(70, 80, 70));
-      box-shadow: 0 0 40px rgba(255,255,255,0.75);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.75);
     }
+
     50% {
       background: linear-gradient(225deg, rgb(70, 80, 70), rgb(80, 90, 80));
-      box-shadow: 0 0 50px rgba(255,255,255,0.75);
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.75);
     }
+
     75% {
       background: linear-gradient(315deg, rgb(80, 90, 80), rgb(90, 100, 90));
-      box-shadow: 0 0 40px rgba(255,255,255,0.75);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.75);
     }
+
     100% {
       background: linear-gradient(45deg, rgb(50, 60, 50), rgb(60, 70, 60));
-      box-shadow: 0 0 30px rgba(255,255,255,0.75);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.75);
     }
   }
   
@@ -99,14 +67,14 @@ form {
     padding: 50px;
     border-radius: 50px;
     margin: auto;
-    width: 70%;
+    width: 50%;
     animation: gradientShift 5s infinite alternate;
 }
     
 .lyrics h2 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 500;
-    color: white;
+    color: rgb(170, 150, 100);
     margin-top: 50px;
     margin-bottom: 25px;
     font-size: 2.5em;
@@ -130,8 +98,5 @@ form {
 }
 
 footer {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    background-color: rgb(30, 40, 30);
-    padding: 10px
+    background-color: rgb(30, 40, 30, 0.800);
 }

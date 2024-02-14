@@ -1,0 +1,67 @@
+body {
+    background-image: url("Images/BYS.png");
+}
+
+header {
+    background-color: rgb(200, 120, 10, 0.800);
+}
+
+.players {
+    font-family: "Open Sans", sans-serif;
+    flex: 1;
+    width: 100%;
+    padding: 0.5em;
+}
+
+.user-player {
+    font-size: 25px;
+}
+
+.player-username {
+    color: rgb(250, 230, 210);
+}
+
+.message {
+    color: black;
+}
+
+.player-event {
+    color: rgb(250, 230, 210);
+}
+
+.lyrics {
+    font-family: 'Caveat', cursive;
+    text-align: center;
+    color: white;
+    padding: 30px;
+    font-size: 5.0em;
+    line-height: 1.5;
+    text-shadow: 10px 10px 10px black;
+}
+
+.guess {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.choices {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.choice {
+    color: white;
+    font-size: 25px;
+}
+
+.radio-container {
+    margin-right: 10px;
+}
+
+footer {
+    background-color: rgb(200, 120, 10, 0.800);
+}

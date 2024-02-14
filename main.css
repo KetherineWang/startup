@@ -3,10 +3,22 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: "Open Sans", sans-serif;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  margin: 0;
 }
 
 header {
   flex: 0;
+}
+
+.header-title h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  font-size: 50px;
+  margin-top: 15px;
 }
 
 main {
@@ -18,8 +30,37 @@ main {
   padding: 20px;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+}
+
+.form-label {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.form-control {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.login-signup-form h2 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  font-size: 30px;
+}
+
 footer {
   flex: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  padding: 10px
 }
 
 .nav-tabs {
