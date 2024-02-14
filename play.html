@@ -65,32 +65,42 @@
                 <span class="btn btn-outline-light btn-lg">👏</span>
             </div>
 
-            <div class="guess">
-                <form class="choices">
-                    <span class="choice">
+            <div class="guesses">
+                <form class="buttons">
+                    <span class="choice mb-5">
                         <label>
                             <div class="radio-container">
                                 <input type="radio" name="song" style="width: 20px; height: 20px;" value="option1"> ANGEL
                             </div>
                         </label>
                         <label>
-                            <input type="radio" name="song" style="width: 20px; height: 20px;" value="option2"> GABRIEL
+                            <div class="radio-container">
+                                <input type="radio" name="song" style="width: 20px; height: 20px;" value="option2"> GABRIEL
+                            </div>
                         </label>
                         <label>
-                            <input type="radio" name="song" style="width: 20px; height: 20px;" value="option3"> LIMBO
+                            <div class="radio-container">
+                                <input type="radio" name="song" style="width: 20px; height: 20px;" value="option3"> LIMBO
+                            </div>
                         </label>
                         <label>
-                            <input type="radio" name="song" style="width: 20px; height: 20px;" value="option4"> UNDERSTAND
+                            <div class="radio-container">
+                                <input type="radio" name="song" style="width: 20px; height: 20px;" value="option4"> UNDERSTAND
+                            </div>
                         </label>
                     </span>
-    
-                    <button type="submit">Go!</button>
-                    <button type="submit">Skip-></button>
-                    <button type="submit">End...</button>                
+                    
+                    <span class="button mb-2">
+                        <button class="btn btn-success btn-lg btn-primary" type="submit">Go!</button>
+                    </span>
+                    <span class="button">
+                        <button class="btn btn-warning btn-lg btn-primary" type="submit">Skip></button>
+                        <button class="btn btn-secondary btn-lg btn-primary" type="submit">End...</button>
+                    </span>            
                 </form>
             </div>
 
-            <div class="answer">
+            <div class="answer mt-5 mb-5">
                 <p id="correct-answer">ANGLE<span>✅</span></p>
             </div>
 
