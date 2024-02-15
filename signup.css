@@ -10,12 +10,16 @@ header {
     background-color: rgb(60, 100, 140);
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
+    width: 70%;
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.signup-button {
+    font-family: "Open Sans", sans-serif;
 }
 
 footer {

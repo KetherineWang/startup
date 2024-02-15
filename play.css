@@ -8,6 +8,7 @@ header {
 
 .players {
     font-family: "Open Sans", sans-serif;
+    font-weight: 400;
     flex: 1;
     width: 100%;
     padding: 0.5em;
@@ -39,7 +40,42 @@ header {
     text-shadow: 10px 10px 10px black;
 }
 
-.guess {
+@keyframes sparkle {
+    0%, 100% {
+      color: #ffffff;
+      text-shadow: none;
+    }
+
+    50% {
+      color: #ffffff;
+      text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 
+                   0 0 20px #ff8c00, 0 0 25px #ff8c00, 0 0 30px #ff8c00, 
+                   0 0 35px #ff8c00;
+    }
+  }
+  
+.lyrics p {
+    animation: sparkle 5.0s infinite ease-in-out;
+}
+  
+.lyrics p:hover {
+    animation: none;
+    text-shadow: 0 0 8px #ffffff, 0 0 12px #ff8c00;
+}
+
+.emojis {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.emoji {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.guesses {
     display: flex;
     width: 100%;
     align-items: center;
@@ -53,6 +89,10 @@ header {
     justify-content: center;
 }
 
+.button {
+    font-family: "Open Sans", sans-serif;
+}
+
 .choice {
     font-family: "Open Sans", sans-serif;
     color: white;
@@ -60,8 +100,30 @@ header {
 }
 
 .radio-container {
+    font-family: "Open Sans", sans-serif;
     margin-left: 30px;
     margin-right: 30px;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+
+    40% {
+      transform: translateY(-50px);
+    }
+
+    60% {
+      transform: translateY(-25px);
+    }
+}
+  
+.answer h1 {
+    font-family: "Bungee Spice", sans-serif;
+    font-weight: 500;
+    font-size: 5.0em;
+    animation: bounce 3.0s;
 }
 
 footer {

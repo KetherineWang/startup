@@ -18,12 +18,16 @@ header {
     background-color: rgb(50, 60, 50);
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
+    width: 70%;
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.login-button {
+  font-family: 'Open Sans', sans-serif;
 }
   
 #signup-prompt {
@@ -32,43 +36,39 @@ header {
     font-size: 20px;
 }
 
-@keyframes gradientShift {
-    0% {
-      background: linear-gradient(45deg, rgb(50, 60, 50), rgb(60, 70, 60));
-      box-shadow: 0 0 30px rgba(255 ,255 ,255 , 0.75);
-    }
-
-    25% {
-      background: linear-gradient(135deg, rgb(60, 70, 60), rgb(70, 80, 70));
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.75);
-    }
-
-    50% {
-      background: linear-gradient(225deg, rgb(70, 80, 70), rgb(80, 90, 80));
-      box-shadow: 0 0 50px rgba(255, 255, 255, 0.75);
-    }
-
-    75% {
-      background: linear-gradient(315deg, rgb(80, 90, 80), rgb(90, 100, 90));
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.75);
-    }
-
-    100% {
-      background: linear-gradient(45deg, rgb(50, 60, 50), rgb(60, 70, 60));
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.75);
-    }
+@keyframes pulse {
+  0%, 100% {
+    background: linear-gradient(135deg, rgba(50, 60, 50), rgba(60, 70, 60));
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.700);
   }
+
+  25% {
+    background: linear-gradient(135deg, rgba(55, 65, 55), rgba(65, 75, 65));
+    box-shadow: 0 0 45px rgba(255, 255, 255, 0.750);
+  }
+
+  50% {
+    background: linear-gradient(135deg, rgba(60, 70, 60), rgba(70, 80, 70));
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.800);
+  }
+
+  75% {
+    background: linear-gradient(135deg, rgba(55, 65, 55), rgba(65, 75, 65));
+    box-shadow: 0 0 45px rgba(255, 255, 255, 0.750);
+  }
+}
   
 .lyrics {
     font-family: 'Caveat', cursive;
     text-align: center;
     color: #F5F5F5;
-    background-color: rgb(50, 60, 50);
+    background: linear-gradient(135deg, rgba(50, 60, 50), rgba(70, 80, 70));
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.75);
     padding: 50px;
     border-radius: 50px;
     margin: auto;
     width: 50%;
-    animation: gradientShift 5s infinite alternate;
+    animation: pulse 5.0s infinite alternate ease-in-out;
 }
     
 .lyrics h2 {
@@ -78,7 +78,7 @@ header {
     margin-top: 50px;
     margin-bottom: 25px;
     font-size: 2.5em;
-    text-shadow: 6px 7px 8px black;
+    text-shadow: 6px 7px 8px rgba(255, 255, 255, 0.500);
 }
 
 .lyrics h3 {
@@ -87,14 +87,14 @@ header {
     color: rgb(170, 150, 100);
     margin-bottom: 15px;
     font-size: 2.0em;
-    text-shadow: 5px 6px 7px black;
+    text-shadow: 5px 6px 7px rgba(255, 255, 255, 0.500);
 }
 
 .lyrics p {
     padding: 30px;
     font-size: 2.0em;
     line-height: 1.5;
-    text-shadow: 4px 5px 6px black;
+    text-shadow: 10px 10px 10px black;
 }
 
 footer {
