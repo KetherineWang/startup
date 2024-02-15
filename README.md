@@ -79,7 +79,7 @@ journey through the lyrical landscapes of his songs.
   - The "End Game..." button on the game play interface or "Play" page redirects to the player score display page (score.html).
   - The "New Game" button on the player score display page (score.html) redirects back to the game play interface or "Play" page (play.html).
   - The "View Rank" button on the player score display page (score.html) redirects to the top scores or "Rank" page (rank.html).
-- **HEAD, BODY, HEADER, MAIN, FOOTER**: The user login or "Home" page (index.html), the game play interface or "Play" page (play.html), and the top scores or "Rank" page (rank.html), each of the three pages has a head section, and a header, main, and footer section enclosed within a body section.
+- **Head, Body, Header, Main, Footer**: The user login or "Home" page (index.html), the game play interface or "Play" page (play.html), and the top scores or "Rank" page (rank.html), each of the three pages has a head section, and a header, main, and footer section enclosed within a body section.
   - Each of the user signup or registration page (signup.html) and the game entrance page (game.html) have a head section, and a main and footer section enclosed within a body section. 
     - The header section which includes a navigation bar or menu of the three main page links (Home, index.html; Play, play.html; Rank, rank.html) is not included on these secondary pages. 
 - **Application Textual Content**: The lyric sentences displayed on the game play interface or "Play" page is an example of the application textual content.
@@ -90,3 +90,13 @@ journey through the lyrical landscapes of his songs.
   - A signup placeholder is also created on the user signup or registration page (signup.html).
 - **Database Data**: The application data of the highest scores of all players will be stored in the database, and the top 10 highest scores will be rendered on the top scores or "Rank" page.
 - **WebSocket Data**: The real-time notifications are displayed below the displayed user name as a placeholder for WebSocket data on the game play interface (play.html) to communicate when a player starts a game, reacts to lyrics, and scores.
+
+## CSS Deliverable
+- **Header, Footer, and Main**:
+  - The header which includes the navigation tabs and elements and the footer which includes my name and my GitHub startup repository link are styled similarly with a different color theme for each HTML page.
+  - Main which includes the login form, third-party API service call ("Echoes of the Day"), signup form, game entrance, real-time notifications, lyrics display, emoji buttons, radio buttons, other game buttons, embedded SoundCloud soundtrack, score statements, and rank table are properly styled with CSS.
+- **Navigation Elements**: Navigation Elements including the title of the game ("Echoes of keshi: A Lyric Odyssey"), the "Home" page tab, the "Play" interface tab, and the "Rank" table tab are styled similarly with different color themes throughout all HTML pages (including secondary pages, the "Signup" page, and the "Score" page, which are linked within the "Home" page and the "Play" interface, respectively).
+- **Responsive to Window Resize**: Responsiveness through CSS Flexbox and Bootstrap Utility is applied and employed on all application elements throughout all HTML pages. The application is responsive to different window sizes for different devices.
+- **Application Elements**: All application elements mentioned about are properly styled and carefully designed with CSS. Animation effects are also added to some application texts and backgrounds.
+- **Application Text Content**: Different font families, font sizes, font colors, and font weights are used throughout all HTML pages with different purposes represented.
+- **Application Image**: A different application image is appropriately used with CSS as the background for the body of each HTML page. A "keshi" logo image is also properly styled with CSS to blend in with the background image of the "Home" page.
