@@ -1,5 +1,3 @@
-I learned git add ., git commit -m, git push, git fetch, git status, git pull, and how to resolve merge conflicts.
-
 # Amazon Web Services - Route 53
 - Use a domain name to represent the web application to make it easy to remember and secure.
 - A domain name can be used to create DNS records that will map domain names to IP addresses (A records) or other domain names (CNAME records).
@@ -220,7 +218,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
         - `POST` Method: When a form is submitted with the `method="post"` attribute, the form data is sent in the request body, not in the URL. This is typically used for sending large amounts of data and is more secure than `GET` because the data does not appear in the URL.
         - `enctype="multipart/form-data"`: This attribute specifies how the form data should be encoded when submitting it to the server. The `enctype="multipart/form-data"` is necessary when a form includes any `<input type="file">` elements because it allows files to be uploaded to the server. It is used when the form is meant to perform file uploads along with other text fields.
     - `<input type="tel" id="tel" name="varTel" placeholder="###-####" pattern="\d{3}-\d{4}" />`
-        - The `pattern="\d{3}-\d{4}"` attribute in an HTML `<input type="tel">` element is a regular expression that specifies a validation pattern the inputted data must match for the form to be submitted. Let's break down what this specific pattern means:
+        - The `pattern="\d{3}-\d{4}"` attribute in an HTML `<input type="tel">` element is a regular expression that specifies a validation pattern the inputted data must match for the form to be submitted. Let us break down what this specific pattern means:
             - `\d`: This represents a digit (0-9). It is a shorthand character class in regular expressions that matches any single digit.
             - `{3}`: This quantifier specifies that exactly three occurrences of the preceding element (in this case, a digit) must be present.
             - `-`: This is a literal dash character. It must appear exactly as it is in the user's input.
@@ -314,7 +312,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
     - Database data: A rendering of application data that is stored in the database.
     - For Simon, this is the highest score of all players.
     - WebSocket data: A rendering of data that is received from the server.
-    - This may be real-time data sent from other users (e.g. chat or scoring data), or real-time data that the service is generating (e.g. stock prices or latest high scores).
+    - This may be real-time data sent from other users (e.g., chat or scoring data), or real-time data that the service is generating (e.g., stock prices or latest high scores).
     - For Simon, this updates every time another user creates or ends a game.
 - Once the application is developed to where it is wanted, it needs to be released to the production environment.
 - `./deployFiles.sh -k <yourpemkey> -h <yourdomain> -s startup`
@@ -324,7 +322,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - index.html
     - `<meta charset="UTF-8" />`
         - A metadata element in HTML is used to provide information about the HTML document, which is not displayed directly on the web page itself. This information is primarily intended for web browsers, search engines, and other automated systems that process the web page. Metadata elements are placed within the `<head>` section of an HTML document.
-        - `UTF-8`: This is a character encoding that encompasses almost all characters and symbols in use around the world. By specifying UTF-8, you ensure that the browser correctly interprets the text in your HTML document. This is especially important for displaying non-ASCII characters like those found in many languages other than English. Without this specification, browsers might default to a different encoding, potentially misinterpreting special characters in your document.
+        - `UTF-8`: This is a character encoding that encompasses almost all characters and symbols in use around the world. By specifying UTF-8, we ensure that the browser correctly interprets the text in our HTML document. This is especially important for displaying non-ASCII characters like those found in many languages other than English. Without this specification, browsers might default to a different encoding, potentially misinterpreting special characters in our document.
     - `<link rel="icon" href="favicon.ico" />`
         - `<link>` Tag: This tag defines the relationship between the current document and an external resource. It is placed within the `<head>` section of an HTML document.
         - `rel="icon"`: The `rel` (relationship) attribute specifies the type of relationship that the document has with the linked resource. In this case, `icon` indicates that the linked resource is an icon representing the document.
@@ -335,13 +333,13 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
         - The `<br />` tag in HTML is used to insert a line break in the text. It stands for "break" and is typically employed to create a new line in the content, without starting a new paragraph. It is self-closing.
 - play.html
     - The `class` attribute
-        - CSS Styling: The primary reason for using the class attribute is to define a specific scope for CSS styling. By assigning a class to an HTML element, you can target that element in your CSS stylesheet to apply specific styles. For example, any CSS rules defined for the class `player-name` will apply to all elements with that class.
-        - JavaScript Interaction: Classes can also be used as selectors in JavaScript to manipulate elements. For instance, you can easily select all elements with the class player-name and apply JavaScript functions to them.
+        - CSS Styling: The primary reason for using the class attribute is to define a specific scope for CSS styling. By assigning a class to an HTML element, we can target that element in our CSS stylesheet to apply specific styles. For example, any CSS rules defined for the class `player-name` will apply to all elements with that class.
+        - JavaScript Interaction: Classes can also be used as selectors in JavaScript to manipulate elements. For instance, we can easily select all elements with the class player-name and apply JavaScript functions to them.
     - When to use `<div>`?
-        - Grouping Elements: `<div>` is commonly used to group together elements for styling purposes. By placing a set of elements inside a `<div>`, you can apply CSS styles to them collectively, rather than individually.
+        - Grouping Elements: `<div>` is commonly used to group together elements for styling purposes. By placing a set of elements inside a `<div>`, we can apply CSS styles to them collectively, rather than individually.
         - Layout Purposes: `<div>` elements are often used as containers to create different sections or areas within a web page, such as headers, footers, navigation bars, or content sections. 
-        - Applying CSS Classes or IDs: When you want to apply specific CSS classes or IDs to a part of your webpage for styling or scripting purposes, wrapping these elements in a `<div>` can be an efficient way to do this.
-        - JavaScript Targeting: If you need a container to target with JavaScript—for instance, to dynamically load content or handle user interactions—a `<div>` can serve as a useful hook.
+        - Applying CSS Classes or IDs: When we want to apply specific CSS classes or IDs to a part of our webpage for styling or scripting purposes, wrapping these elements in a `<div>` can be an efficient way to do this.
+        - JavaScript Targeting: If we need a container to target with JavaScript—for instance, to dynamically load content or handle user interactions—a `<div>` can serve as a useful hook.
     - `<svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">`
         - `aria-hidden="true"`
             - Accessibility: The attribute tells assistive technologies to skip the SVG element. This is useful when the SVG is purely decorative and does not contribute to the understanding of the page's content, or when an alternative representation of the SVG content is provided elsewhere on the page.
@@ -454,7 +452,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - By default, every browser defines a base set of styles that it applies to all HTML, which varies slight from browser to browser.
 
 # CSS Flexbox
-- The `flex` display layout is useful when partitioning your application into areas that responsively move around as the window resizes or the orientation changes.
+- The `flex` display layout is useful when partitioning our application into areas that responsively move around as the window resizes or the orientation changes.
 - In order to demonstrate the power of flex, we will build an application that has a header, footer, and a main content area that is split into two sections, with controls on the left and content on the right.
 - `<body>`
     - `<header>`
@@ -474,7 +472,7 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - `</body>`
 - Flexbox
     - Flexbox Container: The element on which it is applied `display: flex` or `display: inline-flex` becomes a Flexbox container
-    - `flex-direction`: This property defines the main axis of the container and thus the direction in which the flex items are laid out. By default, it is set to `row`, which means items are placed in a horizontal line. When you set `flex-direction: column;`, you change the main axis to vertical, so the flex items stack vertically.
+    - `flex-direction`: This property defines the main axis of the container and thus the direction in which the flex items are laid out. By default, it is set to `row`, which means items are placed in a horizontal line. When we set `flex-direction: column;`, we change the main axis to vertical, so the flex items stack vertically.
 - We make the body element into a responsive Flexbox by including the CSS `display` property with the value of `flex`.
 - This tells the browser that all of the children of this element are to be displayed in a flex-flow.
 - We want our top-level Flexbox children to be column-oriented so we add the `flex-direction` property with a value of `column`.
@@ -544,3 +542,970 @@ I learned git add ., git commit -m, git push, git fetch, git status, git pull, a
 - The override of Bootstrap in order to keep the menu from changing the flex direction to column on small screens. ???
 - The use of `@media` selectors to hide content when the screen is too small.
 - As the application get more complicated, we will break up the CSS into individual files that correspond to the component they style.
+
+# JavaScript Introduction
+- Officially known as ECMAScript, JavaScript is a weakly typed language based upon concepts found in C, Java, and Scheme.
+    - C is a general-purpose, procedural programming language developed in the early 1970s by Dennis Ritchie for use with the UNIX operating system.
+    - Java is a high-level, class-based, object-oriented programming language that was designed to have as few implementation dependencies as possible.
+    - Scheme is a minimalist, multi-paradigm programming language, a dialect of Lisp, designed in the 1970s, with a focus on functional programming and powerful macro systems.
+- It is commonly used as a web server language and for creating serverless functions.
+- Typically, JavaScript is executed using an interpreter at runtime instead of compiling it into a machine-specific binary at build time.
+    - Build Time
+        - Definition: Build time refers to the phase in software development when the source code is compiled, linked, and packaged into executable programs or libraries. This is when various processes like preprocessing, compilation, linking, and packaging occur.
+        - Activities: During build time, source code is transformed into machine-readable code (binaries). Build tools and compilers are involved in this process, and various optimizations can be performed to improve performance or reduce the size of the executable.
+    - Runtime
+        - Definition: Runtime refers to the period when a program is executing commands and operations in a live environment after being launched. This phase starts when a user or another system triggers the execution of the program and ends when the program completes its execution or is terminated.
+        - Activities: During runtime, the program interacts with the system resources (memory, CPU, I/O devices) to perform its tasks. It handles dynamic operations such as user input, memory allocation, and error handling.
+- This has the advantage of making JavaScript very portable, but also allows for many errors, such as using an undefined variable.
+- These types of errors commonly only get discovered when the program crashes during execution.
+- Example
+    - Method 1: `'Hello' + ' ' + 'world';`
+    - Method 2:
+        - We can also call the JavaScript runtime's built-in function `console.log` to output the string to the debugger console.
+            - `console.log('Hello' + ' ' + 'world');`
+            - // OUTPUT: Hello world
+    - Method 3:
+        - `function join(a, b) {`
+            - `return a + ' ' + b;`
+        - `}`
+
+        - `console.log(join('Hello', 'world'));`
+        - // OUTPUT: Hello world
+- We can comment on our JavaScript with either line or block comments
+    - // Line comment
+    - /*
+    - Block comment
+    - */
+- Code Delimiters
+    - While not technically required in most cases, it is considered good form to end JavaScript statements with a semicolon (`;`).
+    - Code blocks, and their resulting scope, are defined with curly braces (`{}`).
+- Two Ways to Write and Run JavaScript
+    - Use an online sandbox like CodePen
+        - With CodePen, we can write whatever JavaScript we would like and immediately see the results.
+        - Make sure we display the CodePen's console window if our JavaScript is using the console.log function.
+    - Use our browser's debugger
+        - For example, if we open Chrome and press `F12`, the debugger will display.
+        - Select the `Console` menu option, and this will display a JavaScrip interpreter where we can write and execute our code.
+- Acronyms and Terms
+    - MDN = Mozilla Developer Network
+    - ECMA = European Computer Manufacturers Association
+
+# JavaScript Console
+- The JavaScript console object provides interaction with the JavaScript runtime's debugger console.
+- This usage of the console should not be confused with the operating system's console (AKA terminal or command line).
+- The console object provides functionality for outputting the value of text and objects, running timers, and counting iterations.
+- These are useful debugging tools when we can actually execute our code in an interactive debugger (such as Visual Studio Code).
+- Log
+    - The basic usage of the console object is to output a log message.
+        - `console.log('hello');`
+        - // OUTPUT: hello
+    - We can create formatted messages in the log parameter.
+        - `console.log('hello %s', 'world');`
+        - // OUTPUT: hello world
+            - `'hello %s'` is the format string, where `%s` specifies where to insert the string value that follows.
+            - `'world'` is the value that will be inserted in the place of `%s`.
+            - The output of the code is hello world because `%s` is replaced with the string `'world'`.
+    - We can even specify CSS declarations in order to style the log output.
+        - `console.log('%c JavaScript Demo', 'font-size:1.5em; color:green;');`
+        - // OUTPUT: JavaScript Demo //in large green text
+- Timers
+    - If we are trying to see how long a piece of code is running, we can wrap it with `time` and `timeEnd` calls, and it will output the duration between the `time` and `timeEnd` calls.
+        - `console.time('demo time');`
+        - // ... some code that takes a long time.
+        - `console.timeEnd('demo time');`
+        - // OUTPUT: demo time: 9762.74 ms
+- Count
+    - To see how many times a block of code is called, we can use the `count` function.
+        - `console.count('a');`
+        - // OUTPUT: a: 1
+        - `console.count('a');`
+        - // OUTPUT: a: 2
+        - `console.count('b');`
+        - // OUTPUT: b: 1
+
+# Adding JavaScript to HTML
+- We can insert JavaScript into HTML either by directly including it in the HTML within the content of a `<script>` element, or by using the `src` attribute of the script element to reference an external JavaScript file.
+    - index.js
+        - `function sayHello() {`
+            - `console.log('hello');`
+        - `}`
+    - index.html
+        - `<head>`
+            - `<script src="index.js"></script>`
+        - `</head>`
+        - `<body>`
+            - `<button onclick="sayHello()">Say Hello</button>`
+            - `<button onclick="sayGoodbye()">Say Goodbye</button>`
+            - `<script>`
+                - `function sayGoodbye() {`
+                    - `alert('Goodbye');`
+                - `}`
+            - `</script>`
+        - `</body>`
+    - `alert()`
+        - User Interaction: The `alert` function creates a modal dialog box that displays a message to the user. This is a form of direct user interaction, making it immediately visible to the user regardless of their current interaction with the browser's developer console.
+        - Blocking Operation: When an `alert` box is displayed, it blocks the user from interacting with the webpage until the dialog box is acknowledged (usually by pressing "OK"). This can be useful for ensuring the user sees and acknowledges the message before proceeding.
+        - Purpose: Typically used in web pages for notifications, warnings, or confirmations that require immediate attention from the user.
+    - Notice that we call the `sayHello` and `sayGoodbye` JavaScript functions from the HTML in the `onclick` attribute of the button element.
+    - Special attributes like `onclick` automatically create event listeners for different DOM events that call the code contained in the attribute's value.
+    - The code specified by the attribute's value can be a simple call to a function or any JavaScript code.
+        - `<button onclick="let i=1;i++;console.log(i)">press me</button>`
+        - <!-- OUTPUT: 2 -->
+            - *The JavaScript code above is just an example as it has a syntax error and a scope issue.
+                - Syntax Error: The `onclick` attribute's value is a string that is evaluated as JavaScript code when the event is triggered. However, using `let` within this string (especially in the way it is shown) can lead to syntax errors because the `let` declaration is not valid in this context. Specifically, the issue is with trying to declare a variable and then use it immediately after in a semicolon-separated list of expressions within the `onclick` attribute.
+                - Scope: Variables declared with `let` in an `onclick` attribute have their scope limited to that attribute's expression. This means even if it worked syntax-wise, the variable `i` would be re-declared and reset to `1` every time the button is clicked, not preserving its value between clicks as might be intended.
+            - *The correct approach is below:
+                - `<button onclick="incrementAndLog()">press me</button>`
+                - `<script>`
+                    - `let i = 1;` // Declare i outside the onclick handler
+                    - `function incrementAndLog() {`
+                        - `i++;` // Increment i
+                        - `console.log(i);` // Log the current value of i
+                    - `}`
+                - `</script>`
+
+# JavaScript Types, Operators, Constructs, Conditionals, and Loops
+- Declaring Variables
+    - Variables are declared using either `let` or `const` keyword.
+    - `let` allows us to change the value of the variable while `const` will cause an error if we attempt to change it.
+        - `let x = 1;`
+        - `const y = 2;`
+    - Originally, JavaScript used the keyword `var` to define variables.
+    - This has been deprecated because they cause hard-to-detect errors in code related to the scope of the variable.
+- Type
+    - JavaScript defines several primitive types.
+        - `Null`: The type of a variable that has not been assigned a value.
+        - `Undefined`: The type of a variable that has not been defined.
+        - `Boolean`: True or false.
+        - `Number`: A 64-bit signed number.
+        - `BigInt`: A number of arbitrary magnitudes.
+        - `String`: A textual sequence of characters.
+        - `Symbol`: A unique value.
+    - Of these types, boolean, number, and string are the types commonly thought of when creating variables.
+    - However, variables may commonly refer to the `Null` or `Undefined` primitive.
+    - Because JavaScript does not enforce the declaration of a variable before we use it, it is entirely possible for a variable to have the type of `Undefined`.
+    - In addition to the above primitives, JavaScript defines several object types.
+        - `Object`: A collection of properties represented by name-value pairs, in which values can be of any type.
+            - `{a:3, b:'fish'}`
+        - `Function`: An object that has the ability to be called.
+            - `function a() {}`
+        - `Date`: Calendar dates and times.
+            - `new Date('1995-12-17')`
+        - `Array`: An ordered sequence of any type.
+            - `[3, 'fish']`
+        - `Map`: A collection of key-value pairs that support efficient lookups.
+            - `new Map()`
+        - `JSON`: A lightweight data-interchange format used to share information across programs.
+            - `{"a":3, "b":"fish"}`
+- Common Operators
+    - When dealing with a number variable, JavaScript supports standard mathematical operators like `+` (add), `-` (subtract), `*` (multiply), `/` (divide), and `===` (equality).
+    - For string variables, JavaScript support `+` (concatenation) and `===` (eqaulity).
+- Type Conversions
+    - JavaScipt is a weakly typed language, which means that a variable always has a type, but the variable can change type when it is assigned to a new value, or that type can be automatically converted based upon the context that they are used in.
+    - Sometimes the results of automatic conversions can be unexpected for programmers who are used to strongly typed languages.
+        - `2 + '3';`
+        - // OUTPUT: '23'
+        - `2 * '3';`
+        - // OUTPUT: 6
+        - `[2] + [3];`
+        - // OUTPUT: '23'
+        - `true + null;`
+        - // OUTPUT: 1
+        - `true + undefined;`
+        - // OUTPUT: NaN
+    - Getting unexpected results is especially common when dealing with the equality operator.
+        - `1 == '1';`
+        - // OUTPUT: true
+        - `null == undefined;`
+        - // OUTPUT: true
+        - `'' == false;`
+        - // OUTPUT: true
+    - The unexpected results happen in JavaScript because it uses complex rules for defining equality that depend upon the conversion of a type to a boolean value.
+    - We will sometimes hear this referred to as falsy and truthy evaluations.
+    - To remove this confusion, JavaScript introduced the strict equality (`===`) and inequality (`!==`) operators.
+    - The strict operators skip the type conversion when computing equality.
+        - `1 === '1';`
+        - // OUTPUT: false
+        - `null === undefined;`
+        - // OUTPUT: false
+        - `'' === false;`
+        - // OUTPUT: false
+    - Interesting Example: `('b' + 'a' + +'a' + 'a').toLowerCase();` // OUTPUT: banana
+        - `'b'` + `'a'`: Concatenates the strings `'b'` and `'a'`, resulting in `'ba'`.
+        - `+'a'`: The unary plus operator tries to convert the string `'a'` into a number. Since `'a'` is not a valid number, this conversion results in `NaN` (Not-a-Number).
+            - The unary plus operator in JavaScript is a prefix operator that is placed before its operand and has the effect of converting the operand to a number. It is represented by a plus sign (`+`). This operator is useful for type coercion, turning its operand into a numeric type.
+        - `'ba'` + `NaN`: Concatenating a string with NaN converts NaN to its string representation, resulting in the string `'baNaN'`.
+        - `'baNaN'` + `'a'`: Concatenates `'baNaN'` with `'a'`, resulting in `'baNaNa'`.
+        - `.toLowerCase()`: Converts the entire string to lowercase, which does not change its appearance in this case since all letters are already lowercase. So, the final result is `'banana'`.
+- Conditionals
+    - JavaScript supports many common programming language conditional constructs, which include `if`, `else`, and `if else`.
+        - `if (a === 1) {`
+            - //...
+        - `} else if (b === 2) {`
+            - //...
+        - `} else {`
+            //...
+        - `}`
+    - We can also use the ternary operator, which provides a compact `if else` representation.
+        - `a === 1 ? console.log(1) : console.log('not 1');`
+            - The ternary operator is used to decide which of two expressions should be evaluated and returned, based on the truthiness of a given condition. It is represented as `condition ? expression1 : expression2`.
+            - `Condition: a === 1`: This part checks if the variable `a` is strictly equal to the number `1`. The strict equality operator (`===`) tests for both value and type equality, meaning `a` must be the number `1` (not just any truthy value or a string "1") for the condition to be true.
+            - `?`: If the condition is true, the expression immediately following the `?` is executed. In this case, if `a` is indeed equal to `1`, then `console.log(1)` is executed, logging `1` to the console.
+            - `:`: If the condition is false, the expression following the `:` is executed. If `a` is not equal to `1`, then `console.log('not 1')` is executed, logging `'not 1'` to the console.
+    - We can use boolean operations in the expression to create complex predicates.
+    - Common boolean operators include `&&` (and), `||` (or), and `!` (not).
+        - `if (true && (!false || true)) {`
+            - //...
+        - `}`
+- Loops
+    - JavaScript supports many common programming language looping constructs, which include `for`, `for in`, `for of`, `while`, `do while`, and `switch`.
+        - `for`
+            - `for (let i = 0; i < 2; i++) {`
+                - `console.log(i);`
+            - `}`
+                - // OUTPUT: 0 1
+        - `do while`
+            - `let i = 0;`
+            - `do {`
+                - `console.log(i);`
+                - `i++;`
+            - `} while (i < 2);`
+            - // OUTPUT: 0 1
+        - `while`
+            - `let i = 0;`
+            - `while (i < 2) {`
+                - `console.log(i);`
+                - `i++;`
+            - `}`
+            - // OUTPUT: 0 1
+        - `for in`
+            - The `for in` statement iterates over an object's property names.
+                - `const obj = { a: 1, b: 'fish' };`
+                - `for (const name in obj) {`
+                    - `console.log(name);`
+                - `}`
+                - // OUTPUT: a
+                - // OUTPUT: b
+            - For arrays, the object's name is the array index.
+                - `const arr = ['a', 'b'];`
+                - `for (const name in arr) {`
+                    `console.log(name);`
+                - `}`
+                - // OUTPUT: 0
+                - // OUTPUT: 1
+        - `for of`
+            - The `for of` statement iterates over an iterable's (array, map, set, ...) property values.
+                - `const arr = ['a', 'b'];`
+                - `for (const val of arr) {`
+                    - `console.log(val);`
+                - `}`
+                - // OUTPUT: 'a'
+                - // OUTPUT: 'b'
+- Break and Continue
+    - All of the looping constructs demonstrated above allow for either a `break` or `continue` statement to abort or advance the loop.
+        - `let i = 0;`
+        - `while (true) {`
+            - `console.log(i);`
+            - `if (i === 0) {`
+                - `i++;`
+                - `continue;`
+            - `} else {`
+                - `break;`
+            - `}`
+        - `}`
+        - // OUTPUT: 0 1
+
+# JavaScript Strings
+- Strings are a primitive type in JavaScript.
+- A string variable is specified by surrounding a sequence of characters with single quotes (`'`), double quotes (`"`), or backticks (`).
+- The meaning of single or double quotes are equivalent, but the backtick defines a string literal that may contain JavaScript that is evaluated in place and concatenated into the string.
+- A string literal replacement specifier is declared with a dollar sign followed by a curly brace pair.
+- Anything inside the curly braces is evaluated as JavaScript.
+- We can also use backticks to create multiline strings without having to explicitly escape the newline characters using `\n`.
+    - `'quoted text'; // " also works`
+
+    - `const l = 'literal';`
+    - `console.log(`string ${l + (1 + 1)} text`);`
+    - // OUTPUT: string literal2 text
+- Unicode Support
+    - JavaScript supports Unicode by defining a string as a 16-bit unsigned integer that represents UTF-16 strings.
+        - Unicode is a universal character encoding standard that provides a unique number for every character, no matter the platform, program, or language. It is designed to support the diverse set of characters used across modern and historical texts, including not just letters from various alphabets but also symbols, emoji, and many other character types.
+        - An unsigned integer is a type of integer that can only represent non-negative numbers (0 and positive numbers). The key characteristic of unsigned integers, as opposed to signed integers, is that they do not allocate a bit for indicating the sign (positive or negative) of the number. This absence of a sign bit effectively doubles the upper limit of the numbers that can be represented with the same number of bits used by a signed integer.
+        - UTF-16 (Unicode Transformation Format - 16-bit) is a character encoding for Unicode characters, where each character is represented by one or two 16-bit units. UTF-16 is one of several encoding schemes (including UTF-8 and UTF-32) used to encode Unicode characters, enabling the representation of virtually every character from every written language in use today, as well as many symbols and special characters.
+    - Unicode support allows JavaScript to represent most languages spoken on the planet, which include those that are read from right to left.
+    - However, there are several important steps we must take in order to make our web application fully internationalized, which include handling currency, time, dates, iconography, units of measure, keyboard layouts, and respecting local customs.
+- String Functions
+    - `length`: The number of characters in the string
+    - `indexOf()`: The starting index of a given substring
+    - `split()`: Split the string into an array on the given delimiter string
+    - `startsWith()`: True if the string has a given prefix
+    - `endsWith()`: True if the string has a given suffix
+    - `toLowerCase()`: Converts all characters to lowercase
+        - `const s = 'Example:조선글';`
+
+        - `console.log(s.length);`
+        - // OUTPUT: 11
+        - `console.log(s.indexOf('조선글'));`
+        - // OUTPUT: 8
+        - `console.log(s.split(':'));`
+        - // OUTPUT: ['Example', '조선글']
+        - `console.log(s.startsWith('Ex'));`
+        - // OUTPUT: true
+        - `console.log(s.endsWith('조선글'));`
+        - // OUTPUT: true
+        - `console.log(s.toLowerCase());`
+        - // OUTPUT: example:조선글
+
+# JavaScript Functions
+- In JavaScipt, functions are first-class objects, which means that they can be assigned a name, passed a parameter, returned as a result, and referenced from an object or array just like any other variable.
+- The basic syntax of a function begins with the `function` keyword followed by zero or more parameters and a body that may contain zero or more return statements.
+- The return statement may return a single value.
+- Note that there are no type declarations, as the type is always inferred by the assignment of the value to the parameter.
+    - `function hello(who) {`
+        - `return 'hello ' + who;`
+    - `}`
+
+    - `console.log(hello('world'));`
+    - // OUTPUT: hello world
+- A function without a return value usually exists to produce some side effects like modifying a parameter or interacting with an external program.
+- In the following example, the side effect of the function is to output text to the debugger console.
+    - `function hello(who) {`
+        - `who.count++;`
+        - `console.log('hello ' + who.name);`
+    - `}`
+
+    - `hello({ name: 'world', count: 0 });`
+    // OUTPUT: hello world
+- Function Parameters
+    - When a function is called, the caller may choose what parameters to provide.
+    - If a parameter is not provided, then the value of the parameter is `undefined` when the function executes.
+    - In addition to explicitly passing the value of a parameter to a function, the function can define a default value, which is done by assigning a value to the parameter in the function declaration.
+        - `function labeler(value, title = 'title') {`
+            - `console.log(`${title}=${value}`);`
+        - `}`
+
+        - `labeler();`
+        - // OUTPUT: title=undefined
+
+        - `labeler('fish');`
+        - // OUTPUT: title=fish
+
+        - `labeler('fish', 'animal');`
+        - // OUTPUT: animal=fish
+- Anonymous Functions
+    - Functions in JavaScript are commonly assigned to a variable so that they can be passed as a parameter to some other functions or stored as an object property.
+    - To easily support this common use, we can define a function anonymously and assign it to a variable.
+        - // Function that takes a function as a parameter
+        - `function doMath(operation, a, b) {`
+            - `return operation(a, b);`
+        - `}`
+
+        - // Anonymous function assigned to a variable
+        - `const add = function (a, b) {`
+            - `return a + b;`
+        - `};`
+
+        - `console.log(doMath(add, 5, 3));`
+        - // OUTPUT: 8
+
+        - // Anonymous function assigned to a parameter
+        - `console.log(`
+            - `doMath(`
+                - `function (a, b) {`
+                - `return a - b;`
+                - `},`
+                - `5,`
+                - `3`
+            - `)`
+        - `);`
+        - // OUTPUT: 2
+- Creating, Passing, and Returning Functions
+    - // Anonymous declaration of the function that is later assigned to a variable
+    - `const add = function (a, b) {`
+        - `return a + b;`
+    - `};`
+
+    - // Function that logs as a side effect of its execution
+    - `function labeler(label, value) {`
+        - `console.log(label + '=' + value);`
+    - `}`
+
+    - // Function that takes a function as a parameter and then executes the function as a side effect
+    - `function addAndLabel(labeler, label, adder, a, b) {`
+        - `labeler(label, adder(a, b));`
+    - `}`
+
+    - // Passing a function to a function
+    - `addAndLabel(labeler, 'a+b', add, 1, 3);`
+    - // OUTPUT: a+b=4
+
+    - // Function that returns a function
+    - `function labelMaker(label) {`
+        - `return function (value) {`
+            - `console.log(label + '=' + value);`
+        - `};`
+    - `}`
+
+    - // Assign a function from the return value of the function
+    - `const nameLabeler = labelMaker('name');`
+
+    - // Calling the returned function
+    - `nameLabeler('value');`
+    - // OUTPUT: name=value
+- Inner Functions
+    - Functions can also be declared inside other functions.
+    - This allows us to modularize our code without always exposing private details.
+        - `function labeler(value) {`
+            - `function stringLabeler(value) {`
+                - `console.log('string=' + value);`
+            - `}`
+            - `function numberLabeler(value) {`
+                - `console.log('number=' + value);`
+            - `}`
+
+            - `if (typeof value == 'string') {`
+                - `stringLabeler(value);`
+            - `} else if (typeof value == 'number') {`
+                - `numberLabeler(value);`
+            - `}`
+        - `}`
+
+        - `labeler(5);`
+        // OUTPUT: number=5
+
+        - `labeler('fish');`
+        // OUTPUT: string=fish
+
+# JavaScript Arrow Functions
+- Because functions are first-class objects in JavaScript, they can be declared anywhere and passed as parameters, and this results in code with lots of anonymous functions cluttering things up.
+- To make the code more compact the `arrow` syntax was created, and this syntax replaces the need for the `function` keyword with the symbols `=>` placed after the parameter declaration, in which the enclosing braces are also optional.
+- Below is a function in arrow syntax that takes no parameters and always returns 3.
+    - `() => 3;`
+- The following invocations of sort are equivalent.
+    - `const a = [1, 2, 3, 4];`
+
+    - // standard function syntax
+    - `a.sort(function (v1, v2) {`
+        - `return v1 - v2;`
+    - `});`
+
+    - // arrow function syntax
+    - `a.sort((v1, v2) => v1 - v2);`
+- `a` is an array `[1, 2, 3, 4]`.
+- The `sort` method is called on array `a`.
+- A comparison function is provided as an argument to `sort`. This function takes two arguments (`v1` and `v2`), which represent any two elements from the array being sorted.
+- The comparison function returns the result of `v1 - v2`.
+    - If the result is negative, `v1` is sorted before `v2`.
+    - If the result is positive, `v2` is sorted before `v1`.
+    - If the result is zero, no change is made with respect to the order of `v1` and `v2`.
+- Besides being compact, the arrow function syntax has some important semantic differences from the standard function syntax, which include restrictions that the arrow functions cannot be used for constructors or iterator generators.
+- Return Values
+    - Arrow functions also have a special rule for the `return` keyword.
+    - The return keyword is optional if no curly braces are provided for the function and it contains a single expression.
+    - In that case, the result of the expression is automatically returned.
+    - If curly braces are provided, then the arrow function behaves just like a standard function.
+        - `() => 3;`
+        - // RETURNS: 3
+
+        - `() => {`
+            - `3;`
+        - `};`
+        - // RETURNS: undefined
+
+        - `() => {`
+            - `return 3;`
+        - `};`
+        - // RETURNS: 3
+- This Pointer
+    - Next, arrow functions inherit the `this` pointer from the scope of where it is created.
+    - This makes what is known as a `closure`.
+    - A closure allows a function to continue referencing its creation scope, even after it has passed out of that scope.
+    - In the following example, the function `makeClosure` returns an anonymous function using the arrow syntax.
+    - Notice that the `a` parameter is overridden, a new `b` variable is created, and both `a` and `b` are referenced in the arrow function.
+    - Because of that reference, they are both part of the closure for the returned function.
+        - `function makeClosure(a) {`
+            - `a = 'a2';`
+            - `const b = 'b2';`
+            - `return () => [a, b];`
+        - `}`
+    - Next, we declare the variables `a` and `b` at the top-level scope, and call `makeClosure` with `a`.
+        - `const a = 'a';`
+        - `const b = 'b';`
+
+        - `const closure = makeClosure(a);`
+    - Now, when we call the `closure` function, it will output the values contained in the scope where it was created instead of the current values of the variables.
+        - `console.log(closure());`
+        - // OUTPUT: ['a2', 'b2']
+
+        - `console.log(a, b);`
+        - // OUTPUT: 'a' 'b'
+    - Closures provide a valuable property when we do things like execute JavaScript within the scope of an HTML page because it can remember the values of variables when the function was created instead of what they are when they are executed.
+- Putting It All Together
+    - The point of a debounce function is to only execute a specified function once within a given time window.
+    - Any requests to execute the debounce function more frequently than this will cause the time window to reset.
+    - This is important in cases where a user can trigger expensive events thousands of times per second.
+    - Without a debounce, the performance of our application can greatly suffer.
+    - The following code calls the browser's `window.addEventListener` function to add a callback function that is invoked whenever the user scrolls the browser's web page.
+    - The first parameter to `addEventListener` specifies that it wants to listen for `scroll` events.
+    - The second parameter provides the function to call when a scroll event happens.
+    - In this case, we call a function named `debounce`.
+    - The `debounce` function takes two parameters, the time window for executing the window function, and the window function to call within that limit.
+    - In this case, we will execute the arrow function at most every 500 milliseconds.
+        - `window.addEventListener(`
+            - `'scroll',`
+            - `debounce(500, () => {`
+                - `console.log('Executed an expensive calculation');`
+            - `})`
+        - `);`
+    - The `debounce` function implements the execution of windowFunc within the restricted time window by creating a closure that contains the current timeout and returning a function that will reset the timeout every time it is called.
+    - The returned function is what the scroll event will actually call when the user scrolls the page.
+    - However, instead of directly executing the `windowFunc`, it sets a timer based on the value of `windowMS`.
+    - If the `debounce` function is called again before the window times out then it resets the timeout.
+        - `function debounce(windowMs, windowFunc) {`
+            - `let timeout;`
+            - `return function () {`
+                - `console.log('scroll event');`
+                - `clearTimeout(timeout);`
+                - `timeout = setTimeout(() => windowFunc(), windowMs);`
+            - `};`
+        - `}`
+    - Event Listener: The `addEventListener` method is used to attach a `scroll` event listener to the `window`. The second argument to `addEventListener` is the debounced version of our expensive function, created by calling `debounce(500, () => { console.log('Executed an expensive calculation'); })`.
+    - `Debounce` Function: The `debounce` function takes two parameters: `windowMs`, the debounce interval in milliseconds, and `windowFunc`, the function to execute once the debounce interval has passed without any further scroll events. It initializes a `timeout` variable to keep track of the current debounce timeout ID.
+    - Returned Function from `Debounce`: The `debounce` function returns a new function that acts as the actual event handler for the `scroll` event. This function logs `'scroll event'` to the console every time a scroll event occurs, indicating the event has been detected. It then clears any previous timeout set by earlier scroll events, using `clearTimeout(timeout)`. This step is crucial because it prevents `windowFunc` from executing if a new scroll event occurs within the debounce interval (`windowMs`). Finally, it sets a new timeout using `setTimeout(() => windowFunc(), windowMs)`, scheduling `windowFunc` to execute after `windowMs` milliseconds. If no more scroll events occur within this interval, `windowFunc` will execute, logging `'Executed an expensive calculation'` to the console.
+    - Closure
+        - Variable in Lexical Scope: The `debounce` function declares a `timeout` variable in its lexical scope. This variable is used to keep track of the timeout ID for the debounced function.
+        - Returned Function: The `debounce` function returns a new anonymous function. This returned function is able to access the `timeout` variable defined in the outer `debounce` function's scope.
+        - Closure: The returned anonymous function forms a closure. It captures and retains access to the `timeout` variable even after the `debounce` function has finished execution. This is essential for the debouncing mechanism because each invocation of the event handler (triggered by the `scroll` event) needs to be able to clear the previous timeout (if any) and set a new one. The ability to access and modify the `timeout` variable across multiple invocations of the event handler, over time, is made possible by the closure.
+
+# JavaScript Arrays
+- JavaScript array objects represent a sequence of other objects and primitives.
+- We can reference the members of the array using a zero-based index.
+- We can create an array with the `Array` constructor (`new Array()`) or using the array literal notation (`[]`) shown below.
+    - `const a = [1, 2, 3];`
+    - `console.log(a[1]);`
+    - // OUTPUT: 2
+
+    - `console.log(a.length);`
+    - // OUTPUT: 3
+- Array Object Functions
+    - `push`: Add an item to the end of the array
+        - `a.push(4)`
+    - `pop`: Remove an item from the end of the array
+        - `x = a.pop()`
+    - `slice`: Return a sub-array
+        - `a.slice(1,-1)`
+    - `sort`: Run a function to sort an array in place
+        - `a.sort((a,b) => b-a)`
+    - `values`: Creates an iterator for use with a `for of` loop
+        - `for (i of a.values()) {...}`
+    - `find`: Find the first item satisfied by a test function
+        - `a.find(i => i < 2)`
+    - `forEach`: Run a function on each array item
+        - `a.forEach(console.log)`
+    - `reduce`: Run a function to reduce each array item to a single item
+        - `a.reduce((a, c) => a + c)`
+    - `map`: Run a function to map an array to a new array
+        - `a.map(i => i+i)`
+    - `filter`: Run a function to remove items
+        - `a.filter(i => i%2)`
+    - `every`: Run a function to test if all items match
+        - `a.every(i => i < 3)`
+    - `some`: Run a function to test if any items match
+        - `a.some(i => i < 1)`
+    - `const a = [1, 2, 3];`
+
+    - `console.log(a.map((i) => i + i));`
+    - // OUTPUT: [2,4,6]
+    - `console.log(a.reduce((v1, v2) => v1 + v2));`
+    - // OUTPUT: 6
+    - `console.log(a.sort((v1, v2) => v2 - v1));`
+    - // OUTPUT: [3,2,1]
+
+    - `a.push(4);`
+    - `console.log(a.length);`
+    - // OUTPUT: 4
+    - `reduce`
+        - For the first call, `v1` is 1 (the first element of the array), and `v2` is 2 (the second element of the array). The return value is 3.
+        - For the second call, `v1` is 3 (the result of the first call) and `v2` is 3 (the third element of the array). The return value is 6.
+        - The array has no more elements to process, so the final result is 6.
+    
+# JSON
+- JSON provides a simple, and yet effective way, to share and store data.
+- By design, JSON is easily convertible to, and from JavaScript objects.
+- This makes it a very convenient data format when working with web technologies.
+- Because of its simplicity, standardization, and compatibility with JavaScript, JSON has become one of the world's most popular data formats.
+- Format
+    - A JSON document contains one of the following data types:
+        - string
+            - `"crockford"`
+        - number
+            - `42`
+        - boolean
+            - `true`
+        - array
+            - `[null,42,"crockford"]`
+        - object
+            - `{"a":1,"b":"crockford"}`
+        - null
+            - `null`
+    - Most commonly, a JSON document contains an object.
+    - Objects contain zero or more key-value pairs.
+    - The key is always a string, and the value must be one of the valid JSON data types.
+    - Key-value pairs are delimited with commas.
+    - Curly braces delimit an object, square brackets and commas delimit arrays, and strings are always delimited with double quotes.
+        - `{`
+            - `"class": {`
+                - `"title": "web programming",`
+                - `"description": "Amazing"`
+            - `},`
+            - `"enrollment": ["Marco", "Jana", "فَاطِمَة"],`
+            - `"start": "2025-02-01",`
+            - `"end": null`
+        - `}`
+    - JSON is always encoded with UTF-8, which allows for the representation of global data.
+- Converting to JavaScript
+    - We can convert JSON to, and from, JavaScript using the `JSON.parse` and `JSON.stringify` functions.
+        - `const obj = { a: 2, b: 'crockford', c: undefined };`
+        - `const json = JSON.stringify(obj);`
+        - `const objFromJson = JSON.parse(json);`
+
+        - `console.log(obj, json, objFromJson);`
+
+        - // OUTPUT:
+        - // {a: 2, b: 'crockford', c: undefined}
+        - // {"a":2, "b":"crockford"}
+        - // {a: 2, b: 'crockford'}
+    - Notice that in this example, JSON cannot represent the JavaScript `undefined` object so it gets dropped when converting from JavaScript to JSON.
+- Acronyms and Terms
+    - JSON = JavaScript Object Notation
+    - RFC = Requests for Comments
+        - RFCs are a series of numbered documents that describe, specify, and standardize the protocols and technologies used throughout the Internet and the World Wide Web.
+
+# JavaScript Objects and Classes
+- A JavaScript object represents a collection of name-value pairs referred to as properties.
+- The property name must be of type String or Symbol, but the value can be of any type.
+- Objects also have common object-oriented functionality such as constructors, a `this` pointer, statis properties and functions, and inheritance.
+- Objects can be created with the `new` operator, which causes the object's constructor to be called.
+- Once declared, we can add properties to the object by simply referencing the property name in an assignment.
+- Any type of variables can be assigned to a property, which include a sub-object, array, or function.
+- The properties of an object can be referenced either with dot (`obj.prop`) or bracket notation (`obj['prop']`)
+    - `const obj = new Object({ a: 3 });`
+    - `obj['b'] = 'fish';`
+    - `obj.c = [1, 2, 3];`
+    - `obj.hello = function () {`
+        - `console.log('hello');`
+    - `};`
+
+    - `console.log(obj);`
+    - // OUTPUT: {a: 3, b: 'fish', c: [1,2,3], hello: func}
+- The ability to dynamically modify an object is incredibly useful when manipulating data with a indeterminate structure.
+- Note the different uses of the term `object`: object can refer to the standard JavaScript objects (e.g., `Promise`, `Map`, `Object`, `Function`, `Date`, ...), or it can refer specifically to the JavaScript `Object` object (i.e., `new Object()`), or it can refer to any JavaScript object we create (e.g., `{a:'a', b:2}`).
+- Object-Literals
+    - We can also declare a variable of object type with the `object-literal` syntax, which allows us to provide the initial composition of the object.
+        - `const obj = {`
+            - `a: 3,`
+            - `b: 'fish',`
+        - `};`
+- Object Functions
+    - `entries`: Returns an array of key-value pairs
+    - `keys`: Returns an array of keys
+    - `values`: Returns an array of values
+        - `const obj = {`
+            - `a: 3,`
+            - `b: 'fish',`
+        - `};`
+
+        - `console.log(Object.entries(obj));`
+        - // OUTPUT: [['a', 3], ['b', 'fish']]
+        - `console.log(Object.keys(obj));`
+        - // OUTPUT: ['a', 'b']
+        - `console.log(Object.values(obj));`
+        - // OUTPUT: [3, 'fish']
+- Constructor
+    - Any function that returns an object is considered a `constructor` and can be invoked with the `new` operator.
+        - `function Person(name) {`
+            - `return {`
+                - `name: name,`
+            - `};`
+        - `}`
+
+        - `const p = new Person('Eich');`
+        - `console.log(p);`
+        - // OUTPUT: {name: 'Eich'}
+    - Because objects can have any type of property value, we can create methods on the object as part of its encapsulation.
+        - `function Person(name) {`
+            - `return {`
+                - `name: name,`
+                - `log: function () {`
+                    - `console.log('My name is ' + this.name);`
+                - `},`
+            - `};`
+        - `}`
+
+        - `const p = new Person('Eich');`
+        - `p.log();`
+        - // OUTPUT: My name is Eich
+- This Pointer
+    - Notice in the example above the use of the keyword `this` when we referred to the name property (`this.name`).
+    - This meaning of `this` depends upon the scope of where it is used, but the in the context of an object, it refers to a pointer to the object.
+- Classes
+    - We can use classes to define objects.
+    - Using a class clarifies the intent to create a reusable component rather than a one-off object.
+    - Class declarations look similar to declaring an object, but classes have an explicit constructor and assumed function declarations.
+    - The person object from above would look like the following when converted to a class.
+        - `class Person {`
+            - `constructor(name) {`
+                - `this.name = name;`
+            - `}`
+
+            - `log() {`
+                - `console.log('My name is ' + this.name);`
+            - `}`
+        - `}`
+
+        - `const p = new Person('Eich');`
+        - `p.log();`
+        - // OUTPUT: My name is Eich
+    - We can make properties and functions of classes private by prefixing them with a `#`.
+        - `class Person {`
+            - `#name;`
+
+            - `constructor(name) {`
+                - `this.#name = name;`
+            - `}`
+        - `}`
+
+        - `const p = new Person('Eich');`
+        - `p.#name = 'Lie';`
+        - // OUTPUT: Uncaught SyntaxError: Private field '#name' must be declared in an enclosing class
+    - Encapsulation: One of the core principles of object-oriented programming is encapsulation—the idea that an object's internal state should only be accessible through its public interface. Private fields enforce this principle by making certain data inaccessible from outside the class.
+    - Information Hiding: Private fields allow a class to hide its internal state and implementation details from the outside, exposing only what is necessary through methods. This makes the class easier to use and understand without needing to know its internal workings.
+    - Data Protection: By making the name property private, we ensure that it cannot be directly accessed or modified from outside the class. This helps protect the internal state of our objects from unintended modifications, which can prevent bugs and ensure data integrity.
+    - Controlled Access: If we want to provide read or write access to a private field, we can do so through public methods (e.g., getters and setters). This allows we to implement validation or other logic whenever the field is accessed or modified.
+    - As shown in the example above, attempting to access or modify a private field from outside its class results in a SyntaxError. This immediate feedback can help developers quickly identify and correct attempts to improperly access private parts of an object.
+- Inheritance
+    - Classes can be extended by using the `extends` keyword to define inheritance.
+    - Parameters that need to be passed to the parent class are delivered using the `super` function.
+    - Any functions defined on the child that have the same name as the parent override the parent's implementation.
+    - A parent's function can be explicitly accessed using the `super` keyword.
+        - `class Person {`
+            - `constructor(name) {`
+                - `this.name = name;`
+            - `}`
+
+            - `print() {`
+                - `return 'My name is ' + this.name;`
+            - `}`
+        - `}`
+
+        - `class Employee extends Person {`
+            - `constructor(name, position) {`
+                - `super(name);`
+                - `this.position = position;`
+            - `}`
+
+            - `print() {`
+                - `return super.print() + '. I am a ' + this.position;`
+            - `}`
+        - `}`
+
+        - `const e = new Employee('Eich', 'programmer');`
+        - `console.log(e.print());`
+        // OUTPUT: My name is Eich. I am a programmer
+
+# JavaScript Regular Expressions
+- Regular expression support is built right into JavaScript.
+- We can think of regular expressions as textual pattern matchers.
+- We use a regular expression to find text in a string so that we can replace it, or simply to know that it exists.
+- We can create a regular expression using the class constructor or a regular expression literal.
+    - `const objRegex = new RegExp('ab*', 'i');`
+    - `const literalRegex = /ab*/i;`
+- The `string` class has several functions that accept regular expressions, which include `match`, `replace`, `search`, and `split`.
+- For a quick test to see if there is a match, we can use the regular expression object's `test` function.
+    - `const petRegex = /(dog)|(cat)|(bird)/gim;`
+    - `const text = 'Both cats and dogs are pets, but not rocks.';`
+
+    - `text.match(petRegex);`
+    - // RETURNS: ['cat', 'dog']
+
+    - `text.replace(petRegex, 'animal');`
+    - // RETURNS: Both animals and animals are pets, but not rocks.
+
+    - `petRegex.test(text);`
+    - // RETURNS: true
+- The forward slashes `/` mark the beginning and end of a regular expression. They are used to delineate the pattern from the flags that may follow the pattern.
+- The `|` character is used as a logical OR operator between expressions. The regular expression will match if any of the expressions separated by `|` are found. In the example above, `(dog)|(cat)|(bird)` means the expression will match if it finds "dog", "cat", or "bird" in the target string.
+- Parentheses `()` are used for grouping in regular expressions. Grouping allows us to apply operators, such as `|`, to entire expressions. They also create a "capture group" for extracting a substring or backreferencing. In the example above, each animal type (dog, cat, bird) is wrapped in parentheses, creating separate capture groups for each. This means if the pattern matches, we can extract which specific animal type was found.
+- Flags modify the behavior of the regular expression. They are placed after the closing forward slash. In the example above, `gim` are used together, each having a distinct purpose:
+    - `g` (Global): The global flag means the search should not stop at the first match. Without this flag, the regular expression would return after finding the first match. With `g`, it will search through the entire string for all matches.
+    - `i` (Case-Insensitive): This flag makes the search case-insensitive, allowing "dog", "Dog", "DOG", etc., to all match the pattern.
+    - `m` (Multiline): The multiline flag allows the start (`^`) and end (`$`) anchor characters to match the start and end of a line, rather than the whole string. This is particularly useful when working with multiline strings and we want to match patterns that may start or end across different lines.
+
+# JavaScript Rest and Spread
+- Rest
+    - Sometimes, we want a function to take an unknown number of parameters.
+    - For example, if we wanted to write a function that checks to see if some number in a list is equal to a given number, we could write this using an array.
+        - `function hasNumber(test, numbers) {`
+            - `return numbers.some((i) => i === test);`
+        - `}`
+
+        - `const a = [1, 2, 3];`
+        - `hasNumber(2, a);`
+        - // RETURNS: true
+    - However, sometimes, we do not have an array to work with.
+    - In this case, we could create one on the fly.
+         - `function hasTwo(a, b, c) {`
+            - `return hasNumber(2, [a, b, c]);`
+        - `}`
+    - But JavaScript provides the `rest` syntax to make this easier.
+    - Think of it as a parameter that contains the `rest` of the parameters.
+    - To turn the last parameter of any function into a `rest` parameter, we prefix it with three periods.
+    - We can then call it with any number of parameters and they are all automatically combined into an array.
+        - `function hasNumber(test, ...numbers) {`
+            - `return numbers.some((i) => i === test);`
+        - `}`
+
+        - `hasNumber(2, 1, 2, 3);`
+        - // RETURNS: true
+    - Note that we can only make the last parameter a `rest` parameter.
+    - Otherwise, JavaScript would not know which parameters to combine into the array.
+    - Technically speaking, `rest` allows JavaScript to provide what is called variadic functions.
+- Spread
+    - `Spread` does the opposite of `rest`.
+    - It takes an object that is iterable (e.g., array or string) and expands it into a function's parameters.
+        - `function person(firstName, lastName) {`
+            - `return { first: firstName, last: lastName };`
+        - `}`
+
+        - `const p = person(...['Ryan', 'Dahl']);`
+        - `console.log(p);`
+        - // OUTPUT: {first: 'Ryan', last: 'Dahl'}
+
+# JavaScript Exceptions
+- JavaScript supports exception handling using the `try catch` and `throw` syntax.
+- An exception can be triggered whenever our code generates an exception using the `throw` keyword, or whenever an exception is generated by the JavaScript runtime, for example, when an undefined variable is used.
+- To catch a thrown exception, we wrap a code block with the `try` keyword and follow the `try` block with the `catch` block.
+- If within the `try` block, including any functions that the block calls, an exception is thrown, then all of the code after the `throw` is ignored, the call stack is unwound, and the `catch` block is called.
+-  In addition to a `catch` block, we can specify a `finally` block that is always called whenever the `try` bloc is exited regardless if an exception was ever thrown.
+    - `try {`
+        - // normal execution code
+    - `} catch (err) {`
+        - // exception handling code
+    - `} finally {`
+        - // always called code
+    - `}`
+    - For example:
+    - `function connectDatabase() {`
+        - `throw new Error('connection error');`
+    - `}`
+
+    - `try {`
+        - `connectDatabase();`
+        - `console.log('never executed');`
+    - `} catch (err) {`
+        - `console.log(err);`
+    - `} finally {`
+        - `console.log('always executed');`
+    - `}`
+
+    - // OUTPUT: Error: connection error
+    - //         always executed
+- When first using exception handling, it is tempting to use it as a way to handle normal flows of execution.
+- For example, throwing a `file not found` exception when it is common for users to request nonexistent files.
+- Throwing exceptions should only happen when something truly exceptional occurs.
+- For example, a `file not found` exception when the file is required for our code to run, such as a required configuration file.
+- Our code will be easier to debug, and our logs will be more meaningful if we restrict exceptions to truly exceptional situations.
+- Fallbacks
+    - The `fallback` pattern is commonly implemented using exception handling.
+    - To implement the fallback pattern, we put the normal feature path in a `try` block, and then provide a `fallback` implementation in the `catch` block.
+    - For example, normally we would get the high scores for a game by making a network request, but if the network is not available, then a locally cached version of the last available scores is used.
+    - By providing a fallback, we can always return something, even if the desired feature is temporarily unavailable.
+        - `function getScores() {`
+            - `try {`
+                - `const scores = scoringService.getScores();`
+                - // store the scores so that we can use them later if the network is not available
+                - `window.localStorage.setItem('scores', scores);`
+                - `return scores;`
+            - `} catch {`
+                - `return window.localStorage.getItem('scores');`
+            - `}`
+        - `}`
+
+# Document Object Model
+- The Document Object Model (DOM) is an object representation of the HTML elements that the browser uses to render the display.
+- The browser also exposes the DOM to external code so that we can write programs that dynamically manipulate the HTML.
+- The browser provides access to the DOM through a global variable name `document` that points to the root element of the DOM.
+- If we open the browser's debugger console windown and type the variable name `document`, we will see the DOM for the document the browser is currently rendering.
+- For everything in an HTML document, there is a node the DOM.
+- This includes elements, attributes, text, comments, and whitespace.
+- All of these nodes from a big tree, with the document node at the top.
+- Accessing the DOM
+    - Every element in an HTML document implements the DOM Element interface, which is derived from the DOM Node interface.
+    - The DOM Element interface provides the means for iterating child elements, accessing parent element, and manipulating the element's attributes.
+    - From our JavaScript code, we can start with the document variable and walk through every element in the tree.
+        - `function displayElement(el) {`
+            - `console.log(el.tagName);`
+            - `for (const child of el.children) {`
+                - `displayElement(child);`
+            - `}`
+        - `}`
+
+        - `displayElement(document);`
+    - We can provide a CSS selector to the `querySelectorAll` function in order to select elements from the document.
+    - The `textContent` property contains all of the element's text.
+    - We can even access a textual representation of an element's HTML content with the `innerHTML` property.
+        - `const listElements = document.querySelectorAll('p');`
+        - `for (const el of listElements) {`
+            - `console.log(el.textContent);`
+        - `}`
+- Modifying the DOM
+    - The DOM supports the ability to insert, modify, or delete the elements in the DOM.
+    - To create a new element, we first create the element on the DOM document.
+    - We then insert the new element into the DOM tree by appending it to an existing element in the tree.
+        - `function insertChild(parentSelector, text) {`
+            - `const newChild = document.createElement('div');`
+            - `newChild.textContent = text;`
+
+            - `const parentElement = document.querySelector(parentSelector);`
+            - `parentElement.appendChild(newChild);`
+        - `}`
+
+        - `insertChild('#courses', 'new course');`
+    - To delete elements, call the `removeChild` function on the parent element.
+        - `function deleteElement(elementSelector) {`
+            - `const el = document.querySelector(elementSelector);`
+            - `el.parentElement.removeChild(el);`
+        - `}`
+
+        - `deleteElement('#courses div');`
+- Injecting HTML
+    - The DOM also allows us to inject entire blocks of HTML into an element.
+    - The following code finds the first `div` element in the DOM and replaces all the HTML it contains.
+        - `const el = document.querySelector('div');`
+        - `el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';`
+    - However, directly injecting HTML as a block of text is a common attack vector for hackers.
+    - If an untrusted party can inject JavaScript anywhere in our application then that JavaScript can represent itself as the current user of the application.
+    - The attacker can then make requests for sensitive data, monitor activity, and steal credentials.
+    - The example below shows how the `img` element can be used to launch an attach as soon as the page is loaded.
+        - `<img src="bogus.png" onerror="console.log('All your base are belong to us')" />`
+    - If we are inject HTML, make sure that it cannot be manipulated by a user.
+    - Common injection paths include HTML input controls, URL parameters, and HTTP headers.
+    - Either sanitize any HTML that contains variables, or simply use DOM manipulation functions instead of using `innerHTML`.
+- Event Listeners
+    - All DOM elements suppot the ability to attach a function that gets called when an event occurs on the element.
+    - These functions are called event listenders.
+    - Below is an example of an event listener that gets called when an element gets clicked.
+        - `const submitDataEl = document.querySelector('#submitData');`
+        - `submitDataEl.addEventListener('click', function (event) {`
+            - `console.log(event.type);`
+        - `});`
+    - There are lots of possible events that we can add a listener to.
+    - This includes things like mouse, keyboard, scrolling, animation, video, audio, WebSocket, and clipboard events.
+        - Clipboard: Cut, copied, pasted
+        - Focus: An element gets focus
+        - Keyboard: Keys are pressed
+        - Mouse: Click events
+        - Text selection: When text is selected
+    - We can also add event listeners directly in the HTML.
+    - For example, below is a `onclick` handler that is attached to a button.
+        - `<button onclick='alert("clicked")'>click me</button>`
