@@ -1,6 +1,6 @@
 function signup() {
-    const newNameEl = document.querySelector("#new_name");
-    const newPasswordEl = document.querySelector("#new_password")
+    const newNameEl = document.querySelector("#newName");
+    const newPasswordEl = document.querySelector("#newPassword")
     const emailEl = document.querySelector("#email")
     localStorage.setItem("newUserame", newNameEl.value);
     localStorage.setItem("newPassword", newPasswordEl.value);
