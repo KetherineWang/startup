@@ -3,30 +3,35 @@ function storeLyricsData() {
 
     const lyricsData = [
       {
+        "isAnswered": false,
         "lyric": "You never had a clue\nAll the days that I spent loving you\nWho am I supposed to give 'em to?",
         "options": ["ANGEL", "GABRIEL", "LIMBO", "UNDERSTAND"],
         "answer": "ANGEL",
         "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1234379731&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
       },
       {
+        "isAnswered": false,
         "lyric": "'Cause you never know until you do\nIf I had to guess, I think it's you\nSo if I fake it\nWould it be true?",
         "options": ["bandaids", "drunk", "blue", "us"],
         "answer": "us",
         "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/911450407&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
       },
       {
+        "isAnswered": false,
         "lyric": "Impatient, just say it\nStill waitin', for another round\nNew faces, I'm racin'\nI'm fine but I'll never make it home",
         "options": ["beside you", "drunk", "blue", "talk"],
         "answer": "blue",
         "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725573965&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
       },
       {
+        "isAnswered": false,
         "lyric": "Never thought that I'd find\nThat the one in my life would be so near\nAnd now you're here",
         "options": ["right here", "UNDERSTAND", "always", "us"],
         "answer": "UNDERSTAND",
         "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1234378480&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
       },
       {
+        "isAnswered": false,
         "lyric": "I think some words are overdue\nCould we just do it over?\nCan we just talk it out like friends\nBecause I need your shoulder",
         "options": ["right here", "beside you", "B.Y.S.", "talk"],
         "answer": "right here",
@@ -49,14 +54,13 @@ function getPlayerName() {
     return localStorage.getItem('username') || 'Unknown'
 }
 
-let isAnswered = false;
+let counter = 0;
 
 function displayLyricAndOptions() {
     console.log("Entered displayLyricAndOptions function")
-    isAnswered = false;
 
     const lyricsData = getLyricsData();
-    const currentLyricIndex = Math.floor(Math.random() * lyricsData.length);
+    const currentLyricIndex = counter;
     const currentLyric = lyricsData[currentLyricIndex];
 
     const lyricsEl = document.querySelector('.lyrics p');
@@ -105,13 +109,28 @@ function handleEmojiClick() {
 function skipQuestion() {
     console.log("Entered skipQuestion function")
 
+    const lyricsData = getLyricsData();
+    const currentLyricIndex = counter;
+    const currentLyric = lyricsData[currentLyricIndex];
+
+    if (counter < lyricsData.length) {
+        counter += 1;
+    }
+
     document.querySelector('#skip').addEventListener('click', displayLyricAndOptions);
+
 }
 
 function nextQuestion() {
     console.log("Entered nextQuestion function")
 
-    isAnswered = false;
+    const lyricsData = getLyricsData();
+    const currentLyricIndex = counter;
+    const currentLyric = lyricsData[currentLyricIndex];
+
+    if (counter < lyricsData.length) {
+        counter += 1;
+    }
 
     document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
 }
@@ -128,7 +147,11 @@ function checkGuess() {
     console.log("Entered checkGuess function")
 
     document.querySelector('#go').addEventListener('click', function() {
-        if (isAnswered) {
+        const lyricsData = getLyricsData();
+        const currentLyricIndex = parseInt(localStorage.getItem('currentLyricIndex'), 10);
+        const currentLyric = lyricsData[currentLyricIndex];
+
+        if (currentLyric.isAnswered) {
             alert('You have already answered this question. Please move to the next question.')
             return;
         }
@@ -139,11 +162,7 @@ function checkGuess() {
             return;
         }
 
-        isAnswered = true;
-
-        const lyricsData = getLyricsData();
-        const currentLyricIndex = parseInt(localStorage.getItem('currentLyricIndex'), 10);
-        const currentLyric = lyricsData[currentLyricIndex];
+        currentLyric.isAnswered = true;
 
         if (selectedOption.value === currentLyric.answer) {
             displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
@@ -157,7 +176,7 @@ function checkGuess() {
 }
 
 function displayAnswerAndSoundCloud(answer, soundCloud) {
-    console.log("Entered disPlayAnswerAndSoundCloud function")
+    console.log("Entered displayAnswerAndSoundCloud function")
 
     const answerEl = document.querySelector('.answer');
 
@@ -175,7 +194,7 @@ function displayAnswerAndSoundCloud(answer, soundCloud) {
 function updateScore(isCorrect) {
     console.log("Entered updateScore function")
 
-    if (isCorrect && !isAnswered) {
+    if (isCorrect) {
         let currentPlayer = getPlayerName();
         let scores = JSON.parse(localStorage.getItem('scores')) || {}
 
@@ -198,8 +217,6 @@ function initPlay() {
     getPlayerName();
     displayLyricAndOptions();
     handleEmojiClick();
-    skipQuestion();
-    nextQuestion();
     endGame();
     checkGuess();
 }
