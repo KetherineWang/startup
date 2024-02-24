@@ -37,14 +37,23 @@ function storeLyricsData() {
     localStorage.setItem('lyricsData', JSON.stringify(lyricsData));
 }
 
-  function getLyricsData() {
+function getLyricsData() {
     console.log("Entered getLyricsData function")
 
     return JSON.parse(localStorage.getItem('lyricsData'));
-  }
+}
 
-  function displayLyricAndOptions() {
+function getPlayerName() {
+    console.log("Entered getPlayerName function")
+
+    return localStorage.getItem('username') || 'Unknown'
+}
+
+let isAnswered = false;
+
+function displayLyricAndOptions() {
     console.log("Entered displayLyricAndOptions function")
+    isAnswered = false;
 
     const lyricsData = getLyricsData();
     const currentLyricIndex = Math.floor(Math.random() * lyricsData.length);
@@ -63,7 +72,7 @@ function storeLyricsData() {
     }
 
     currentLyric.options.forEach(option => {
-        const label = document.createElement('lable');
+        const label = document.createElement('label');
         const div = document.createElement('div');
         div.className = "radioContainer";
         const input = document.createElement('input');
@@ -80,9 +89,9 @@ function storeLyricsData() {
     });
 
     localStorage.setItem('currentLyricIndex', currentLyricIndex.toString())
-  }
+}
 
-  function handleEmojiClick() {
+function handleEmojiClick() {
     console.log("Entered handleEmojiClick function")
 
     document.querySelectorAll('.emoji').forEach(emoji => {
@@ -91,37 +100,46 @@ function storeLyricsData() {
             console.log(`Emoji ${reaction} clicked`);
         });
     });
-  }
+}
 
-  function skipQuestion() {
+function skipQuestion() {
     console.log("Entered skipQuestion function")
 
     document.querySelector('#skip').addEventListener('click', displayLyricAndOptions);
-  }
+}
 
-  function nextQuestion() {
+function nextQuestion() {
     console.log("Entered nextQuestion function")
 
-    document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
-  }
+    isAnswered = false;
 
-  function endGame() {
+    document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
+}
+
+function endGame() {
     console.log("Entered endGame function")
 
     document.querySelector('#end').addEventListener('click', () => {
         windown.location.href = 'score.html';
     })
-  }
+}
 
-  function checkGuess() {
+function checkGuess() {
     console.log("Entered checkGuess function")
 
     document.querySelector('#go').addEventListener('click', function() {
+        if (isAnswered) {
+            alert('You have already answered this question. Please move to the next question.')
+            return;
+        }
+
         const selectedOption = document.querySelector('input[type="radio"]:checked');
         if (!selectedOption) {
             alert('Please select an option!');
             return;
         }
+
+        isAnswered = true;
 
         const lyricsData = getLyricsData();
         const currentLyricIndex = parseInt(localStorage.getItem('currentLyricIndex'), 10);
@@ -131,14 +149,14 @@ function storeLyricsData() {
             displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
             updateScore(true);
         } else {
-            alert('Please select an option!');
+            alert('Incorret! Sorry the game ends upon the first incorrect answer.')
             updateScore(false);
             window.location.href = 'score.html';
         }
     });
-  }
+}
 
-  function displayAnswerAndSoundCloud(answer, soundCloud) {
+function displayAnswerAndSoundCloud(answer, soundCloud) {
     console.log("Entered disPlayAnswerAndSoundCloud function")
 
     const answerEl = document.querySelector('.answer');
@@ -152,22 +170,38 @@ function storeLyricsData() {
 
     const soundCloudContainer = document.querySelector('#soundCloud');
     soundCloudContainer.innerHTML = soundCloud;
-  }
+}
 
-  function updateScore(isCorrect) {
+function updateScore(isCorrect) {
+    console.log("Entered updateScore function")
 
-  }
+    if (isCorrect && !isAnswered) {
+        let currentPlayer = getPlayerName();
+        let scores = JSON.parse(localStorage.getItem('scores')) || {}
 
-  function initPlay() {
-    if (!localStorage.getItem('lyricsData')) {
-        storeLyricsData();
+        if (!scores[currentPlayer]) {
+            scores[currentPlayer] = 0;
+        }
+
+        scores[currentPlayer] += 1;
+
+        console.log(`After updating, ${currentPlayer}'s score:`, scores[currentPlayer]);
+
+        localStorage.setItem('scores', JSON.stringify(scores));
+
+        console.log("Scores saved to localStorage:", scores);
     }
+}
+
+function initPlay() {
+    storeLyricsData();
+    getPlayerName();
     displayLyricAndOptions();
     handleEmojiClick();
     skipQuestion();
     nextQuestion();
     endGame();
     checkGuess();
-  }
+}
 
-  document.addEventListener('DOMContentLoaded', initPlay);
+document.addEventListener('DOMContentLoaded', initPlay);
