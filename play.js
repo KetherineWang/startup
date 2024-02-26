@@ -116,9 +116,6 @@ function skipQuestion() {
     if (counter < lyricsData.length) {
         counter += 1;
     }
-
-    document.querySelector('#skip').addEventListener('click', displayLyricAndOptions);
-
 }
 
 function nextQuestion() {
@@ -131,8 +128,6 @@ function nextQuestion() {
     if (counter < lyricsData.length) {
         counter += 1;
     }
-
-    document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
 }
 
 function endGame() {
@@ -146,33 +141,31 @@ function endGame() {
 function checkGuess() {
     console.log("Entered checkGuess function")
 
-    document.querySelector('#go').addEventListener('click', function() {
-        const lyricsData = getLyricsData();
-        const currentLyricIndex = parseInt(localStorage.getItem('currentLyricIndex'), 10);
-        const currentLyric = lyricsData[currentLyricIndex];
+    const lyricsData = getLyricsData();
+    const currentLyricIndex = parseInt(localStorage.getItem('currentLyricIndex'), 10);
+    const currentLyric = lyricsData[currentLyricIndex];
 
-        if (currentLyric.isAnswered) {
-            alert('You have already answered this question. Please move to the next question.')
-            return;
-        }
+    if (currentLyric.isAnswered) {
+        alert('You have already answered this question. Please move to the next question.')
+        return;
+    }
 
-        const selectedOption = document.querySelector('input[type="radio"]:checked');
-        if (!selectedOption) {
-            alert('Please select an option!');
-            return;
-        }
+    const selectedOption = document.querySelector('input[type="radio"]:checked');
+    if (!selectedOption) {
+        alert('Please select an option!');
+        return;
+    }
 
-        currentLyric.isAnswered = true;
+    currentLyric.isAnswered = true;
 
-        if (selectedOption.value === currentLyric.answer) {
-            displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
-            updateScore(true);
-        } else {
-            alert('Incorret! Sorry the game ends upon the first incorrect answer.')
-            updateScore(false);
-            window.location.href = 'score.html';
-        }
-    });
+    if (selectedOption.value === currentLyric.answer) {
+        displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
+        updateScore(true);
+    } else {
+        alert('Incorret! Sorry the game ends upon the first incorrect answer.')
+        updateScore(false);
+        window.location.href = 'score.html';
+    };
 }
 
 function displayAnswerAndSoundCloud(answer, soundCloud) {
@@ -218,7 +211,33 @@ function initPlay() {
     displayLyricAndOptions();
     handleEmojiClick();
     endGame();
-    checkGuess();
+    document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
+    document.querySelector('#skip').addEventListener('click', displayLyricAndOptions);
+
 }
 
 document.addEventListener('DOMContentLoaded', initPlay);
+
+function displayPlayerUsername() {
+    const playerUsernameEl = document.querySelector('.playerUsername')
+}
+
+setInterval(() => {
+    addNewMessage();
+}, 1500);
+
+function addNewMessage() {
+    const score = Math.floor(Math.random() * 100);
+    const notifications = document.querySelector('#notifications');
+    const notificationsChildren = Array.from(notifications.children);
+
+    const newMessage = document.createElement('div');
+    newMessage.className = 'message';
+    newMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
+
+    notificationsChildren.unshift(newMessage);
+    if (notifications.children.length > 15) {
+        notificationsChildren.pop()
+    }
+    notifications.replaceChildren(...notificationsChildren);
+}

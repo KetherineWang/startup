@@ -14,19 +14,23 @@ header {
     padding: 0.5em;
 }
 
-.user-player {
+.userPlayer {
     font-size: 25px;
 }
 
-.player-username {
+.playerUsername {
     color: rgb(250, 230, 210);
+}
+
+#notifications {
+    position: absolute;
 }
 
 .message {
     color: black;
 }
 
-.player-event {
+.playerEvent {
     color: rgb(250, 230, 210);
 }
 
