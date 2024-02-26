@@ -48,10 +48,46 @@ function getLyricsData() {
     return JSON.parse(localStorage.getItem('lyricsData'));
 }
 
-function getPlayerName() {
+function getPlayerUsername() {
     console.log("Entered getPlayerName function")
 
-    return localStorage.getItem('username') || 'Unknown'
+    return localStorage.getItem('username') || 'Unknown Player'
+}
+
+function displayPlayerUsername() {
+    const playerUsernameEl = document.querySelector('.playerUsername');
+    playerUsernameEl.textContent = getPlayerUsername();
+}
+
+setInterval(() => {
+    addNewMessage();
+}, 1500);
+
+function addNewMessage() {
+    const notifications = document.querySelector('#notifications');
+    const notificationsChildren = Array.from(notifications.children);
+
+    const newStartMessage = document.createElement('div');
+    newScoreMessage.className = 'message';
+    newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
+
+    const score = Math.floor(Math.random() * 100);
+    const newScoreMessage = document.createElement('div');
+    newScoreMessage.className = 'message';
+    newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
+
+    const emoji = getLastEmojiClicked();
+    const newEmojiMessage = document.createElement('div');
+    newEmojiMessage.className = 'message';
+    newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${emoji}`;
+
+    notificationsChildren.unshift(newStartMessage);
+    notificationsChildren.unshift(newScoreMessage);
+    notificationsChildren.unshift(newEmojiMessage);
+    if (notifications.children.length > 15) {
+        notificationsChildren.pop()
+    }
+    notifications.replaceChildren(...notificationsChildren);
 }
 
 let counter = 0;
@@ -99,11 +135,24 @@ function handleEmojiClick() {
     console.log("Entered handleEmojiClick function")
 
     document.querySelectorAll('.emoji').forEach(emoji => {
-        emoji.addEventListener('click', function() {
-            const reaction = this.textContent;
+        emoji.addEventListener('click', function(event) {
+            const reaction = emoji.textContent;
+            //const reaction = this.textContent;
             console.log(`Emoji ${reaction} clicked`);
+
+            localStorage.setItem('lastEmojiClicked', reaction);
         });
     });
+}
+
+function getLastEmojiClicked() {
+    const lastEmojiClicked = localStorage.getItem('lastEmojiClicked');
+    
+    if(lastEmojiClicked) {
+        console.log(`The last emoji clicked was: ${lastEmojiClicked}`);
+    } else {
+        console.log('No emoji reaction has been stored.');
+    }
 }
 
 function skipQuestion() {
@@ -192,22 +241,24 @@ function updateScore(isCorrect) {
         let scores = JSON.parse(localStorage.getItem('scores')) || {}
 
         if (!scores[currentPlayer]) {
-            scores[currentPlayer] = 0;
+            scores[currentPlayer] = {
+                score: 0,
+                date: new Date().toLocaleString()
+            }
         }
 
         scores[currentPlayer] += 1;
-
+        scores[currentPlayer].date = new Date().toLocaleString();
         console.log(`After updating, ${currentPlayer}'s score:`, scores[currentPlayer]);
 
         localStorage.setItem('scores', JSON.stringify(scores));
-
         console.log("Scores saved to localStorage:", scores);
     }
 }
 
 function initPlay() {
     storeLyricsData();
-    getPlayerName();
+    displayPlayerUsername();
     displayLyricAndOptions();
     handleEmojiClick();
     endGame();
@@ -217,27 +268,3 @@ function initPlay() {
 }
 
 document.addEventListener('DOMContentLoaded', initPlay);
-
-function displayPlayerUsername() {
-    const playerUsernameEl = document.querySelector('.playerUsername')
-}
-
-setInterval(() => {
-    addNewMessage();
-}, 1500);
-
-function addNewMessage() {
-    const score = Math.floor(Math.random() * 100);
-    const notifications = document.querySelector('#notifications');
-    const notificationsChildren = Array.from(notifications.children);
-
-    const newMessage = document.createElement('div');
-    newMessage.className = 'message';
-    newMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
-
-    notificationsChildren.unshift(newMessage);
-    if (notifications.children.length > 15) {
-        notificationsChildren.pop()
-    }
-    notifications.replaceChildren(...notificationsChildren);
-}
