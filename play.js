@@ -59,37 +59,6 @@ function displayPlayerUsername() {
     playerUsernameEl.textContent = getPlayerUsername();
 }
 
-setInterval(() => {
-    addNewMessage();
-}, 1500);
-
-function addNewMessage() {
-    const notifications = document.querySelector('#notifications');
-    const notificationsChildren = Array.from(notifications.children);
-
-    const newStartMessage = document.createElement('div');
-    newScoreMessage.className = 'message';
-    newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
-
-    const score = Math.floor(Math.random() * 100);
-    const newScoreMessage = document.createElement('div');
-    newScoreMessage.className = 'message';
-    newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
-
-    const emoji = getLastEmojiClicked();
-    const newEmojiMessage = document.createElement('div');
-    newEmojiMessage.className = 'message';
-    newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${emoji}`;
-
-    notificationsChildren.unshift(newStartMessage);
-    notificationsChildren.unshift(newScoreMessage);
-    notificationsChildren.unshift(newEmojiMessage);
-    if (notifications.children.length > 15) {
-        notificationsChildren.pop()
-    }
-    notifications.replaceChildren(...notificationsChildren);
-}
-
 let counter = 0;
 
 function displayLyricAndOptions() {
@@ -153,6 +122,8 @@ function getLastEmojiClicked() {
     } else {
         console.log('No emoji reaction has been stored.');
     }
+
+    return lastEmojiClicked;
 }
 
 function skipQuestion() {
@@ -237,7 +208,7 @@ function updateScore(isCorrect) {
     console.log("Entered updateScore function")
 
     if (isCorrect) {
-        let currentPlayer = getPlayerName();
+        let currentPlayer = getPlayerUsername();
         let scores = JSON.parse(localStorage.getItem('scores')) || {}
 
         if (!scores[currentPlayer]) {
@@ -247,7 +218,7 @@ function updateScore(isCorrect) {
             }
         }
 
-        scores[currentPlayer] += 1;
+        scores[currentPlayer].score += 1;
         scores[currentPlayer].date = new Date().toLocaleString();
         console.log(`After updating, ${currentPlayer}'s score:`, scores[currentPlayer]);
 
@@ -268,3 +239,42 @@ function initPlay() {
 }
 
 document.addEventListener('DOMContentLoaded', initPlay);
+
+setInterval(() => {
+    addNewMessage();
+}, 1500);
+
+function addNewMessage() {
+    const notifications = document.querySelector('#notifications');
+    let notificationsChildren = Array.from(notifications.children);
+
+    const newStartMessage = document.createElement('div');
+    newStartMessage.className = 'message';
+    newStartMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
+    notificationsChildren.unshift(newStartMessage)
+    if (notifications.children.length > 15) {
+        notificationsChildren.pop()
+    }
+
+    const score = Math.floor(Math.random() * 100);
+    const newScoreMessage = document.createElement('div');
+    newScoreMessage.className = 'message';
+    newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
+    notificationsChildren.unshift(newScoreMessage)
+    if (notifications.children.length > 15) {
+        notificationsChildren.pop()
+    }
+
+    const lastEmojiClicked = getLastEmojiClicked();
+    if (lastEmojiClicked) {
+        const newEmojiMessage = document.createElement('div');
+        newEmojiMessage.className = 'message';
+        newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${lastEmojiClicked}`;
+        notificationsChildren.unshift(newEmojiMessage)
+        if (notifications.children.length > 15) {
+            notificationsChildren.pop()
+        }
+    }
+
+    notifications.replaceChildren(...notificationsChildren);
+}
