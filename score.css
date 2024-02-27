@@ -48,6 +48,11 @@ header {
     font-size: 45px;
 }
 
+#playerScore {
+    font-size: 50px;
+    color:rgba(3, 30, 30, 0.800)
+}
+
 footer {
     background-color: rgb(3, 30, 30, 0.800);
 }

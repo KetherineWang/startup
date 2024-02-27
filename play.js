@@ -49,12 +49,14 @@ function getLyricsData() {
 }
 
 function getPlayerUsername() {
-    console.log("Entered getPlayerName function")
+    console.log("Entered getPlayerUSername function")
 
     return localStorage.getItem('username') || 'Unknown Player'
 }
 
 function displayPlayerUsername() {
+    console.log("Entered displayPlayerUSername function")
+
     const playerUsernameEl = document.querySelector('.playerUsername');
     playerUsernameEl.textContent = getPlayerUsername();
 }
@@ -115,13 +117,15 @@ function handleEmojiClick() {
 }
 
 function getLastEmojiClicked() {
+    // console.log("Entered getLastEmojiClicked function")
+
     const lastEmojiClicked = localStorage.getItem('lastEmojiClicked');
     
-    if(lastEmojiClicked) {
-        console.log(`The last emoji clicked was: ${lastEmojiClicked}`);
-    } else {
-        console.log('No emoji reaction has been stored.');
-    }
+    // if(lastEmojiClicked) {
+    //     console.log(`The last emoji clicked was: ${lastEmojiClicked}`);
+    // } else {
+    //     console.log('No emoji reaction has been stored.');
+    // }
 
     return lastEmojiClicked;
 }
@@ -245,6 +249,8 @@ setInterval(() => {
 }, 1500);
 
 function addNewMessage() {
+    // console.log("Entered addNewMessage function")
+
     const notifications = document.querySelector('#notifications');
     let notificationsChildren = Array.from(notifications.children);
 

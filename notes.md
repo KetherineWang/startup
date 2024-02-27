@@ -1434,14 +1434,14 @@
 # Document Object Model
 - The Document Object Model (DOM) is an object representation of the HTML elements that the browser uses to render the display.
 - The browser also exposes the DOM to external code so that we can write programs that dynamically manipulate the HTML.
-- The browser provides access to the DOM through a global variable name `document` that points to the root element of the DOM.
-- If we open the browser's debugger console windown and type the variable name `document`, we will see the DOM for the document the browser is currently rendering.
-- For everything in an HTML document, there is a node the DOM.
+- The browser provides access to the DOM through a global variable named `document` that points to the root element of the DOM.
+- If we open the browser's debugger console window and type the variable name `document`, we will see the DOM for the document the browser is currently rendering.
+- For everything in an HTML document, there is a node in the DOM.
 - This includes elements, attributes, text, comments, and whitespace.
-- All of these nodes from a big tree, with the document node at the top.
+- All of these nodes are from a big tree, with the document node at the top.
 - Accessing the DOM
     - Every element in an HTML document implements the DOM Element interface, which is derived from the DOM Node interface.
-    - The DOM Element interface provides the means for iterating child elements, accessing parent element, and manipulating the element's attributes.
+    - The DOM Element interface provides the means for iterating child elements, accessing parent elements, and manipulating the element's attributes.
     - From our JavaScript code, we can start with the document variable and walk through every element in the tree.
         - `function displayElement(el) {`
             - `console.log(el.tagName);`
@@ -1488,12 +1488,12 @@
     - The attacker can then make requests for sensitive data, monitor activity, and steal credentials.
     - The example below shows how the `img` element can be used to launch an attach as soon as the page is loaded.
         - `<img src="bogus.png" onerror="console.log('All your base are belong to us')" />`
-    - If we are inject HTML, make sure that it cannot be manipulated by a user.
+    - If we are to inject HTML, make sure that it cannot be manipulated by a user.
     - Common injection paths include HTML input controls, URL parameters, and HTTP headers.
-    - Either sanitize any HTML that contains variables, or simply use DOM manipulation functions instead of using `innerHTML`.
+    - Either sanitize any HTML that contains variables or simply use DOM manipulation functions instead of using `innerHTML`.
 - Event Listeners
-    - All DOM elements suppot the ability to attach a function that gets called when an event occurs on the element.
-    - These functions are called event listenders.
+    - All DOM elements support the ability to attach a function that gets called when an event occurs on the element.
+    - These functions are called event listeners.
     - Below is an example of an event listener that gets called when an element gets clicked.
         - `const submitDataEl = document.querySelector('#submitData');`
         - `submitDataEl.addEventListener('click', function (event) {`
@@ -1507,5 +1507,120 @@
         - Mouse: Click events
         - Text selection: When text is selected
     - We can also add event listeners directly in the HTML.
-    - For example, below is a `onclick` handler that is attached to a button.
+    - For example, below is an `onclick` handler that is attached to a button.
         - `<button onclick='alert("clicked")'>click me</button>`
+
+# Midterm Kahoot!
+- The `<p>` tag in HTML is used for block-level text.
+- Border vs. Margin
+    - The border surrounds the padding (if any) and the actual content of the element.
+    - The margin is the outermost layer and represents the space between the element's border and the neighboring elements.
+- JSON
+    - `{'x':3}` is not valid JSON because the keys must be in double quotes.
+    - `{"x":undefined}` is not valid JSON because undefined is not a valid JSON value. JSON supports null but not undefined.
+    - `{x:3}` is not valid JSON because, again, the keys must be in double quotes.
+    - `{"x":3}` is valid JSON. The key is in double quotes, and the value is a number, which is a valid data type in JSON.
+- `chmod +x` is the console command that makes a script executable.
+- `CNAME` is the DNS record type that is used to point to another DNS record.
+- Promise
+- `const p = new Promise((resolve, reject) => {`
+    - `setTimeout(() =>) {`
+        - `console.log('taco);`
+        - `resolve(true);`
+    - `}, 10000);`
+- `});`
+- `console.log('burger')`
+
+- `p`
+- `.then((result) => console.log('shake'))`
+- `.catch((e) => console.log('salas'))`
+- `.finally(() => console.log('noodles'))`
+
+- `console.log('fries')`
+    - A new `Promise` `p` is created. The `Promise` constructor takes a function that has two parameters, `resolve` and `reject`, which are both functions. This function is called the executor.
+    - Inside the `Promise` executor, there's a `setTimeout` call scheduled to execute after `10000` milliseconds (or 10 seconds). When the timeout is complete, it will log `'taco'` to the console and then resolve the `Promise` with the value `true`.
+    - Immediately after the `Promise` is created, `console.log('burger')` is executed. This is not part of the asynchronous code, so it will run immediately.
+    - After logging `'burger'`, the code sets up chained `.then`, `.catch`, and `.finally` methods on the `Promise` `p`. These methods are used to handle the fulfilled value, any errors, and cleanup operations, respectively.
+    - The `.then` method is used to handle the resolved value from the `Promise`. If the `Promise` is resolved, it will log `'shake'` to the console.
+    - The `.catch` method is for error handling. If the `Promise` were rejected, it would log `'salad'`. However, in this code, the `Promise` is never rejected, so `'salad'` will not be logged.
+    - The `.finally` method is called regardless of whether the `Promise` is resolved or rejected. This method will log `'noodles'` to the console.
+    - Finally, `console.log('fries')` will run immediately after setting up the `Promise` handlers, since it is not inside the asynchronous part of the code.
+        - `'burger`' will be the first output, since it is directly in the flow of execution.
+        - `'fries'` will be the second output, for the same reason as `'burger'`.
+        - After 10 seconds, `'taco'` will be logged when the `setTimeout` callback is invoked.
+        - Immediately after `'taco'`, `'shake'` will be logged because the `Promise` resolves to `true`.
+        - Finally, `'noodles'` will be logged because the `.finally` method is called after the `.then`.
+- Typical Scenarios where a `Promise` would be rejected:
+    - An error occurs within the executor function, and we explicitly call the `reject` function with a reason (typically an Error object).
+        - `new Promise((resolve, reject) => {`
+            - // Some code that might fail
+            - `if (/* failure condition */) {`
+                - `reject(new Error("Failure reason"));`
+            - `} else {`
+                - `resolve(successValue);`
+            - `}`
+        - `});`
+    - An uncaught error is thrown within the executor function. If an error is thrown and not caught within a Promise executor, the Promise will be automatically rejected with that error.
+        - `new Promise((resolve, reject) => {`
+            - `throw new Error("Failure reason");`
+            - `// This will cause the Promise to be rejected with "Failure reason"`
+        - `});`
+    - A rejection happens within a Promise chain. If a `.then` or `.catch` handler throws an error or returns a Promise that gets rejected, the entire Promise chain is rejected until a `.catch` handler is encountered.
+        - `doSomethingAsync()`
+            - `.then(result => {`
+                - `throw new Error("Failure in then");`
+                - `// The chain is now in a rejected state`
+            - `})`
+            - `.catch(error => {`
+                - `// Handle the error`
+            - `});`
+- Async
+- `const a = async function() {`
+    - `return new Promise((resolve, reject) => {`
+        - `setTimeout(() => {`
+            - `console.log('D');`
+            - `resolve(true)`
+        - `},`
+        - `10000);`
+    - `})`
+- `}`
+
+- `try {`
+    - `console.log('A');`
+    - `await a();`
+    - `console.log('B');`
+- `} catch(e) {`
+    - `console.log('C');`
+- `}`
+    - `const a` is an `async function` that, when called, immediately returns a `Promise` because all `async` functions return a Promise implicitly.
+    - Inside the `async function`, a new `Promise` is explicitly returned, which uses a `setTimeout` to simulate asynchronous behavior. The `setTimeout` will call its callback function after 10 seconds (`10000` milliseconds), which logs `'D'` to the console and resolves the `Promise` with the value `true`.
+    - There is a `try` block that first logs `'A'` to the console.
+    - Then the `await` keyword is used to pause the execution within the `try` block until the `Promise` returned by `a()` is settled (either resolved or rejected). Since `a()` returns a `Promise` that resolves after 10 seconds, the `try` block is paused at this line until that time.
+    - After 10 seconds, when the `Promise` resolves, it will continue to execute the next line within the `try` block, which logs `'B'` to the console.
+    - There is no `reject` in the Promise executor, so the `catch` block is not executed. If there were any errors thrown inside the `try` block, the `catch` block would catch these errors, and `'C'` would be logged to the console.
+        - `'A'` is logged immediately when the `try` block executes.
+        - The script awaits the resolution of `a()`, which takes 10 seconds due to the `setTimeout`.
+        - After a 10-second delay, `'D'` is logged when the `setTimeout` in `a()` fires.
+        - Immediately after `'D'`, `'B'` is logged because the `Promise` has been resolved and control returns to the line after the `await a()` call.
+        - `'C'` is never logged because there is no error thrown.
+
+# Midterm
+- `document.getElementsByTag(‘p #header’)[0].style.color = 'red';`
+    - Incorrect Method Name: There is no method called `getElementsByTag` in the Document Object Model (DOM). The correct method for selecting elements by their tag name is `getElementsByTagName`.
+    - Incorrect Selector Syntax: The syntax `‘p #header’` is not a valid argument for `getElementsByTagNam`e. This method expects a tag name (like `'p'`, `'div'`, etc.) as its argument, not a CSS selector. The `#header` part implies we are looking for an element with the ID of `header`, which is not something we can select with `getElementsByTagName`.
+    - Combining Selectors Incorrectly: `‘p #header’` implies we are trying to select an element with the ID of `header` that is a descendant of a `<p>` tag, which is a CSS selector strategy, not something we can directly achieve with `getElementsByTagName`. For selecting elements based on more complex criteria like this, `querySelector` or `querySelectorAll` would be used, and the correct syntax would be `document.querySelector('p #header')` (though this is also logically incorrect if `'header'` is an ID, as IDs should be unique within the page and not tied to specific tag types).
+    - Incorrect Approach for ID Selection: To select an element by its ID, the correct method is `getElementById`, as IDs are intended to be unique within a page. Thus, `document.getElementById('header')` is the proper way to select an element with the ID of the header.
+- The `<li>` tag in HTML is used to define a list item in an ordered list (`<ol>`) or an unordered list (`<ul>`). It stands for "list item" and is used to mark each item that appears in a list. Each `<li>` element is part of a larger list defined by the enclosing `<ol>` or `<ul>` tags.
+- `<!DOCTYPE html>` informs the browser which version of HTML the page is written in (in this case, HTML5) to ensure that the browser renders the content correctly according to the HTML5 specifications.
+- In JavaScript, it is possible to add new properties to an object dynamically after it has been created. The given example demonstrates this capability by adding the `hasEaten` property with a value of `false` to the `squirrel` object. This flexibility is one of the features of JavaScript's dynamic nature.
+    - `squirrel = { hungry: true, sleeping: false };`
+    
+    - `squirrel.hasEaten = false;`
+- `demo.simon.myfunkychickens.click`
+    - `demo.simon` is the subdomain.
+    - `myfunkychickens.click` is the second-level domain.
+    - `click` is both the top-level domain and the root domain.
+        - The top-level domain is the rightmost part of a domain name, following the last dot `.`.
+        - In DNS notation, the root domain is represented by a single dot `.`.
+- A DNS (Domain Name System) A record maps a domain name to an IP address. However, it is also possible for an A record to point to another A record. This is known as DNS aliasing or a DNS chain. It allows one domain to redirect to another domain or to another host without exposing the actual IP address of the destination.
+- Port 443 is reserved for the HTTPS (Hypertext Transfer Protocol Secure) protocol.
