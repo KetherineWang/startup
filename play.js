@@ -49,13 +49,13 @@ function getLyricsData() {
 }
 
 function getPlayerUsername() {
-    console.log("Entered getPlayerUSername function")
+    console.log("Entered getPlayerUsername function")
 
     return localStorage.getItem('username') || 'Unknown Player'
 }
 
 function displayPlayerUsername() {
-    console.log("Entered displayPlayerUSername function")
+    console.log("Entered displayPlayerUsername function")
 
     const playerUsernameEl = document.querySelector('.playerUsername');
     playerUsernameEl.textContent = getPlayerUsername();
@@ -186,9 +186,8 @@ function checkGuess() {
         displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
         updateScore(true);
     } else {
-        alert('Incorret! Sorry the game ends upon the first incorrect answer.')
+        alert('Sorry your guess was incorrect. Please try again!')
         updateScore(false);
-        window.location.href = 'score.html';
     };
 }
 
@@ -206,6 +205,8 @@ function displayAnswerAndSoundCloud(answer, soundCloud) {
 
     const soundCloudContainer = document.querySelector('#soundCloud');
     soundCloudContainer.innerHTML = soundCloud;
+
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
 function updateScore(isCorrect) {
@@ -236,51 +237,62 @@ function initPlay() {
     displayPlayerUsername();
     displayLyricAndOptions();
     handleEmojiClick();
-    endGame();
     document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
     document.querySelector('#skip').addEventListener('click', displayLyricAndOptions);
-
 }
 
 document.addEventListener('DOMContentLoaded', initPlay);
+
+let messageState = 0;
 
 setInterval(() => {
     addNewMessage();
 }, 1500);
 
 function addNewMessage() {
-    // console.log("Entered addNewMessage function")
-
     const notifications = document.querySelector('#notifications');
-    let notificationsChildren = Array.from(notifications.children);
 
+    let newMessage;
+    if (messageState === 0) {
+        newMessage = createStartMessage();
+    } else if (messageState === 1) {
+        newMessage = createScoreMessage();
+    } else if (messageState === 2) {
+        newMessage = createEmojiMessage();
+    }
+
+    if (newMessage) {
+        notifications.insertBefore(newMessage, notifications.firstChild);
+        if (notifications.children.length > 15) {
+            notifications.removeChild(notifications.lastChild);
+        }
+    }
+
+    messageState = (messageState + 1) % 3;
+}
+
+function createStartMessage() {
     const newStartMessage = document.createElement('div');
     newStartMessage.className = 'message';
     newStartMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
-    notificationsChildren.unshift(newStartMessage)
-    if (notifications.children.length > 15) {
-        notificationsChildren.pop()
-    }
+    return newStartMessage;
+}
 
+function createScoreMessage() {
     const score = Math.floor(Math.random() * 100);
     const newScoreMessage = document.createElement('div');
     newScoreMessage.className = 'message';
     newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
-    notificationsChildren.unshift(newScoreMessage)
-    if (notifications.children.length > 15) {
-        notificationsChildren.pop()
-    }
+    return newScoreMessage;
+}
 
+function createEmojiMessage() {
     const lastEmojiClicked = getLastEmojiClicked();
     if (lastEmojiClicked) {
         const newEmojiMessage = document.createElement('div');
         newEmojiMessage.className = 'message';
         newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${lastEmojiClicked}`;
-        notificationsChildren.unshift(newEmojiMessage)
-        if (notifications.children.length > 15) {
-            notificationsChildren.pop()
-        }
+        return newEmojiMessage;
     }
-
-    notifications.replaceChildren(...notificationsChildren);
+    return null;
 }

@@ -81,7 +81,6 @@ header {
 
 .optionsContainer {
     display: flex;
-    width: 100%;
     align-items: center;
     justify-content: center;
     font-family: "Open Sans", sans-serif;
@@ -91,7 +90,6 @@ header {
 
 .buttons {
     display: flex;
-    width: 80%;
     align-items: center;
     justify-content: center;
 }
