@@ -100,3 +100,27 @@ journey through the lyrical landscapes of his songs.
 - **Application Elements**: All application elements mentioned about are properly styled and carefully designed with CSS. Animation effects are also added to some application texts and backgrounds.
 - **Application Text Content**: Different font families, font sizes, font colors, and font weights are used throughout all HTML pages with different purposes represented.
 - **Application Image**: A different application image is appropriately used with CSS as the background for the body of each HTML page. A "keshi" logo image is also properly styled with CSS to blend in with the background image of the "Home" page.
+
+# JavaScript Deliverable
+- **Login**: 
+  - Username and password will be saved to and stored in `localstorage` once entered as user input.
+  - By pressing "Enter" on the keyboard or the "Login to Play" button at the bottom of the login form, it will take the player to the "Play" page.
+  - Signup
+    - New username, new password, and email will be saved to and stored in `localstorage` once entered as user input.
+    - By pressing "Enter" on the keyboard or the "Register" button at the bottom of the signup form, it will take the player to the "Home" page for the player to log in with the player's registered username and password so that the player could log in to play.
+- **database**:
+  - The current player's username will be displayed at the top left corner of the "Play" page by getting and reading the user's login information from `localstorage`.
+  - All the game questions are stored in and retrieved from `localstorage` but will be replaced with database data later.
+    - Lyric sentences to display, four options to select from, the correct answer, and the corresponding SoundCloud soundtrack are stored in and retrieved from `localstorage` for each game question.
+  - All players' scores including the corresponding dates and times that the scores are received are stored in and retrieved from `localstorage` to display the top 10 highest scores and the corresponding players' positions, names, and dates on the "Rank" page. This will be replaced with database data later.
+- **WebSocket**
+  - Mocked Websocket data are implemented on the left side of the "Play" page below where the current player's username is displayed by using the `setInterval()` function to simulate real-time notification messages of all players' activities including game connection, emoji reaction, and score result. This will be replaced with WebSocket later.
+- **Application Interaction Logic**
+  - Most application interaction logic is implemented within the "Play" page.
+  - The game displays a few lyric sentences, four possible options to select from, and some emoji reactions to click with (The emoji reaction clicked will be displayed with the other real-time notification messages on the left side of the "Play" page.).
+  - The player earns one point for each correct answer.
+  - The "Go!" button checks the player's answer. If it is correct, the corresponding correct answer and SoundCloud soundtrack will display at the bottom of the "Play" page. If it is incorrect, an alert will show to ask the player to try again.
+  - The "Skip>>" button skips to the next question.
+  - The "Next>" button goes to the next question.
+  - The "End..." button ends the game and will redirect the player to the "Score" page which displays the player's final score.
+  - If the player chooses to start a new game by pressing the "New Game" button on the "Score" page, the player's preexisting score will be reset to zero, and it will redirect the player back to the "Play" page again to play a new game.
