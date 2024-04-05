@@ -30,8 +30,8 @@ function resetScoreZero() {
 
   const currentPlayer = getPlayerUsername();
 
-  fetch("/api/reset", {
-    method: "DELETE",
+  fetch("/api/resetScore", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -39,12 +39,9 @@ function resetScoreZero() {
       username: currentPlayer,
     }),
   })
-    .then((response) => {
-      if (response.ok) {
-        console.log("Score reset to zero successfully.");
-      } else {
-        throw new Error("Failed to reset score.");
-      }
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.message);
     })
     .catch((error) => console.error("Error resetting score:", error));
 }

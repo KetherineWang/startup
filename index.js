@@ -113,10 +113,15 @@ apiRouter
   });
 
 // Endpoint to delete scores
-apiRouter.route("/reset").delete((req, res) => {
+apiRouter.post("/resetScore", (req, res) => {
   const { username } = req.body;
-  scores[username].score = 0;
-  scores[username].date = new Date().toLocaleString();
+  if (scores[username]) {
+    scores[username].score = 0;
+    scores[username].date = new Date().toLocaleString();
+    res.status(200).send({ message: "Score reset to zero successfully." });
+  } else {
+    res.status(404).send({ message: "Username not found." });
+  }
 });
 
 // Return the application's default page if the path is unknown
