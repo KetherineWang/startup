@@ -1525,7 +1525,7 @@
 - Promise
 - `const p = new Promise((resolve, reject) => {`
     - `setTimeout(() =>) {`
-        - `console.log('taco);`
+        - `console.log('taco');`
         - `resolve(true);`
     - `}, 10000);`
 - `});`
@@ -1533,12 +1533,12 @@
 
 - `p`
 - `.then((result) => console.log('shake'))`
-- `.catch((e) => console.log('salas'))`
+- `.catch((e) => console.log('salad'))`
 - `.finally(() => console.log('noodles'))`
 
 - `console.log('fries')`
     - A new `Promise` `p` is created. The `Promise` constructor takes a function that has two parameters, `resolve` and `reject`, which are both functions. This function is called the executor.
-    - Inside the `Promise` executor, there's a `setTimeout` call scheduled to execute after `10000` milliseconds (or 10 seconds). When the timeout is complete, it will log `'taco'` to the console and then resolve the `Promise` with the value `true`.
+    - Inside the `Promise` executor, there is a `setTimeout` call scheduled to execute after `10000` milliseconds (or 10 seconds). When the timeout is complete, it will log `'taco'` to the console and then resolve the `Promise` with the value `true`.
     - Immediately after the `Promise` is created, `console.log('burger')` is executed. This is not part of the asynchronous code, so it will run immediately.
     - After logging `'burger'`, the code sets up chained `.then`, `.catch`, and `.finally` methods on the `Promise` `p`. These methods are used to handle the fulfilled value, any errors, and cleanup operations, respectively.
     - The `.then` method is used to handle the resolved value from the `Promise`. If the `Promise` is resolved, it will log `'shake'` to the console.
@@ -1624,3 +1624,1113 @@
         - In DNS notation, the root domain is represented by a single dot `.`.
 - A DNS (Domain Name System) A record maps a domain name to an IP address. However, it is also possible for an A record to point to another A record. This is known as DNS aliasing or a DNS chain. It allows one domain to redirect to another domain or to another host without exposing the actual IP address of the destination.
 - Port 443 is reserved for the HTTPS (Hypertext Transfer Protocol Secure) protocol.
+
+# The Internet
+- The internet globally connects independent networks and computing devices.
+- In a simplistic way, we can think of the internet as a massive redundant collection of wires that connect up all the computers in the world.
+- A lot of those wires are wireless (Wi-Fi, satellite, or cell), and not all of computers in the world are connected, but generally, that is what the internet is.
+- The deeper our mental model of the internet is, the more effectively we will be able to create web applications.
+- Making Connections
+    - When one device wants to talk to another, it must have an IP address.
+    - For example, `128.187.16.184` is BYU's address.
+    - Usually, human users prefer a symbolic name over an IP address.
+    - The symbolic name is called a domain name.
+    - Domain names are converted to IP addresses by doing a lookup in the Domain Name System (DNS).
+    - We can look up the IP address for any domain name using the `dig` console utility.
+        - `dig byu.edu`
+        - `byu.edu.		5755	IN	A	128.187.16.184`
+    - Once we have the IP address, we connect to the device it represents by first asking for a connection route to the device.
+    - A connection route consists of many hops across the network until the destination is dynamically discovered and the connection established.
+    - With the connection, the transport and application layers start exchanging data.
+- Traceroute
+    - We can determine the hops in a connection using the `traceroute` console utility. 
+    - In the following example, we trace the route between a home computer and BYU.
+    - In the result, we see the first address `192.168.1.1`.
+    - This is the address of the network router the home computer is connected to.
+    - From there it goes through a couple of devices that do not identify themselves and then hits the Google Fiber gateway.
+    - Google Fiber is the internet service provider, or ISP, for the requesting device.
+    - Then we jump through a few more unidentified devices before finally arriving at BYU (`128.187.16.184`)
+        - `traceroute byu.edu`
+        - ` traceroute to byu.edu (128.187.16.184), 64 hops max, 52 byte packets`
+            - `1  192.168.1.1 (192.168.1.1)  10.942 ms  4.055 ms  4.694 ms`
+            - `2  * * *`
+            - `3  * * *`
+            - `4  192-119-18-212.mci.googlefiber.net (192.119.18.212)  5.369 ms  5.576 ms  6.456 ms`
+            - `5  216.21.171.197 (216.21.171.197)  6.283 ms  6.767 ms  5.532 ms`
+            - `6  * * *`
+            - `7  * * *`
+            - `8  * * *`
+            - `9  byu.com (128.187.16.184)  7.544 ms !X *  40.231 ms !X`
+    - If we run `traceroute` again, we might see a slightly different route since every connection through the internet is dynamically calculated.
+    - The ability to discover a route makes the internet resilient when network devices fail or disappear from the network.
+- Network Internals
+    - The actual sending of data across the internet uses the TCP/IP model.
+    - This is a layered architecture that covers everything from the physical wires to the data that a web application sends.
+    - At the top of the TCP/IP protocol is the application layer.
+    - It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC).
+    - Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data.
+    - The actual connection is made using the internet layer.
+    - This finds the device we want to talk to and keeps the connection alive.
+    - Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
+    - TCP/IP Layers
+        - Layer: Application
+            - Example: HTTPS
+            - Purpose: Functionality like web browsing
+        - Layer: Transport
+            - Example: TCP
+            - Purpose: Moving connection information packets
+        - Layer: Internet
+            - Example: IP
+            - Purpose: Establishing connections
+        - Layer: Link
+            - Example: Fiber, Hardware
+            - Purpose: Physical connections
+- Acronyms and Terms
+    - ISP = Internet Service Provider
+    - SMTP = Simple Mail Transfer Protocol
+    - FTP = File Transfer Protocol
+    - SSH = Secure Shell
+    - IRC = Internet Relay Chat
+
+# Web Servers
+- A web server is a computing device that hosts a web service that knows how to accept incoming internet connections and speak the HTTP application protocol.
+- Monolithic Web Servers
+    - In the early days of web programming, we would buy a massive, complex, expensive, software program that spoke HTTP and is installed on a hardware server.
+    - The package of server and software was considered the web server because the web service software was the only thing running on the server. 
+    - When Berners-Lee wrote his first web server, it only served up static HTML files.
+    - This soon advanced so that they allowed dynamic functionality, including the ability to generate all the HTML on demand in response to a user's interaction.
+    - That facilitated what we know as modern web applications.
+- Combining Web and Application Services
+    - Today, most modern programming languages include libraries that provide the ability to make connections and serve up HTTP.
+    - For example, here is a simple `Go` language program that is a fully functioning web service. 
+        - `package main`
+
+        - `import (`
+            - `"net/http"`
+        - `)`
+
+        - `func main() {`
+            - // Serve up files found in the public_html directory
+            - `fs := http.FileServer(http.Dir("./public_html"))`
+            - `http.Handle("/", fs)`
+
+            - // Listen for HTTP requests
+            - `http.ListenAndServe(":3000", nil)`
+        - `}`
+            - Package Declaration: Every Go file starts with a package declaration, which helps in organizing the code. Packages are Go's way of grouping related code together into a single unit. This makes the code modular, reusable, and maintainable.
+            - `package main`: Indicates that the package should compile as an executable program, not as a shared library. The compiler expects to find a `main` function within this package as the starting point of execution.
+            - `import ("net/http")`: This imports the `net/http` package, which contains functions and types for building HTTP servers and clients in Go.
+            - `func main() { ... }`: Every executable Go program starts with a main function. This is the entry point of our application.
+            - `fs := http.FileServer(http.Dir("./public_html"))`
+                - `http.Dir("./public_html")` specifies the directory from which to serve files. In this case, it is the `public_html` directory located in the same directory as our program.
+                - `http.FileServer(...)` takes a `http.FileSystem` (which `http.Dir` returns) and returns a handler that serves HTTP requests with the contents of the file system.
+            - `http.Handle("/", fs)`
+                - `http.Handle(pattern string, handler http.Handler)` registers the handler for the given pattern in the DefaultServeMux. Here, the pattern is `/`, meaning it will match all URLs. The handler `fs` is what we defined earlier to serve static files.
+                - Essentially, this line tells the Go server to handle all HTTP requests by serving files from the `public_html` directory.
+            - `http.ListenAndServe(":3000", nil)`
+                - `http.ListenAndServe(addr string, handler http.Handler)` listens on the TCP network address `addr` and then calls Serve with a handler to handle requests on incoming connections.
+                - `":3000"` specifies that the server should listen on port 3000 of all network interfaces of the machine. We can access the server by visiting `http://localhost:3000` in our web browser.
+                - Passing `nil` as the handler tells `ListenAndServe` to use the default handler (DefaultServeMux), which we have configured with `http.Handle("/", fs)` to serve our static files.
+    - Port: A port is a numerical identifier in networking used to specify a specific process or service on a host (computer or server) within the TCP/IP networking protocol. Ports allow multiple services to run on a single host, with each service listening for connections on its designated port. Ports are numbered, with the range extending from 0 to 65535.
+    - Listening: When we say a program is "listening" on a port, it means that the program is running in a state where it is waiting for incoming connections on that port. This is a common setup for servers that need to accept connections from clients. When a client attempts to connect to the server using the server's IP address and the specified port number, the server can accept the connection, establishing a communication channel.
+    - Being able to easily create web services makes it easy to completely drop the monolithic web server concept and just build web services right into our web application.
+    - With our simple `Go` example, we can add a function that responds with the current time when the `/api/time` resource is requested.
+        - `package main`
+
+        - `import (`
+            - `"fmt"`
+            - `"io"`
+            - `"net/http"`
+            - `"time"`
+        - `)`
+
+        - `func getTime(w http.ResponseWriter, r *http.Request) {`
+            - `io.WriteString(w, time.Now().String())`
+        - `}`
+
+        - ` func main() {`
+            - // Serve up files found in the public_html directory
+            - `fs := http.FileServer(http.Dir("./public_html"))`
+            - `http.Handle("/", fs)`
+
+            - // Dynamically provide data
+            - `http.HandleFunc("/api/time", getTime)`
+
+            - // Listen for HTTP requests
+            - `fmt.Println(http.ListenAndServe(":3000", nil))`
+        - `}`
+            - `fmt` for formatted I/O with functions analogous to C's printf and scanf.
+            - `io` to provide basic interfaces to I/O primitives.
+            - `net/http` to provide HTTP client and server implementations.
+            - `time` for working with dates and times.
+            - `func getTime( ... )`
+                - It takes two parameters: `w` (an `http.ResponseWriter`) used to write the HTTP response, and `r` (an `*http.Request`) containing all the details of the HTTP request.
+                - `io.WriteString(w, time.Now().String())` writes the current time (converted to a string) to the response writer, effectively sending the current time back to the client.
+            - `fs := http.FileServer(http.Dir("./public_html"))`
+            - `http.Handle("/", fs)`
+                - These lines create a file server that serves static files from the `public_html` directory. Any request to the root path (`/`) or subpaths will serve files from this directory.
+            - `http.HandleFunc("/api/time", getTime)`
+                - This registers a new handler for the path `/api/time`. When a request is made to this path, the `getTime` function is called. This allows the server to dynamically respond with the current time, rather than serving a static file.
+            - `fmt.Println(http.ListenAndServe(":3000", nil))`
+                - `http.ListenAndServe(":3000", nil)` starts an HTTP server listening on port 3000. The `nil` argument tells it to use the default ServeMux, which has been configured with routes (`/` for static files and `/api/time` for the current time).
+                - `fmt.Println(...)` is used here to print any error returned by `ListenAndServe`. Typically, this call blocks indefinitely unless an error occurs (e.g., if the port is already in use).
+    - We can run that web service code, and use the console application `curl` to make an HTTP request and see the time response.
+        - `curl localhost:3000/api/time`
+
+        - `2022-12-03 09:50:37.391983 -0700`
+- Web Service Gateways
+    - Since it is so easy to build web services, it is common to find multiple web services running on the same computing device.
+    - The trick is exposing the multiple services in a way that a connection can be made to each of them.
+    - Every network device allows for separate network connection by referring to a unique port number.
+    - Each service on the device starts up on a different port.
+    - In the example above, the `Go` web service was using port 80.
+    - So we could just have a user access each service by referring to the port it was launched on.
+    - However, this makes it difficult for the user of the services to remember what port matches to which service.
+    - To resolve this, we introduce a service gateway, sometimes called a reverse proxy, that is itself a simple web service that listens on the common HTTPS port 443.
+    - The gateway then looks at the request and maps it to the other services running on different ports.
+    - Our web server will use the application `Caddy` as the gateway to our services.
+- Microservices
+    - Web services that provide a single functional purpose are referred to as microservices.
+    - By partitioning functionality into small logical chunks, we can develop and manage them independently from other functionality in a larger system.
+    - They can also handle large fluctuations in user demand by simply running more and more stateless copies of the microservice from multiple virtual servers hosted in a dynamic cloud environment.
+    - For example, one microservice for generating a genealogical family tree might be able to handle 1,000 users concurrently.
+    - So in order to support 1 million users, we just deploy 1,000 instances of the service running on scalable virtual hardware.
+- Serverless
+    - The idea of microservices naturally evolved into the world of serverless functionality where the server is conceptually removed from the architecture and we just write a function that speaks HTTP.
+    - That function is loaded through a gateway that maps a web request to the function.
+    
+# Domain Names
+- In the instruction about the internet, we showed how an IP address can be referenced by a domain name.
+- We can get the IP address for any domain using the `dig` console utility.
+- Notice that in the following example, there are actually multiple IP addresses associated with the domain name `amazon.com`.
+- This allows for redundancy in case one of the IP addresses fails to successfully resolve to a valid connection because the server listening at that IP address is not responding.
+    - `dig amazon.com`
+
+    - `amazon.com.		126	IN	A	205.251.242.103`
+    - `amazon.com.		126	IN	A	52.94.236.248`
+    - `amazon.com.		126	IN	A	54.239.28.85`
+- A domain name is simply a text string that follows a specific naming convention and is listed in a special database called the domain name registry.
+- Domain names are broken up into a root domain, with one or more possible subdomain prefixes.
+- The root domain is represented by a secondary-level domain and a top-level domain.
+- The top-level domain (TLD) represents things like `com`, `edu`, or `click`.
+- So a root domain would look something like `byu.edu`, `google.com`, or `cs260.clock`.
+- The possible list of TLDs is controlled by ICANN, one of the governing boards of the internet.
+- The owner of a root domain can create any number of subdomains of the root domain.
+- Each subdomain may resolve to a different IP address.
+- We can get information about a domain name from the domain name registry using the `whois` console utility.
+    - `whois byu.edu`
+- This provides information such as a technical contact to talk to if there is a problem with the domain, and an administrative contact to talk to if we want to buy the domain.
+- DNS
+    - Once a domain name is in the registry, it can be listed with a domain name system (DNS) server and associated with an IP address.
+    - We must also lease the IP address before we can use it to uniquely identify a device on the internet.
+    - Every DNS server in the world references a few special DNS servers that are considered the `authoritative name servers` for associating a domain name with an IP address.
+    - The DNS database records that facilitate the mapping of domain names to IP addresses come in several flavors.
+    - The main ones we are concerned with are the `address` (`A`) and the `canonical name` (`CNAME`).
+    - An `A` record is a straight mapping from a domain name to an IP address.
+    - A `CNAME` record maps one domain name to another domain name, which acts as a domain name alias.
+    - When we enter a domain name into a browser, the browser first checks to see if it has the name already in its cache of names.
+    - If it does not, it contacts a DNS server and gets the IP address.
+    - The DNS server also keeps a cache of names.
+    - If the domain name is not in the cache, it will request the name from an `authoritative name server`.
+    - If the authority does not know the name, then we get an unknown domain name error.
+    - If the process does resolve, then the browser makes the HTTP connection to the associated IP address.
+    - There are a lot of levels of name caching.
+    - This is done for performance reasons, but it also can be frustrating when we are trying to update the information associated with our domain name.
+    - This is where the `time to live` (`TTL`) setting for a domain record comes into play.
+    - We can set this to be something short like 5 minutes or as long as several days.
+    - The different caching layers should then honor the TTL and clear their cache after the requested period has passed.
+- Leasing A Domain Name
+    - We can pay to lease an unused domain name for a specific period of time.
+    - Before the lease expires, we have the right to extend the lease for an additional amount of time.
+    - The cost to buy the domain varies from something like $3 to $200 a year.
+    - Buying, or sub-leasing, an existing domain name from a private party can be very expensive, and so we are better off buying something obscure like `idigfor.gold` (currently available for only $101).
+    - This is one reason why companies have such strange names these days.
+- Acronyms and Terms
+    - TLD = Top Level Domain
+    - ICANN = Internet Corporation for Assigned Names and Numbers
+    - CNAME = Canonical Name
+    - TTL = Time to Live
+
+# Web Services Introduction
+- Up to this point, our entire application is loaded from our web server and runs on the user's browser.
+- It starts when the browser requests the `index.html` file from the web server.
+- The `index.html`, in turn, references other HTML, CSS, JavaScript, or image files.
+- All of these files, that are running on a browser, comprise the `frontend` of our application.
+- Notice that when the frontend requests the application files from the web server, it is using the HTTPS protocol.
+- All web programming requests between devices use HTTPS to exchange data.
+- From our frontend JavaScript, we can make requests to external services running anywhere in the world.
+- This allows us to get external data, such as an inspirational quote, that we then inject into the DOM for the user to read.
+- To make a web service request, we supply the URL of the web service to the `fetch` function that is built into the browser.
+- The next step in building a full-stack web application, is to create our own web service.
+- Our web service will provide the static frontend files along with functions to handle `fetch` requests for things like storing data persistently, providing security, running tasks, executing application logic that we do not want our user to be able to see, and communicating with other users.
+- The functionality provided by our web service represents the `backend` of our application.
+- Generally, the functions provided by a web service are called `endpoint`, or sometimes APIs.
+- We access the web service endpoints from our frontend JavaScript with the fetch function.
+- In the picture below, the backend web service is not only providing the static files that make up the frontend, but also providing the web service endpoints that the frontend calls to do things like get a user, create a user, or get high scores.
+- The backend web service can also use `fetch` to make requests to other web services.
+- For example, in the image below, the frontend uses `fetch` to request the user's data from the database, and another one to request subway routes that are near the user's home.
+- That data is then combined together by the backend web service and returned to the frontend for display in the browser.
+- In the following instruction, we will discuss how to use fetch, HTTP, and URLs, and build a web service using the Node.js application.
+- With all of this in place, our application will be a full stack application comprised of both a frontend and a backend.
+
+# URL
+- The Uniform Resource Locator (URL) represents the location of a web source.
+- A web source can be anything, such as a web page, font, image, video stream, database record, or JSON object.
+- It can also be completely ephemeral, such as visitation counter, or gaming session.
+- Looking at the different parts of a URL is a good way to understand what it represents.
+- Below is an example URL that represents the summary of accepted CS 260 BYU students that is accessible using secure HTTP.
+    - `https://byu.edu:443/cs/260/student?filter=accepted#summary`
+- The URL syntax uses the following convention.
+- Notice the delimiting punctuation between parts of the URL.
+- Most parts of the URL are optional.
+- The only ones that are required are the scheme and the domain name.
+    - `<scheme>://<domain name>:<port>/<path>?<parameters>#<anchor>`
+        - Part: Scheme
+            - Example: https
+            - Meaning: The protocol required to ask for the resource. For web applications, this is usually HTTPS. But it could be any internet protocol such as FTP or MAILTO.
+        - Part: Domain name
+            - Example: byu.edu
+            - Meaning: The domain name that owns the resource represented by the URL.
+        - Part: Port
+            - Example: 3000
+            - Meaning: The port specifies the numbered network port used to connect to the domain server. Lower-number ports are reserved for common internet protocols. Higher-number ports can be used for any purpose. The default port is 80 if the scheme is HTTP, or 443 if the scheme is HTTPS.
+        - Part: Path
+            - Example: /school/byu/user/8014
+            - Meaning: The path to the resource on the domain. The resource does not have to physically be located on the file system with this path. It can be a logical path representing endpoint parameters, a database table, or an object schema.
+                - An object schema refers to a formal definition that describes the structure, constraints, and rules of data objects within a database, application, or information system. It essentially outlines how data is organized and how it can be accessed and manipulated. An object schema can include various components such as the types of data (e.g., integers, strings, dates), the relationships between different data types, constraints (e.g., required/optional fields, unique keys), and other rules that data must adhere to.
+        - Part: Parameters
+            - Example: filter=names&highlight=intro,summary
+            - Meaning: The parameters represent a list of key-value pairs. Usually, it provides additional qualifiers on the resource represented by the path. This might be a filter on the returned resource or how to highlight the resource. The parameters are also sometimes called the query string.
+        - Part: Anchor
+            - Example: summary
+            - Meaning: The anchor usually represents a sub-location in the resource. For HTML pages, this represents a request for the browser to automatically scroll to the element with an ID that matches the anchor. The anchor is also sometimes called the hash, or fragment ID.
+- Technically, we can also provide a username and password before the domain name.
+- This was used historically to authenticate access, but for security reasons, this is deprecated.
+- However, we will still see this convention for URLs that represent database connection strings.
+- URL, URN, and URI
+    - We will sometimes hear the use of URN or URI when talking about web resources.
+    - A Uniform Resource Name (URN) is a unique resource name that does not specify location information.
+    - For example, a book URN might be `urn:isbn:10,0765350386`.
+    - A Uniform Resource Identifier (URI) is a general resource identifier that could refer to either a URL or a URN.
+    - With web programming, we are almost always talking about URLs and therefore we should not use the more general URI.
+- Acronyms and Terms
+    - URL = Uniform Resource Locator
+    - URN = Uniform Resource Name
+    - URI = Uniform Resource Identifier
+
+# Ports
+- When we connect to a device on the internet, we need both an IP address and a numbered port.
+- Port numbers allow a single device to support multiple protocols (e.g. HTTP, HTTPS, FTP, or SSH) as well as different types of services (e.g. search, document, or authentication).
+- The ports may be exposed externally, or they may only be used internally on the device.
+- For example, the HTTPS port (443) might allow the world to connect, the SSH port (22) might only allow computers at your school, and a service-defined port (say 3000) may only allow access to processes running on the device.
+- The Internet governing body, IANA, defines the standard usage for port numbers.
+- Ports from 0 to 1023 represent standard protocols.
+- Generally, a web service should avoid these ports unless it is providing the protocol represented by the standard.
+- Ports from 1024 to 49151 represent ports that have been assigned to requesting entities.
+    - "Requesting entities" in the context of internet ports (specifically, the range from 1024 to 49151 known as Registered Ports) refer to organizations, individuals, or services that have requested and been assigned a specific port number for their application or service by the Internet Assigned Numbers Authority (IANA) or other relevant authority.
+- However, it is very common for these ports to be used by services running internally on a device.
+- Ports from 49152 to 65535 are considered dynamic and are used to create dynamic connections to a device.
+    - Ports 0 to 1023 - Well-Known Ports
+        - These ports are reserved for standard, well-known services and protocols. For example, HTTP typically uses port 80, HTTPS uses port 443, FTP uses port 21, and SSH uses port 22.
+        - Services running on these ports are usually fundamental networking services or applications that are widely used.
+        - A web service or application should only use these ports if it offers the standard service associated with that port. Because these ports are below 1024, administrative privileges are generally required to bind a service to these ports on Unix-like operating systems, which adds a layer of security.
+    - Ports 1024 to 49151 - Registered Ports
+        - These ports can be registered with IANA for specific services, although the process is less strict than for well-known ports. Many applications and services use these ports, and while some are officially registered, others are used informally.
+        - It is common for internal, custom, or proprietary services to use ports in this range. For instance, certain database services, application-specific servers, or development servers might run on these ports.
+        - Even though ports in this range can be used without administrative privileges, it is good practice to be aware of officially registered ports to avoid conflicts.
+    - Ports 49152 to 65535 - Dynamic/Private Ports
+        - This range is intended for temporary communications, often used for client-side communications or ephemeral ports that are selected automatically for the client side of a connection.
+        - Services generally do not bind to these ports explicitly; instead, they are allocated dynamically as needed for client-side connections or temporary purposes.
+        - The dynamic nature of these ports makes them suitable for peer-to-peer applications, temporary service endpoints, or for supporting high volumes of outbound connections without interfering with predefined service ports.
+- Below is a list of common port numbers that we might come across.
+    - Port: 20
+        - Protocol: File Transfer Protocol (FTP) for data transfer
+    - Port: 22
+        Protocol: Secure Shell (SSH) for connecting to remote devices
+    - Port: 25
+        - Protocol: Simple Mail Transfer Protocol (SMTP) for sending email
+    - Port: 53
+        - Protocol: Domain Name System (DNS) for looking up IP addresses
+    - Port: 80
+        - Protocol: Hypertext Transfer Protocol (HTTP) for web requests
+    - Port: 110
+        - Protocol: Post Office Protocol (POP3) for retrieving email
+    - Port: 123
+        - Protocol: Network Time Protocol (NTP) for managing time
+    - Port: 161
+        - Protocol: Simple Network Management Protocol (SNMP) for managing network devices such as routers or printers
+    - Port: 194
+        - Protocol: Internet Relay Chat (IRC) for chatting
+    - Port: 443
+        - Protocol: HTTP Secure (HTTPS) for secure web requests
+- Our Ports
+    - As an example of how ports are used, we can look at our web server.
+    - When we built our web server, we externally exposed port 22 so that we could use SSH to open a remote console on the server, port 443 for secure HTTP communication, and port 80 for unsecured HTTP communication.
+    - Our web service, Caddy, is listening on ports 80 and 443.
+    - When Caddy gets a request on port 80, it automatically redirects the request to port 443 so that a secure connection is used.
+    - When Caddy gets a request on port 443, it examines the path provided in the HTTP request (as defined by the URL) and if the path matches a static file, it reads the file off disk and returns it.
+    - If the HTTP path matches one of the definitions it has for a gateway service, Caddy makes a connection on that service's port (e.g. 3000 or 4000) and passes the request to the service.
+    - Internally on our web server, we can have as many web services running as we would like.
+    - However, we must make sure that each one uses a different port to communicate.
+    - We run our Simon service on port 3000 and therefore cannot use port 3000 for our startup service.
+    - Instead, we use port 4000 for our startup service.
+    - It does not matter what high-range port we use.
+    - It only matters that we are consistent and that they are only used by one service.
+- Acronyms and Terms
+    - IANA = Internet Assigned Numbers Authority
+    - POP3 = Post Office Protocol
+    - NTP = Network Time Protocol
+    - SNMP = Simple Network Management Protocol
+    - IRC = Internet Relay Chat
+
+# HTTP
+- Hypertext Transfer Protocol (`HTTP`) is how the web talks.
+- When a web browser makes a request to a web server, it does it using the HTTP protocol.
+- When a web client (e.g. a web browser) and a web server talk, they exchange HTTP requests and responses.
+- The browser will make an HTTP request and the server will generate an HTTP response.
+- We can see the HTTP exchange by using the browser's debugger or by using a console tool like `curl`.
+- For example, in our console, we can use `curl` to make the following request.
+    - `curl -v -s http://info.cern.ch/hypertext/WWW/Helping.html`
+        - `curl`: The command to initiate the curl utility, which will perform the data transfer/A command-line tool for transferring data using various network protocols.
+        - `-v`: Stands for "verbose". This option tells curl to provide detailed information about the transaction, including request and response headers. This is useful for debugging or understanding the communication between the client (curl) and the server.
+        - `-s`: Stands for "silent" or "quiet" mode. This option tells curl to not show progress or error messages. This makes the output cleaner, especially when we are only interested in the content of the response or want to suppress unnecessary output in scripts.
+        - `http://info.cern.ch/hypertext/WWW/Helping.html`: The URL of the web page curl will request. In this case, it is a specific page on the CERN website, historically significant as CERN is where the World Wide Web was invented.
+- Request
+    - The HTTP request for the above command would look like the following.
+        - `GET /hypertext/WWW/Helping.html HTTP/1.1`
+        -` Host: info.cern.ch`
+        - `Accept: text/html`
+    - An HTTP request has this general syntax.
+        - `<verb> <url path, parameters, anchor> <version>`
+        - `[<header key: value>]*`
+        - `[`
+
+        - `<body>`
+        - `]`
+    -  The first line of the HTTP request contains the `verb` of the request, followed by the path, parameters, and anchor of the URL, and finally the version of HTTP being used.
+    - The following lines are optional headers that are defined by key-value pairs.
+    - After the headers, we have an optional body.
+    - The body start is delimited from the headers with two new lines.
+    - In the above example, we are asking to `GET` a resource found at the path `/hypertext/WWW/Helping.html`.
+    - The version used by the request is `HTTP/1.1`.
+    - This is followed by two headers.
+    - The first specifies the requested host (i.e. domain name).
+    - The second specifies what type of resources the client will accept.
+    - The resource type is always a MIME type as defined by the Internet governing body, IANA.
+        - A MIME type (Multipurpose Internet Mail Extensions type) is a standard way of indicating the type of data that a file contains. MIME types are used on the Internet to specify the nature of the content being transmitted, enabling browsers and other software to understand how to process or display that content. Originally designed for email, MIME types have become integral to the World Wide Web, allowing servers to tell clients about the types of data files are in, and how they should be handled.
+        - A MIME type is composed of two main parts: a type and a subtype, separated by a slash (`/`). For example, `text/html` for HTML documents, `image/jpeg` for JPEG images, and `application/json` for JSON data. The type represents the general category of the data (such as `text`, `image`, or `application`), while the subtype specifies the specific kind of data within that category.
+    - In this case, we are asking for HTML.
+- Response
+    - The response to the above request looks like this.
+        - `HTTP/1.1 200 OK`
+        - `Date: Tue, 06 Dec 2022 21:54:42 GMT`
+        - `Server: Apache`
+        - `Last-Modified: Thu, 29 Oct 1992 11:15:20 GMT`
+        - `ETag: "5f0-28f29422b8200"`
+        - `Accept-Ranges: bytes`
+        - `Content-Length: 1520`
+        - `Connection: close`
+        - `Content-Type: text/html`
+
+        - `<TITLE>Helping -- /WWW</TITLE>`
+        - `<NEXTID 7>`
+        - `<H1>How can I help?</H1>There are lots of ways you can help if you are interested in seeing`
+        - `the <A NAME=4 HREF=TheProject.html>web</A> grow and be even more useful...`
+    - An HTTP response has the following syntax.
+        - `<version> <status code> <status string>`
+        - `[<header key: value>]*`
+        - `[`
+
+        - `<body>`
+        - `]`
+    - We can see that the response syntax is similar to the request syntax.
+    - The major difference is that the first line represents the version and the status of the response.
+- Verbs
+    - There are several verbs that describe what the HTTP request is asking for.
+        - Verb: GET
+            - Meaning: Get the requested resource. This can represent a request to get a single resource or a resource representing a list of resources.
+        - Verb: POST
+            - Meaning: Create a new resource. The body of the request contains the resource. The response should include a unique ID of the newly created resource.
+        - Verb: PUT
+            - Meaning: Update a resource. Either the URL path, HTTP header, or body must contain the unique ID of the resource being updated. The body of the request should contain the updated resource. The body of the response may contain the resulting updated resource.
+        - Verb: DELETE
+            - Meaning: Delete a resource. Either the URL path or HTTP header must contain the unique ID of the resource to delete.
+        - Verb: OPTIONS
+            - Meaning: Get metadata about a resource. Usually, only HTTP headers are returned. The resource itself is not returned.
+- Status Codes
+    - The codes are partitioned into five blocks.
+        - 1xx - Informational.
+        - 2xx - Success
+        - 3xx - Redirect to some other location, or that the previously cached resource is still valid.
+        - 4xx - Client errors. The request is invalid.
+        - 5xx - Server errors. The request cannot be satisfied due to an error on the server.
+    - Code: 100
+        - Text: Continue
+        - Meaning: The service is working on the request.
+    - Code: 200
+        - Text: Success
+        - Meaning: The requested resource was found and returned as appropriate.
+    - Code: 201
+        - Text: Created
+        - Meaning: The request was successful and a new resource was created.
+    - Code: 204
+        - Text: No Content
+        - Meaning: The request was successful but no resource is returned.
+    - Code: 304
+        - Text: Not Modified
+        - Meaning: The cached version of the resource is still valid.
+    - Code: 307
+        - Text: Permanent Redirect
+        - Meaning: The resource is no longer at the requested location. The new location is specified in the response location header.
+    - Code: 308
+        - Text: Temporary Redirect
+        - Meaning: The resource is temporarily located at a different location. The temporary location is specified in the response location header.
+    - Code: 400
+        - Text: Bad Request
+        - Meaning: The request was malformed or invalid.
+    - Code: 401
+        - Text: Unauthorized
+        - Meaning: The request did not provide a valid authorization token.
+    - Code: 403
+        - Tex: Forbidden
+        - Meaning: The provided authentication token is not authorized for the resource.
+    - Code: 404
+        - Text: Not found
+        - Meaning: An unknown resource was requested.
+    - Code: 408
+        - Text: Request Timeout
+        - Meaning: The request takes too long.
+    - Code: 409
+        - Text: Conflict
+        - Meaning: The provided resource represents an out-of-date version of the resource.
+    - Code: 418
+        - Text: I'm a teapot
+        - Meaning: The service refuses to brew coffee in a teapot.
+    - Code: 429
+        - Text: Too Many Requests
+        - Meaning: The client is making too many requests in too short of a time period.
+    - Code: 500
+        - Text: Internal Server Error
+        - Meaning: The server failed to properly process the request.
+    - Code: 503
+        - Text: Service Unavailable
+        - Meaning: The server is temporarily down. The client should try again with an exponential back-off.
+            - Exponential back-off is a strategy used in computer networks and applications to manage retry attempts for failed operations, such as network requests or transactions. The core idea is to gradually increase the delay between retry attempts to reduce the load on the network or system and increase the likelihood of successful future attempts. This approach is particularly useful in scenarios where repeated immediate retries may lead to further congestion or exacerbate the problem that caused the initial failure.
+- Headers
+    - HTTP headers specify metadata about a request or response, like how to handle security, caching, data formats, and cookies.
+    - Header: Authorization
+        - Example: Bearer bGciOiJIUzI1NiIsI
+        - Meaning: A token that authorizes the user to make the request.
+    - Header: Accept
+        - Example: Image/*
+        - Meaning: The format the client accepts. This may include wildcards.
+    - Header: Content-Type
+        - Example: text/html; charset=utf-8
+        - Meaning: The format of the content being sent. These are described using standard MIME types.
+    - Header: Cookie
+        - Example: SessionID=39s8cgj34; csrftoken=9dck2
+        - Meaning: Key-value pairs that are generated by the server and stored on the client
+    - Header: Host
+        - Example: info.cern.ch
+        - Meaning: The domain name of the server. This is required in all requests.
+    - Header: Origin
+        - Example: cs260.click
+        - Meaning: Identifies the origin that caused the request. A host may only allow requests from specific origins.
+    - Header: Access-Control-Allow-Origin
+        - Example: https://cs260.click
+        - Meaning: Server response of what origins can make a request. This may include a wildcard.
+    - Header: Content-Length
+        - Example: 368
+        - Meaning: The number of bytes contained in the response
+    - Header: Cache-Control
+        - Example: public, max-age=604800
+        - Meaning: Tells the client how it can cache the response
+    - Header: User-Agent
+        - Example: Mozilla/5.0 (Macintosh)
+        - Meaning: The client application making the request.
+- Body
+    - The format of the body of an HTTP request or response is defined by the `Content-Type` header.
+    - For example, it may be HTML text (`text/html`), a binary image format (`image/png`), JSON (`application/json`), or JavaScript (`text/javascript`).
+    - A client may specify what formats it accepts using the `accept` header.
+- Cookies
+    - HTTP itself is stateless.
+    - This means that one HTTP request does not know anything about a previous or future request.
+    - However, that does not mean that a server or client cannot track state across requests.
+    - One common method for tracking state is the `cookie`.
+    - Cookies are generated by a server and passed to the client as an HTTP header.
+        - `HTTP/2 200`
+        - `Set-Cookie: myAppCookie=tasty; SameSite=Strict; Secure; HttpOnly`
+    - The client then caches the cookie and returns it as an HTTP header back to the server on subsequent requests.
+        - `HTTP/2 200`
+        - `Cookie: myAppCookie=tasty`
+    - This allows the server to remember things like the language preference of the user or the user's authentication credentials.
+    - A server can also use cookies to track, and share, everything that a user does.
+    - However, there is nothing inherently evil about cookies; the problem comes from web applications that use them as a means to violate a user's privacy or inappropriately monetize their data.
+- HTTP Versions
+    - HTTP continually evolves in order to increase performance and support new types of applications.
+        - Version: HTTP0.9
+            - Year: 1990
+            - Features: one line, no versions, only get
+        - Version: HTTP1
+            - Year: 1996
+            - Features: get/post, header, status codes, content-type
+        - Version: HTTP1.1
+            - Year: 1997
+            - Features: put/patch/delete/options, persistent connection
+        - Version: HTTP2
+            - Year: 2015
+            - Features: multiplex, server push, binary representation
+                - Multiplexing (often abbreviated as multiplex or muxing) is a method used in telecommunications and computer networks to combine multiple signals or data streams into one signal over a shared medium. The goal of multiplexing is to efficiently utilize the available bandwidth or transmission capacity, allowing several transmissions to occur simultaneously without interference.
+                - Server push is a feature in web technologies that allows a server to send information to a client (usually a web browser) proactively, without waiting for the client to make a request for that specific information. This capability is especially useful for delivering updates in real-time to web applications, such as new email notifications, instant messages, live sports scores, or any other dynamic content updates.
+        - Version: HTTP3
+            - Year: 2022
+            - Features: QUIC for transport protocol, always encrypted
+                - QUIC (Quick UDP Internet Connections) is a modern transport layer network protocol designed by Google to make the web faster, more secure, and more efficient. It was initially developed to address the performance limitations of traditional protocols like TCP (Transmission Control Protocol) and TLS (Transport Layer Security) over the internet, particularly to reduce connection establishment time, minimize latency, and improve the overall user experience for web applications. Over time, QUIC has evolved and is being standardized by the Internet Engineering Task Force (IETF) with its version known as IETF QUIC.
+- Acronyms and Terms
+    - CERN = European Council/Organization for Nuclear Research
+    - MIME = Multipurpose Internet Mail Extensions
+    - QUIC = Quick UDP Internet Connections
+    - UDP = User Datagram Protocol
+
+# Fetch
+- The ability to make HTTP requests from JavaScript is one of the main technologies that changed the web from static content pages (Web 1.0) to one of web applications (Web 2.0) that fully interact with the user.
+- Microsoft introduced the first API for making HTTP requests from JavaScript with the XMLHttpRequest API.
+- Today, the fetch API is the preferred way to make HTTP requests.
+- The `fetch` function is built into the browser's JavaScript runtime, which means that we can call it from JavaScript code running in a browser.
+- The basic usage of fetch takes a URL and returns a promise.
+- The promise `then` function takes a callback function that is asynchronously called when the request URL content is obtained.
+- If the returned content is of type `application/json`, we can use the `json` function on the response object to convert it to a JavaScript object.
+- The following example makes a fetch request to get and display an inspirational quote.
+    - `fetch('https://api.quotable.io/random')`
+        - `.then((response) => response.json())`
+        - `.then((jsonResponse) => {`
+            - `console.log(jsonResponse);`
+        - `});`
+        - `fetch('https://api.quotable.io/random')`:
+            - This line initiates a network request to the URL `'https://api.quotable.io/random'`. The `fetch` function returns a `Promise` that resolves to the response to this request. The response is an object that represents the HTTP response. If the request fails due to network issues, the promise is rejected.
+        - `.then((response) => response.json())`:
+            - This line is a method that takes the first `Promise` (from the `fetch` call) and uses `.then()` to handle the response once it is available. The response object has several methods to handle the body of the response, and `.json()` is one of them. It reads the response stream to completion and parses the body text as JSON. This method also returns a `Promise` that resolves with the result of parsing the body text as JSON.
+        - `.then((jsonResponse) => { console.log(jsonResponse); })`:
+            - This line is another `.then()` method that takes the second `Promise` (from the `response.json()` call) and uses it to handle the JSON response once it is parsed. The `jsonResponse` parameter holds the parsed JSON data (in this case, a random quote). The code inside the function `{ console.log(jsonResponse); }` logs this data to the console. This allows us to see the structured data, which typically includes the quote and the author, among other possible fields provided by the API.
+    - Response
+        - `{`
+            - `content: 'Never put off till tomorrow what you can do today.',`
+            - `author: 'Thomas Jefferson',`
+        - `};`
+    - To do a POST request, we populate the options parameter with the HTTP method and headers
+        - POST requests are often used to submit form data or upload a file. In contrast to GET requests, which append data to the URL, POST requests include the data in the body of the request. This allows for larger amounts of data to be transmitted.
+        - `fetch('https://jsonplaceholder.typicode.com/posts', {`
+            - `method: 'POST',`
+            - `body: JSON.stringify({`
+                - `title: 'test title',`
+                - `body: 'test body',`
+                - `userId: 1,`
+            - `}),`
+            - `headers: {`
+                - `'Content-type': 'application/json; charset=UTF-8',`
+            - `},`
+        -  `})`
+            - `.then((response) => response.json())`
+            - `.then((jsonResponse) => {`
+                - `console.log(jsonResponse);`
+            - `});`
+        - Request Configuration
+            - `method: 'POST'`: Specifies the HTTP method to use, indicating that this is a POST request.
+            - `body: JSON.stringify({...})`: Contains the data to be sent with the request. `JSON.stringify` converts a JavaScript object into a JSON string. The object includes three fields: `title`, `body`, and `userId`, with sample values provided for each.
+            - `headers: { 'Content-type': 'application/json; charset=UTF-8' }`: Sets the request headers. Here, `Content-type` is set to `application/json; charset=UTF-8`, indicating that the request body format is JSON.
+        - Knowing that the server simulates the creation of a new post upon receiving a POST request, especially when using `https://jsonplaceholder.typicode.com/posts`, comes from understanding the purpose and behavior of the JSONPlaceholder API.
+        - JSONPlaceholder is a fake online REST API designed for testing and prototyping. It is publicly known and documented to mimic real server responses without actually creating, updating, or deleting any persistent data. When we send a POST request to the `/posts` endpoint, JSONPlaceholder is designed to respond as if a new post has been created successfully, following typical REST API conventions.
+            - REST API stands for Representational State Transfer Application Programming Interface. It is an architectural style and approach to communications often used in web services development. REST uses HTTP requests to access and use data, with operations such as read (`GET`), create (`POST`), update (`PUT`), and delete (`DELETE`) corresponding to CRUD (Create, Read, Update, Delete) operations.
+        - When the options parameter is not specified, it results in a default fetch operation, which is a GET request.
+            - Purpose and Usage
+                - GET Request:
+                    - Intended for retrieving data from a server.
+                    - Data is sent in the URL, typically as query parameters.
+                    - Ideal for requests where the data does not change server state (idempotent).
+                    - Used for searching, fetching data, and navigation where the URL can be bookmarked or shared.
+                - POST Request:
+                    - Used for submitting data to the server to create or update a resource.
+                    - Data is sent in the body of the request, allowing more data to be sent in different formats (e.g., JSON, FormData).
+                    - Can change the server state, so it is not idempotent.
+                    - Used for form submissions, file uploads, and any time-sensitive data that needs to be sent to the server.
+            - Data Transmission
+                - GET Request:
+                    - Appends data to the URL as query strings, which has a length limit and is visible to users, making it less secure.
+                    - Because the data is in the URL, it is limited in type and amount. Complex data structures are hard to transmit this way.
+                - POST Request:
+                    - Encloses data in the request body, allowing for larger amounts of data to be securely transmitted without being exposed in the URL.
+                    - Supports various content types like `application/json`, `multipart/form-data`, making it versatile for different types of data.
+- CodePen
+    - HTML
+        - `<pre></pre>`
+    - CSS
+        - `pre {`
+            - `font-size: 2em;`
+        - `}`
+    - JavaScript
+        - `const url = "https://api.quotable.io/random";`
+        - `fetch(url)`
+            - `.then((x) => x.json())`
+            - `.then((response) => {`
+                - `document.querySelector("pre").textContent = JSON.stringify(`
+                    - `response,`
+                    - `null,`
+                    - `"  "`
+                - `);`
+            - `});`
+    - The `<pre>` tag is used in HTML (HyperText Markup Language) to define preformatted text. The content inside a `<pre>` tag is displayed in a fixed-width font (usually Courier), and it preserves both spaces and line breaks. This makes the `<pre>` tag particularly useful for displaying code or text where the formatting is important.
+    - The first argument (`response`): This is the object that we want to convert into a JSON string.
+    - The second argument (`null`): This is a replacer function or array that allows for filtering or altering the values in the object before converting it to a JSON string. When `null` is passed, it means that no filtering or transformation is applied, and every property of the object is included in the JSON string as is.
+    - The third argument (`" "`): This is the space argument that controls the indentation of the formatted JSON string. By passing `" "` (two spaces), we are specifying that each level in the JSON structure should be indented with two spaces. This makes the JSON string more readable to humans by adding white space to the resulting string in a structured format.
+    - `json()` is a method available on the `Response` object in the Fetch API, which is used to make HTTP requests in modern web development. When a Fetch request is made and a response is received from the server, the `json()` method can be called on the response object to parse the JSON-formatted response body and convert it into a JavaScript object or array. It is an asynchronous method that returns a promise, which resolves with the result of parsing the body text as JSON.
+    - `JSON.stringify()` is a method that converts a JavaScript object or value to a JSON-formatted string. It is part of the `JSON` global object in JavaScript. This method is useful for serializing data so that it can be transmitted over a network or saved in a format that is easy to share or store.
+- Acronyms and Terms
+    - REST = Representational State Transfer
+    - API = Application Programming Interface
+
+# Node.js
+- Node.js was the first successful application for deploying JavaScript outside of a browser.
+- This changed the JavaScript mindset from a browser technology to one that could run on the server as well.
+- This means that JavaScript can power our entire technology stack.
+- Node.js is often just referred to as Node and is currently maintained by the Open.js Foundation.
+- Browsers run JavaScript using a JavaScript interpreter and execution engine.
+- For example, Chromium-based browsers all use the V8 engine by Google.
+- Node.js simply took the V8 engine and ran it inside of a console application.
+- When we run a JavaScript program in Chrome or Node.js, it is V8 that reads our code and executes it.
+- With either program wrapping V8, the result is the same.
+- Installing NVM and Node.js
+    - Our production environment web server comes with Node.js already installed.
+    - However, we will need to install Node.js in our development environment.
+    - The easiest way to install Node.js is to first install the `Node Version Manager` (NVM) and use it to install, and manage, Node.js.
+- Checking that Node is installed
+    - The Node.js console application is simply called `node`.
+- Running Programs
+    - We can execute a line of JavaScript with Node.js from our console with the `-e` parameter.
+        -  `node -e "console.log(1+1)"`
+    - However, to do real work we need to execute an entire project composed of dozens or even hundreds of JavaScript files.
+    - We do this by creating a single starting JavaScript file, named something like `index.js`, that references the code found in the rest of our project.
+    - We then execute our code by running `node` with `index.js` as a parameter.
+    - For example, with the following JavaScript saved to a file named `index.js`,
+        - `function countdown() {`
+            - `let i = 0;`
+            - `while (i++ < 5) {`
+                - `console.log(`Counting ... ${i}`);`
+            - `}`
+        - `}`
+
+        - `countdown();`
+    - We can execute the JavaScript by passing the file to `node`, and receive the following result.
+        - `node index.js`
+        - `Counting ... 1`
+        - `Counting ... 2`
+        - `Counting ... 3`
+        - `Counting ... 4`
+        - `Counting ... 5`
+    - We can also run `node` in interpretive mode by executing it without any parameters and then typing our JavaScript code directly into the interpreter.
+        - `node`
+        - `Welcome to Node.js v16.15.1.`
+        - `> 1+1`
+        - `2`
+        - `> console.log('hello')`
+        - `hello`
+- Node Package Manager
+    - While we could write all of the JavaScript for everything we need, it is always helpful to use preexisting packages of JavaScript for implementing common tasks.
+    - To load a package using Node.js, we must take two steps.
+    - First, install the package locally on our machine using the Node Package Manager (NPM), and then include a `require` statement in our code that references the package name.
+    - NPM is automatically installed when we install Node.js.
+    - NPM knows how to access a massive repository of preexisting packages.
+    - We can search for packages on the NPM website.
+    - However, before we start using NPM to install packages, we need to initialize our code to use NPM.
+    - This is done by creating a directory that will contain our JavaScript and then running `npm init`.
+        - `mkdir npmtest`
+        - `cd npmtest`
+        - `npm init -y`
+- Package.json
+    - If we list the files in the directory, we will notice that it has created a file named `package.json`.
+    - This file contains three main things: (1) Metadata about our project such as its name and the default entry JavaScript file, (2) commands (scripts) that we can execute to do things like run, test, or distribute our code, and (3) packages that this project depends upon.
+    - The following shows what our `package.json` looks like currently.
+    - It has some default metadata and a simple placeholder script that just runs the echo command when we execute `npm run test` from the console.
+        - `{`
+            - `"name": "npmtest",`
+            - `"version": "1.0.0",`
+            - `"description": "",`
+            - `"main": "index.js",`
+            - `"keywords": [],`
+            - `"author": "",`
+            - `"license": "ISC",`
+            - `"scripts": {`
+                - `"test": "echo \"Error: no test specified\" && exit 1"`
+            - `}`
+        - `}`
+    - With NPM initialized to work with our project, we can now use it to install a node package.
+    - As a simple example, we will install a package that knows how to tell jokes.
+    - This package is called `give-me-a-joke`.
+    - We install the package using `npm install` followed by the name of the package.
+        - `npm install give-me-a-joke`
+    - If we again examine the contents of the `package.json` file, we will see a reference to the newly installed package dependency.
+    - If we decide we no longer want a package dependency, we can always remove it with the `npm uninstall <package name here>` console command.
+    - With the dependency added, the unnecessary metadata removed, the addition of a useful script to run the program, and also adding a description, the `package.json` file should look like this:
+        - `{`
+            - `"name": "npmtest",`
+            - `"version": "1.0.0",`
+            - `"description": "Simple Node.js demo",`
+            - `"main": "index.js",`
+            - `"license": "MIT",`
+            - `"scripts": {`
+                - `"dev": "node index.js"`
+            - `},`
+            - `"dependencies": {`
+                - `"give-me-a-joke": "^0.5.1"`
+            - `}`
+        - `}`
+    - Note that when we start installing package dependencies, NPM will create an additional file named `package-lock.json` and a directory named `node_modules` in our project directory.
+    - The `node_modules` directory contains the actual JavaScript files for the package and all of its dependent packages.
+    - As we install several packages, this directory will start to get very large.
+    - We do not want to check this into our source control system since it can be very large and can be rebuilt using the information contained in the `package.json` and `package-lock.json` files.
+    - So make sure we include `node_modules` in our `.gitignore` file.
+    - When we clone our source code from GitHub to a new location, the first thing we should do is run `npm install` in the project directory.
+    - This will cause NPM to download all of the previously installed packages and recreate the `node_modules` directory.
+    - The `package-lock.json` file tracks the version of the package that we installed.
+    - That way if we rebuild our `node_modules` directory, we will have the version of the package we initially installed and not the latest available version, which might not be compatible with our code.
+    - With NPM and the joke package installed, we can now use the joke package in a JavaScript file by referring to the package name as a parameter to the `require` function.
+    - This is then followed by a call to the joke object's `getRandomDadJoke` function to actually generate a joke.
+    - Create a file named `index.js` and paste the following into it.
+        - `const giveMeAJoke = require('give-me-a-joke');`
+        - `giveMeAJoke.getRandomDadJoke((joke) => {`
+            - `console.log(joke);`
+        - `});`
+    - If we run this code using Node.js, we should get a result similar to the following.
+        - `node index.js`
+        - `What do you call a fish with no eyes? A fsh.`
+    - Main Steps:
+        1. Create our project directory.
+        2. Initialize it for use with NPM by running `npm init -y`.
+        3. Make sure `.gitignore` file contains `node_modules`.
+        4. Install any desired packages with `npm install <package name here>`.
+        5. Add `require('<package name here>')` to our application's JavaScript.
+        6. Use the code the package provides in our JavaScript.
+        7. Run our code with `node index.js`.
+- Creating A Web Service
+    - With JavaScript, we can write code that listens on a network port (e.g., 80, 443, 3000, or 8080), receives HTTP requests, processes them, and then responds.
+    - We can use this to create a simple web service that we then execute using Node.js.
+    - First, create our project.
+        - `mkdir webservicetest`
+        - `cd webservicetest`
+        - `npm init -y`
+    - Now, open VS Code and create a file named `index.js`.
+    - Paste the following code into the file and save.
+        - `const http = require('http');`
+        - `const server = http.createServer(function (req, res) {`
+            - `res.writeHead(200, { 'Content-Type': 'text/html' });`
+            - ``res.write(`<h1>Hello Node.js! [${req.method}] ${req.url}</h1>`);``
+            - `res.end();`
+        - `});`
+
+        - `server.listen(8080, () => {`
+            - ``console.log(`Web service listening on port 8080`);``
+        - `});`
+            - `const http = require('http');`: This line imports Node.js's built-in `http` module and assigns it to the variable `http`. The `http` module allows you to create HTTP servers and clients, which is essential for web development with Node.js.
+            - `const server = http.createServer(function (req, res) {...});`: Here, we use the `createServer` method of the `http` module to create a new HTTP server. The method takes a request listener function as an argument, which is executed each time the server receives a request. The request listener function has two parameters: `req` (request) and `res` (response).
+            - `res.writeHead(200, { 'Content-Type': 'text/html' })`: This line starts a response to the request with a status code of 200 (OK) and sets the `Content-Type` header to `text/html`. This tells the client that the response will be HTML content.
+            - `res.write(...)`: This sends a chunk of the response body. In this case, it sends an HTML `<h1>` tag with a message that includes the request method (`req.method`) and the URL path (`req.url`). For example, if we navigate to `http://localhost:8080/test`, it will display "Hello Node.js! [GET] /test".
+            - `res.end()`: This method signals to the server that all of the response headers and body have been sent; thus, the server should consider this message complete. The method, `res.end()`, must be called on each response.
+            - `server.listen(8080, () => {...});`: This line tells our server to listen on port 8080. When the server starts listening, the callback function is called, logging a message to the console that our web service is listening on port 8080.
+    - This code uses the Node.js's built-in `http` package to create our HTTP server using the `http.createServer` function along with a callback function that takes a request (`req`) and response (`res`) object.
+    - That function is called whenever the server receives an HTTP request.
+    - In our example, the callback always returns the same HTML snippet, with a status code of `200`, and a `Content-Type` header, no matter what request is made.
+    - Basically, this is just a simple dynamically generated HTML page.
+    - A real web service would examine the HTTP path and return meaningful content based on the purpose of the endpoint.
+    - The `server.listen` call starts listening on port 8080 and blocks until the program is terminated.
+    - We execute the program by going back to our console window and running Node.js to execute our `index.js` file.
+    - If the service starts up correctly, then it should look like the following.
+        - `node index.js`
+        - `Web service listening on port 8080`
+    - We can now open our browser point it to `localhost: 8080` and view the result.
+    - Use different URL paths in the browser and note that it will echo the HTTP method and path back in the document.
+    - We can kill the process by pressing `CTRL-C` in the console.
+    - Note that we can also start up Node and execute the `index.js` code directly in VS Code.
+    - To do this, open `index.js` in VS Code and press the `F5` key.
+    - This should ask us what program we want to run.
+    - Select Node.js.
+    - This starts up Node.js with the `index.js` file, but also attaches a debugger so that we can set breakpoints in the code and step through each line of code.
+- Acronyms and Terms
+    - NVM = Node Version Manager
+    - NPM = Node Package Manager
+
+# Express
+- Using Node-js to create a simple web server works great for little projects where we are trying to quickly serve up some web content but to build a production-ready application, we need a framework with a bit more functionality for easily implementing a full web service.
+- This is where the Node package `Express` comes in.
+- Express provides support for:
+    1. Routing requests for service endpoints
+    2. Manipulating HTTP requests with JSON body content
+    3. Generating HTTP responses
+    4. Using `middleware` to add functionality
+- Everything in Express revolves around creating and using HTTP routing and middleware functions.
+- We create an Express application by using NPM to install the Express package and then calling the `express` constructor to create the Express application and listen for HTTP requests on a desired port.
+    - `const express = require('express');`
+    - `const app = express();`
+
+    - `app.listen(8080);`
+- With the `app` object, we can now add HTTP routing and middleware functions to the application.
+- Defining Routes
+    - HTTP endpoints are implemented in Express by defining routes that call a function based upon an HTTP path.
+    - The Express `app` object supports all of the HTTP verbs as functions on the object.
+    - For example, if we want to have a route function that handles an HTTP GET request for the URL path `/store/provo`, we would call the `get` method on the `app`.
+        - `app.get('/store/provo', (req, res, next) => {`
+            - `res.send({name: 'provo'});`
+        - `});`
+    - The `get` function takes two parameters, a URL path-matching pattern, and a callback function that is invoked when the pattern matches.
+    - The path matching parameter is used to match against the URL path of an incoming HTTP request.
+    - The callback function has three parameters that represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` routing function that Express expects to be called if this routing function wants another function to generate a response.
+    - The Express `app` compares the routing function patterns in the order that they are added to the Express `app` object.
+    - So if we have two routing functions with patterns that both match, the first one that was added will be called and given the next matching function in the `next` parameter.
+    - In our example above, we hard-coded the store name to be `provo`.
+    - A real store endpoint would allow any store name to be provided as a parameter in the path.
+    - Express supports path parameters by prefixing the parameter name with a colon (`:`).
+    - Express creates a map of path parameters and populates it with the matching values found in the URL path.
+    - We then reference the parameters using the `req.params` object.
+    - Using this pattern, we can rewrite our getScore endpoint as follows.
+        - `app.get('/store/:storeName', (req, res, next) => {`
+            - `res.send({name: req.params.storeName});`
+        - `});`
+    - If we run our JavaScript using `node`, we can see the result when we make an HTTP request using `curl`.
+        - `curl localhost:8080/store/orem`
+        - `{"name":"orem"}`
+    - If we wanted an endpoint that used the POST or DELETE HTTP verb, then we just use the `post` or `delete` function on the Express `app` object.
+    - The route path can also include a limited wildcard syntax or even full regular expressions in the path pattern.
+    - Here are a couple of route functions using different pattern syntax.
+        - // Wildcard - matches /store/x and /star/y
+        - `app.put('/st*/:storeName', (req, res) => res.send({update: req.params.storeName}));`
+
+        - // Pure regular expression
+        - `app.delete(/\/store\/(.+)/, (req, res) => res.send({delete: req.params[0]}));`
+    - Notice that in these examples, the `next` parameter was omitted.
+    - Since we are not calling `next`, we do not need to include it as a parameter.
+    - However, if we do not call `next`, then no following middleware functions will be invoked for the request.
+-  Using Middleware
+    - The standard Mediator/Middleware design pattern has two pieces: a mediator and middleware.
+    - Middleware represents componentized pieces of functionality.
+    - The mediator loads the middleware components and determines their order of execution.
+    - When a request comes to the mediator, it then passes the request around to the middleware components.
+    - Following this pattern, Express is the mediator, and middleware functions are the middleware components.
+    - Express comes with a standard set of middleware functions.
+    - These provide functionality like routing, authentication, CORS, sessions, serving static web files, cookies, and logging.
+    - Some middleware functions are provided by default, and other ones must be installed using NPM before we can use them.
+    - We can also write our own middleware functions and use them with Express.
+    - A middleware function looks very similar to a routing function.
+    - That is because routing functions are also middleware functions.
+    - The only difference is that routing functions are only called if the associated pattern matches.
+    - Middleware functions are always called for every HTTP request unless a preceding middleware function does not call `next`.
+    - A middleware function has the following pattern:
+        - `function middlewareName(req, res, next)`
+    - The middleware function parameters represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` middleware function to pass processing to.
+    - We should usually call the `next` function after completing processing so that the next middleware function can execute.
+- Create Our Own Middleware
+    - As an example of writing our own middleware, we can create a function that logs out the URL of the request and then passes on processing to the next middleware function.
+        - `app.use((req, res, next) => {`
+            - `console.log(req.originalUrl);`
+            - `next();`
+        - `});`
+    - Remember that the order which we add our middleware to the Express app object controls the order in the middleware functions are called.
+    - Any middleware that does not call the `next` function after doing its processing, stops the middleware chain from continuing.
+- Builtin Middleware
+    - In addition to creating our own middleware functions, we can use a built-in middleware function.
+    - Here is an example of using the `static` middleware function.
+    - This middleware responds with static files, found in a given directory, that match the request URL.
+        - `app.use(express.static('public'));`
+    - Now if we create a subdirectory in our project directory and name it `public`, we can serve up any static content that we would like.
+    - For example, we could create an `index.html` file that is the default content for our web service.
+    - Then when we call our web service without any path, the `index.html` file will be returned.
+- Third-Party Middleware
+    - We can also use third-party middleware functions by using NPM to install the package and including the package in our JavaScript with the `require` function.
+    - The following uses the `cookie-parser` package to simplify the generation and access of cookies.
+        - `npm install cookie-parser`
+        - `const cookieParser = require('cookie-parser');`
+
+        - `app.use(cookieParser());`
+
+        - `app.post('/cookie/:name/:value', (req, res, next) => {`
+            - `res.cookie(req.params.name, req.params.value);`
+            - ``res.send({cookie: `${req.params.name}:${req.params.value}`});``
+        - `});`
+
+        - `app.get('/cookie', (req, res, next) => {`
+            - `res.send({cookie: req.cookies});`
+        - `});`
+    - It is common for middleware functions to add fields and functions to the `req` and `res` objects so that other middleware can access the functionality they provide.
+    - We see this happening when the `cookie-parser` middleware adds the `req.cookies` object for reading cookies and also adds the `res.cookie` function in order to make it easy to add a cookie to a response.
+- Error Handling Middleware
+    - We can also add middleware for handling errors that occur.
+    - Error middleware looks similar to other middleware functions, but it takes an additional `err` parameter that contains the error.
+        - `function errorMiddlewareName(err, req, res, next)`
+    - If we wanted to add a simple error handler for anything that might go wrong while processing HTTP requests, we could add the following.
+        - `app.use(function (err, req, res, next) {`
+            - `res.status(500).send({type: err.name, message: err.message});`
+        - `});`
+    - We can test that our error middleware is getting used by adding a new endpoint that generates an error.
+        - `app.get('/error', (req, res, next) => {`
+            - `throw new Error('Trouble in river city');`
+        - `});`
+    - Now if we use `curl` to call our error endpoint, we can see that the response comes from the error middleware.
+        - `curl localhost:8080/error`
+        - `{"type":"Error","message":"Trouble in river city"}`
+- Putting It All Together
+    - Here is a full example of our web service built using Express.
+        - `const express = require('express');`
+        - `const cookieParser = require('cookie-parser');`
+        - `const app = express();`
+
+        - // Third-party middleware - Cookies
+        - `app.use(cookieParser());`
+
+        - `app.post('/cookie/:name/:value', (req, res, next) => {`
+            - `res.cookie(req.params.name, req.params.value);`
+            - ``res.send({cookie: `${req.params.name}:${req.params.value}`});``
+        - `});`
+
+        - `app.get('/cookie', (req, res, next) => {`
+        `- `res.send({cookie: req.cookies});`
+        - `});`
+
+        - // Creating your own middleware - logging
+        - `app.use((req, res, next) => {`
+            - `console.log(req.originalUrl);`
+            - `next();`
+        - `});`
+
+        - // Built-in middleware - Static file hosting
+        - `app.use(express.static('public'));`
+
+        - // Routing middleware
+        - `app.get('/store/:storeName', (req, res) => {`
+            - `res.send({name: req.params.storeName});`
+        - `});`
+
+        - `app.put('/st*/:storeName', (req, res) => res.send({update: req.params.storeName}));`
+
+        - `app.delete(/\/store\/(.+)/, (req, res) => res.send({delete: req.params[0]}));`
+
+        - // Error middleware
+        - `app.get('/error', (req, res, next) => {`
+            - `throw new Error('Trouble in river city');`
+        - `});`
+
+        - `app.use(function (err, req, res, next) {`
+            - `res.status(500).send({type: err.name, message: err.message});`
+        - `});`
+
+        - // Listening to a network port
+        - `const port = 8080;`
+        - `app.listen(port, function () {`
+            - `console.log(`Listening on port ${port}`);`
+        - `});`
+- Acronyms and Terms
+    - CORS = Cross-Origin Resource Sharing
+        - It is a security feature in web browsers that restricts web pages from making requests to a domain other than the one that served the web page. This is known as the same-origin policy. CORS is a protocol that allows for exceptions to this rule; it lets web applications make requests to different domains by using specific HTTP headers that permit resources to be requested from another domain, enabling a more open web while still maintaining security.
+
+# Simon Service
+- This deliverable demonstrates converting the JavaScript application into a web application by implementing a web service that listens on a network port for HTTP requests.
+- The web service provides endpoints for getting and updating the scores.
+- The application also uses a couple of third-party endpoints to display inspirational quotes on the about page and show a random header image.
+- We will use Node.js and Express to create our HTTP service.
+- Service Endpoint Definitions
+    - Here is our design, documented using `curl` commands, for the two endpoints that the Simon web service provides.
+        - GetScores - Get the latest high scores.
+            - `curl -X GET /api/scores`
+
+            - #Response
+            - `{ "scores":[`
+                - `{"name":"Harvey", "score":"337", "date":"2022/11/20"},`
+                - `{"name":"도윤 이", "score":"95", "date":"2019/05/20"}`
+            - `]}`
+        - SubmitScore - Submit a score for consideration in the list of high scores.
+            - `curl -X POST /api/score -d '{"name":"Harvey", "score":"337", "date":"2022/11/20"}'`
+
+            - #Response
+            - `{ "scores":[`
+                - `{"name":"Harvey", "score":"337", "date":"2022/11/20"},`
+                - `{"name":"도윤 이", "score":"95", "date":"2019/05/20"}`
+            - `]}`
+- Third-Party Endpoints
+    - The `about.js` file contains code for making calls to third-party endpoints using `fetch`.
+    - We make one call to `picsum.photos` to get a random picture and another to `quotable.io` to get a random quote.
+    - Once the endpoint asynchronously returns, the DOM is updated with the requested data.
+    - Here is an example of the quote endpoint call.
+        - `function displayQuote(data) {`
+            - `fetch('https://api.quotable.io/random')`
+                - `.then((response) => response.json())`
+                - `.then((data) => {`
+                    - `const containerEl = document.querySelector('#quote');`
+
+                    - `const quoteEl = document.createElement('p');`
+                    - `quoteEl.classList.add('quote');`
+                    - `const authorEl = document.createElement('p');`
+                    - `authorEl.classList.add('author');`
+
+                    - `quoteEl.textContent = data.content;`
+                    - `authorEl.textContent = data.author;`
+
+                    - `containerEl.appendChild(quoteEl);`
+                    - `containerEl.appendChild(authorEl);`
+                - `});`
+            - `}`
+                - Initiate a Fetch Request: The function begins by making a fetch request to `https://api.quotable.io/random`. This is an asynchronous operation to retrieve a random quote from the API.
+                - Process the Response: `.then((response) => response.json())`: Once the fetch operation completes and returns a response, this line is executed. It takes the response object, which represents the entire HTTP response, and uses the .json() method to read the response body to completion. The `.json()` method returns a promise that resolves with the result of parsing the body text as JSON.
+                - Use the Data:
+                    - `.then((data) => { ... })`: After the previous promise resolves, this part of the code handles the actual data (now a JavaScript object thanks to `.json()`) returned from the API. The `data` object contains the quote and its author, among other potential fields.
+                    - Inside this callback function, several things happen:
+                        - Select the Container Element: It selects the HTML element with the id `#quote` to use as the container for displaying the quote and author. This is done using `document.querySelector('#quote')`.
+                        - Create Elements for Quote and Author: It creates two new `<p>` elements to hold the quote and the author's name. These elements are assigned class names 'quote' and 'author', respectively, for styling purposes.
+                        - Set the Text Content: The `textContent` of the created elements is set to the content of the quote (`data.content`) and the name of the author (`data.author`).
+                        - Append the Elements: Finally, it appends these newly created elements (`quoteEl` and `authorEl`) to the container element (`containerEl`). This action inserts the quote and the author's name into the DOM, making them visible on the page.
+- Steps to Convert Simon to A Service
+    - Converting Simon to a service involved the following steps.
+        1. Move all the previous deliverable code files(__.html, __.js, *.css, favicon.ico, and assets) into a sub-directory named `public`. 
+        1. We will use the HTTP Node.js based service to host the frontend application files. 
+        1. This is done with the static file middleware that we will add to our service `index.js`.
+            - `app.use(express.static('public'));`
+        1. When running our service, the static file middleware takes care of reading the frontend code from the `public` directory and returning it to the browser.
+        1. The service only directly handles the endpoint requests.
+        2. Within the project directory, run `npm init -y`.
+        2. This configures the directory to work with Node.js.
+        3. Modify or create `.gitignore` to ignore `node_modules`.
+        4. Install the Express package by running `npm install express`.
+        4. This will write the Express package dependency in the `package.json` file and install all the Express code to the `node_modules` directory.
+        5. Create a file named `index.js` in the root of the project.
+        5. This is the entry point that Node.js will call when we run our web service.
+        6. Add the basic Express JavaScript code needed to host the application static content and the desired enpoints.
+            - `const express = require('express');`
+            - `const app = express();`
+
+            - // The service port. In production, the frontend code is statically hosted by the service on the same port.
+            - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
+
+            - // JSON body parsing using built-in middleware
+            - `app.use(express.json());`
+
+            - // Serve up the frontend static content hosting
+            - `app.use(express.static('public'));`
+
+            - // Router for service endpoints
+            - `const apiRouter = express.Router();`
+            - `app.use(`/api`, apiRouter);`
+
+            - // GetScores
+            - `apiRouter.get('/scores', (_req, res) => {`
+            res.send(scores);
+            });
+
+            // SubmitScore
+            apiRouter.post('/score', (req, res) => {
+            scores = updateScores(req.body, scores);
+            res.send(scores);
+            });
+
+            // Return the application's default page if the path is unknown
+            app.use((_req, res) => {
+            res.sendFile('index.html', { root: 'public' });
+            });
+
+            app.listen(port, () => {
+            console.log(`Listening on port ${port}`);
+            });
