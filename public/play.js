@@ -1,298 +1,250 @@
-function storeLyricsData() {
-    console.log("Entered storeLyricsData function")
-
-    const lyricsData = [
-      {
-        "isAnswered": false,
-        "lyric": "You never had a clue\nAll the days that I spent loving you\nWho am I supposed to give 'em to?",
-        "options": ["ANGEL", "GABRIEL", "LIMBO", "UNDERSTAND"],
-        "answer": "ANGEL",
-        "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1234379731&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
-      },
-      {
-        "isAnswered": false,
-        "lyric": "'Cause you never know until you do\nIf I had to guess, I think it's you\nSo if I fake it\nWould it be true?",
-        "options": ["bandaids", "drunk", "blue", "us"],
-        "answer": "us",
-        "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/911450407&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
-      },
-      {
-        "isAnswered": false,
-        "lyric": "Impatient, just say it\nStill waitin', for another round\nNew faces, I'm racin'\nI'm fine but I'll never make it home",
-        "options": ["beside you", "drunk", "blue", "talk"],
-        "answer": "blue",
-        "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725573965&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
-      },
-      {
-        "isAnswered": false,
-        "lyric": "Never thought that I'd find\nThat the one in my life would be so near\nAnd now you're here",
-        "options": ["right here", "UNDERSTAND", "always", "us"],
-        "answer": "UNDERSTAND",
-        "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1234378480&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
-      },
-      {
-        "isAnswered": false,
-        "lyric": "I think some words are overdue\nCould we just do it over?\nCan we just talk it out like friends\nBecause I need your shoulder",
-        "options": ["right here", "beside you", "B.Y.S.", "talk"],
-        "answer": "right here",
-        "soundCloud": '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/682184639&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
-      }
-    ];
-  
-    localStorage.setItem('lyricsData', JSON.stringify(lyricsData));
-}
-
 function getLyricsData() {
-    console.log("Entered getLyricsData function")
+  console.log("Entered getLyricsData function");
 
-    return JSON.parse(localStorage.getItem('lyricsData'));
+  return fetch("/api/lyrics").then((response) => response.json());
 }
 
 function getPlayerUsername() {
-    console.log("Entered getPlayerUsername function")
+  console.log("Entered getPlayerUsername function");
 
-    return localStorage.getItem('username') || 'Unknown Player'
+  return fetch("/api/username").then((response) => response.text());
 }
 
 function displayPlayerUsername() {
-    console.log("Entered displayPlayerUsername function")
+  console.log("Entered displayPlayerUsername function");
 
-    const playerUsernameEl = document.querySelector('.playerUsername');
-    playerUsernameEl.textContent = getPlayerUsername();
+  getPlayerUsername().then((username) => {
+    const playerUsernameEl = document.querySelector(".playerUsername");
+    playerUsernameEl.textContent = username || "Unknown Player";
+  });
 }
 
 let counter = 0;
 
 function displayLyricAndOptions() {
-    console.log("Entered displayLyricAndOptions function")
+  console.log("Entered displayLyricAndOptions function");
 
-    const lyricsData = getLyricsData();
-    const currentLyricIndex = counter;
-    const currentLyric = lyricsData[currentLyricIndex];
+  getLyricsData().then((lyricsData) => {
+    const currentLyric = lyricsData[counter];
 
-    const lyricsEl = document.querySelector('.lyrics p');
-    lyricsEl.textContent = '';
-    currentLyric.lyric.split('\n').forEach(line => {
-        lyricsEl.appendChild(document.createTextNode(line));
-        lyricsEl.appendChild(document.createElement('br'));
+    const lyricsEl = document.querySelector(".lyrics p");
+    lyricsEl.textContent = "";
+    currentLyric.lyric.split("\n").forEach((line) => {
+      lyricsEl.appendChild(document.createTextNode(line));
+      lyricsEl.appendChild(document.createElement("br"));
     });
 
-    const optionsContainer = document.querySelector('.optionsContainer');
+    const optionsContainer = document.querySelector(".optionsContainer");
     while (optionsContainer.hasChildNodes()) {
-        optionsContainer.removeChild(optionsContainer.firstChild);
+      optionsContainer.removeChild(optionsContainer.firstChild);
     }
 
-    currentLyric.options.forEach(option => {
-        const label = document.createElement('label');
-        const div = document.createElement('div');
-        div.className = "radioContainer";
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = 'song';
-        input.value = option;
-        input.style.width = '20px';
-        input.style.height = '20px';
+    currentLyric.options.forEach((option) => {
+      const label = document.createElement("label");
+      const div = document.createElement("div");
+      div.className = "radioContainer";
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "song";
+      input.value = option;
+      input.style.width = "20px";
+      input.style.height = "20px";
 
-        div.appendChild(input);
-        div.appendChild(document.createTextNode(` ${option}`));
-        label.appendChild(div);
-        optionsContainer.appendChild(label);
+      div.appendChild(input);
+      div.appendChild(document.createTextNode(` ${option}`));
+      label.appendChild(div);
+      optionsContainer.appendChild(label);
     });
-
-    localStorage.setItem('currentLyricIndex', currentLyricIndex.toString())
+  });
 }
 
 function handleEmojiClick() {
-    console.log("Entered handleEmojiClick function")
+  console.log("Entered handleEmojiClick function");
 
-    document.querySelectorAll('.emoji').forEach(emoji => {
-        emoji.addEventListener('click', function(event) {
-            const reaction = emoji.textContent;
-            //const reaction = this.textContent;
-            console.log(`Emoji ${reaction} clicked`);
+  document.querySelectorAll(".emoji").forEach((emoji) => {
+    emoji.addEventListener("click", function (event) {
+      const reaction = emoji.textContent;
+      //const reaction = this.textContent;
+      console.log(`Emoji ${reaction} clicked`);
 
-            localStorage.setItem('lastEmojiClicked', reaction);
-        });
+      fetch("/api/emoji", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emoji: reaction }),
+      });
     });
+  });
 }
 
 function getLastEmojiClicked() {
-    // console.log("Entered getLastEmojiClicked function")
+  // console.log("Entered getLastEmojiClicked function")
 
-    const lastEmojiClicked = localStorage.getItem('lastEmojiClicked');
-    
-    // if(lastEmojiClicked) {
-    //     console.log(`The last emoji clicked was: ${lastEmojiClicked}`);
-    // } else {
-    //     console.log('No emoji reaction has been stored.');
-    // }
+  return fetch("/api/emoji")
+    .then((response) => response.text())
+    .then((emoji) => {
+      console.log(`The last emoji clicked was: ${emoji}`);
+      return emoji;
+    })
+    .catch((error) => {
+      console.error("Error fetching the last emoji clicked:", error);
+      return "";
+    });
 
-    return lastEmojiClicked;
+  // if(lastEmojiClicked) {
+  //     console.log(`The last emoji clicked was: ${lastEmojiClicked}`);
+  // } else {
+  //     console.log('No emoji reaction has been stored.');
+  // }
+
+  return lastEmojiClicked;
 }
 
 function skipQuestion() {
-    console.log("Entered skipQuestion function")
+  console.log("Entered skipQuestion function");
 
-    const lyricsData = getLyricsData();
-    const currentLyricIndex = counter;
-    const currentLyric = lyricsData[currentLyricIndex];
-
-    if (counter < lyricsData.length) {
-        counter += 1;
-    }
+  counter += 1;
+  displayLyricAndOptions();
 }
 
 function nextQuestion() {
-    console.log("Entered nextQuestion function")
+  console.log("Entered nextQuestion function");
 
-    const lyricsData = getLyricsData();
-    const currentLyricIndex = counter;
-    const currentLyric = lyricsData[currentLyricIndex];
-
-    if (counter < lyricsData.length) {
-        counter += 1;
-    }
+  counter += 1;
+  displayLyricAndOptions();
 }
 
 function endGame() {
-    console.log("Entered endGame function")
+  console.log("Entered endGame function");
 
-    document.querySelector('#end').addEventListener('click', () => {
-        windown.location.href = 'score.html';
-    })
+  document.querySelector("#end").addEventListener("click", () => {
+    window.location.href = "score.html";
+  });
 }
 
 function checkGuess() {
-    console.log("Entered checkGuess function")
+  console.log("Entered checkGuess function");
 
-    const lyricsData = getLyricsData();
-    const currentLyricIndex = parseInt(localStorage.getItem('currentLyricIndex'), 10);
-    const currentLyric = lyricsData[currentLyricIndex];
+  const selectedOption = document.querySelector('input[type="radio"]:checked');
+  if (!selectedOption) {
+    alert("Please select an option!");
+    return;
+  }
 
-    if (currentLyric.isAnswered) {
-        alert('You have already answered this question. Please move to the next question.')
-        return;
-    }
-
-    const selectedOption = document.querySelector('input[type="radio"]:checked');
-    if (!selectedOption) {
-        alert('Please select an option!');
-        return;
-    }
-
-    currentLyric.isAnswered = true;
-
+  getLyricsData().then((lyricsData) => {
+    const currentLyric = lyricsData[counter];
     if (selectedOption.value === currentLyric.answer) {
-        displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
-        updateScore(true);
+      displayAnswerAndSoundCloud(currentLyric.answer, currentLyric.soundCloud);
+      updateScore(true);
     } else {
-        alert('Sorry your guess was incorrect. Please try again!')
-        updateScore(false);
-    };
+      alert("Sorry wrong answer. Please try again!");
+      updateScore(false);
+    }
+  });
 }
 
 function displayAnswerAndSoundCloud(answer, soundCloud) {
-    console.log("Entered displayAnswerAndSoundCloud function")
+  console.log("Entered displayAnswerAndSoundCloud function");
 
-    const answerEl = document.querySelector('.answer');
+  const answerEl = document.querySelector(".answer");
 
-    answerEl.style.animation = 'none';
-    answerEl.offsetHeight;
-    answerEl.style.animation = '';
+  answerEl.style.animation = "none";
+  answerEl.offsetHeight;
+  answerEl.style.animation = "";
 
-    answerEl.textContent = `${answer} ✅`;
-    answerEl.style.display = 'block';
+  answerEl.textContent = `${answer} ✅`;
+  answerEl.style.display = "block";
 
-    const soundCloudContainer = document.querySelector('#soundCloud');
-    soundCloudContainer.innerHTML = soundCloud;
+  const soundCloudContainer = document.querySelector("#soundCloud");
+  soundCloudContainer.innerHTML = soundCloud;
 
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 }
 
 function updateScore(isCorrect) {
-    console.log("Entered updateScore function")
+  console.log("Entered updateScore function");
 
-    if (isCorrect) {
-        let currentPlayer = getPlayerUsername();
-        let scores = JSON.parse(localStorage.getItem('scores')) || {}
-
-        if (!scores[currentPlayer]) {
-            scores[currentPlayer] = {
-                score: 0,
-                date: new Date().toLocaleString()
-            }
-        }
-
-        scores[currentPlayer].score += 1;
-        scores[currentPlayer].date = new Date().toLocaleString();
-        console.log(`After updating, ${currentPlayer}'s score:`, scores[currentPlayer]);
-
-        localStorage.setItem('scores', JSON.stringify(scores));
-        console.log("Scores saved to localStorage:", scores);
-    }
+  if (isCorrect) {
+    getPlayerUsername().then((username) => {
+      fetch("/api/scores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: username, score: 1 }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Score updated successfully", data);
+        })
+        .catch((error) => {
+          console.error("Error updating score:", error);
+        });
+    });
+  }
 }
 
 function initPlay() {
-    storeLyricsData();
-    displayPlayerUsername();
-    displayLyricAndOptions();
-    handleEmojiClick();
-    document.querySelector('#next').addEventListener('click', displayLyricAndOptions);
-    document.querySelector('#skip').addEventListener('click', displayLyricAndOptions);
+  displayPlayerUsername();
+  displayLyricAndOptions();
+  handleEmojiClick();
+  document.querySelector("#next").addEventListener("click", nextQuestion);
+  document.querySelector("#skip").addEventListener("click", skipQuestion);
 }
 
-document.addEventListener('DOMContentLoaded', initPlay);
+document.addEventListener("DOMContentLoaded", initPlay);
 
 let messageState = 0;
 
 setInterval(() => {
-    addNewMessage();
+  addNewMessage();
 }, 1500);
 
 function addNewMessage() {
-    const notifications = document.querySelector('#notifications');
+  const notifications = document.querySelector("#notifications");
 
-    let newMessage;
-    if (messageState === 0) {
-        newMessage = createStartMessage();
-    } else if (messageState === 1) {
-        newMessage = createScoreMessage();
-    } else if (messageState === 2) {
-        newMessage = createEmojiMessage();
+  let newMessage;
+  if (messageState === 0) {
+    newMessage = createStartMessage();
+  } else if (messageState === 1) {
+    newMessage = createScoreMessage();
+  } else if (messageState === 2) {
+    newMessage = createEmojiMessage();
+  }
+
+  if (newMessage) {
+    notifications.insertBefore(newMessage, notifications.firstChild);
+    if (notifications.children.length > 15) {
+      notifications.removeChild(notifications.lastChild);
     }
+  }
 
-    if (newMessage) {
-        notifications.insertBefore(newMessage, notifications.firstChild);
-        if (notifications.children.length > 15) {
-            notifications.removeChild(notifications.lastChild);
-        }
-    }
-
-    messageState = (messageState + 1) % 3;
+  messageState = (messageState + 1) % 3;
 }
 
 function createStartMessage() {
-    const newStartMessage = document.createElement('div');
-    newStartMessage.className = 'message';
-    newStartMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
-    return newStartMessage;
+  const newStartMessage = document.createElement("div");
+  newStartMessage.className = "message";
+  newStartMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
+  return newStartMessage;
 }
 
 function createScoreMessage() {
-    const score = Math.floor(Math.random() * 100);
-    const newScoreMessage = document.createElement('div');
-    newScoreMessage.className = 'message';
-    newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
-    return newScoreMessage;
+  const score = Math.floor(Math.random() * 100);
+  const newScoreMessage = document.createElement("div");
+  newScoreMessage.className = "message";
+  newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
+  return newScoreMessage;
 }
 
 function createEmojiMessage() {
-    const lastEmojiClicked = getLastEmojiClicked();
-    if (lastEmojiClicked) {
-        const newEmojiMessage = document.createElement('div');
-        newEmojiMessage.className = 'message';
-        newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${lastEmojiClicked}`;
-        return newEmojiMessage;
-    }
-    return null;
+  const lastEmojiClicked = getLastEmojiClicked();
+  if (lastEmojiClicked) {
+    const newEmojiMessage = document.createElement("div");
+    newEmojiMessage.className = "message";
+    newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${lastEmojiClicked}`;
+    return newEmojiMessage;
+  }
+  return null;
 }
