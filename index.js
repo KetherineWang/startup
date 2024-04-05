@@ -112,6 +112,13 @@ apiRouter
     res.status(200).send({ message: "Score updated" });
   });
 
+// Endpoint to delete scores
+apiRouter.route("/reset").delete((req, res) => {
+  const { username } = req.body;
+  scores[username].score = 0;
+  scores[username].date = new Date().toLocaleString();
+});
+
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {
   res.sendFile("login.html", { root: "public" });

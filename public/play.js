@@ -7,16 +7,18 @@ function getLyricsData() {
 function getPlayerUsername() {
   console.log("Entered getPlayerUsername function");
 
-  return fetch("/api/username").then((response) => response.text());
+  return localStorage.getItem("username") || "Unknown Player";
+
+  // return fetch("/api/username").then((response) => response.text());
 }
 
 function displayPlayerUsername() {
   console.log("Entered displayPlayerUsername function");
 
-  getPlayerUsername().then((username) => {
-    const playerUsernameEl = document.querySelector(".playerUsername");
-    playerUsernameEl.textContent = username || "Unknown Player";
-  });
+  const username = getPlayerUsername();
+
+  const playerUsernameEl = document.querySelector(".playerUsername");
+  playerUsernameEl.textContent = username || "Unknown Player";
 }
 
 let counter = 0;
@@ -166,22 +168,22 @@ function updateScore(isCorrect) {
   console.log("Entered updateScore function");
 
   if (isCorrect) {
-    getPlayerUsername().then((username) => {
-      fetch("/api/scores", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: username, score: 1 }),
+    const username = getPlayerUsername();
+
+    fetch("/api/scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: username, score: 1 }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Score updated successfully", data);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Score updated successfully", data);
-        })
-        .catch((error) => {
-          console.error("Error updating score:", error);
-        });
-    });
+      .catch((error) => {
+        console.error("Error updating score:", error);
+      });
   }
 }
 
@@ -201,7 +203,7 @@ setInterval(() => {
   addNewMessage();
 }, 1500);
 
-function addNewMessage() {
+async function addNewMessage() {
   const notifications = document.querySelector("#notifications");
 
   let newMessage;
@@ -210,7 +212,7 @@ function addNewMessage() {
   } else if (messageState === 1) {
     newMessage = createScoreMessage();
   } else if (messageState === 2) {
-    newMessage = createEmojiMessage();
+    newMessage = await createEmojiMessage();
   }
 
   if (newMessage) {
@@ -238,8 +240,8 @@ function createScoreMessage() {
   return newScoreMessage;
 }
 
-function createEmojiMessage() {
-  const lastEmojiClicked = getLastEmojiClicked();
+async function createEmojiMessage() {
+  const lastEmojiClicked = await getLastEmojiClicked();
   if (lastEmojiClicked) {
     const newEmojiMessage = document.createElement("div");
     newEmojiMessage.className = "message";
