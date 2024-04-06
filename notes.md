@@ -1922,7 +1922,7 @@
 - When we connect to a device on the internet, we need both an IP address and a numbered port.
 - Port numbers allow a single device to support multiple protocols (e.g. HTTP, HTTPS, FTP, or SSH) as well as different types of services (e.g. search, document, or authentication).
 - The ports may be exposed externally, or they may only be used internally on the device.
-- For example, the HTTPS port (443) might allow the world to connect, the SSH port (22) might only allow computers at your school, and a service-defined port (say 3000) may only allow access to processes running on the device.
+- For example, the HTTPS port (443) might allow the world to connect, the SSH port (22) might only allow computers at our school, and a service-defined port (say 3000) may only allow access to processes running on the device.
 - The Internet governing body, IANA, defines the standard usage for port numbers.
 - Ports from 0 to 1023 represent standard protocols.
 - Generally, a web service should avoid these ports unless it is providing the protocol represented by the standard.
@@ -2429,7 +2429,7 @@
         - `server.listen(8080, () => {`
             - ``console.log(`Web service listening on port 8080`);``
         - `});`
-            - `const http = require('http');`: This line imports Node.js's built-in `http` module and assigns it to the variable `http`. The `http` module allows you to create HTTP servers and clients, which is essential for web development with Node.js.
+            - `const http = require('http');`: This line imports Node.js's built-in `http` module and assigns it to the variable `http`. The `http` module allows us to create HTTP servers and clients, which is essential for web development with Node.js.
             - `const server = http.createServer(function (req, res) {...});`: Here, we use the `createServer` method of the `http` module to create a new HTTP server. The method takes a request listener function as an argument, which is executed each time the server receives a request. The request listener function has two parameters: `req` (request) and `res` (response).
             - `res.writeHead(200, { 'Content-Type': 'text/html' })`: This line starts a response to the request with a status code of 200 (OK) and sets the `Content-Type` header to `text/html`. This tells the client that the response will be HTML content.
             - `res.write(...)`: This sends a chunk of the response body. In this case, it sends an HTML `<h1>` tag with a message that includes the request method (`req.method`) and the URL path (`req.url`). For example, if we navigate to `http://localhost:8080/test`, it will display "Hello Node.js! [GET] /test".
@@ -2592,7 +2592,7 @@
         `- `res.send({cookie: req.cookies});`
         - `});`
 
-        - // Creating your own middleware - logging
+        - // Creating our own middleware - logging
         - `app.use((req, res, next) => {`
             - `console.log(req.originalUrl);`
             - `next();`
@@ -2713,24 +2713,53 @@
 
             - // Router for service endpoints
             - `const apiRouter = express.Router();`
-            - `app.use(`/api`, apiRouter);`
+            - ``app.use(`/api`, apiRouter);``
 
             - // GetScores
             - `apiRouter.get('/scores', (_req, res) => {`
-            res.send(scores);
-            });
+                - `res.send(scores);`
+            - `});`
 
-            // SubmitScore
-            apiRouter.post('/score', (req, res) => {
-            scores = updateScores(req.body, scores);
-            res.send(scores);
-            });
+            - // SubmitScore
+            - `apiRouter.post('/score', (req, res) => {`
+                `scores = updateScores(req.body, scores);`
+                `res.send(scores);`
+            - `});`
 
-            // Return the application's default page if the path is unknown
-            app.use((_req, res) => {
-            res.sendFile('index.html', { root: 'public' });
-            });
+            - // Return the application's default page if the path is unknown
+            - `app.use((_req, res) => {`
+                - `res.sendFile('index.html', { root: 'public' });`
+            - `});`
 
-            app.listen(port, () => {
-            console.log(`Listening on port ${port}`);
-            });
+            - `app.listen(port, () => {`
+                - `console.log(`Listening on port ${port}`);`
+            - `});`
+                - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
+                    - `process.argv` is an array containing the command-line arguments passed when the Node.js process was launched. The first element (`process.argv[0]`) is the path to the node executable, and the second element (`process.argv[1]`) is the path to the JavaScript file being executed. Any additional arguments are found from the third element onwards (`process.argv[2]`, `process.argv[3]`, etc.).
+                    - `process.argv.length > 2` checks if there are more than two elements in the `process.argv` array. This essentially checks if any additional command-line arguments were provided beyond the default two (the node executable and the script path).
+                    - The ternary operator (`? :`) is used here as a shortcut for an if-else statement. It checks the condition before the `?`, and if that condition is true, it returns the value before the `:`, otherwise, it returns the value after the `:`.
+                    - If there are additional command-line arguments (`process.argv.length > 2 is true`), it assigns `process.argv[2]` to `port`. This means the first argument provided by the user (beyond the default two) is used as the port number. For example, if we start our application with `node app.js 5000`, `process.argv[2]` would be `5000`, and thus, `port` would be set to `5000`.
+                    - If there are no additional command-line arguments, it defaults to `3000`, meaning if no port is specified by the user, the server will listen on port `3000`.
+                - `const apiRouter = express.Router();`
+                - ``app.use(`/api`, apiRouter);``
+                    - Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the next middleware function in the application’s request-response cycle. These functions can execute any code, make changes to the request and the response objects, end the request-response cycle, and call the next middleware function in the stack.
+                    - `app.use` is a method used to mount middleware functions to the application. Any middleware registered with `app.use` will be executed for every incoming request to the application.
+                    - `express.json()` is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser
+                    - Essentially, `express.json()` returns a middleware function that reads a request’s body and, if the `Content-Type` header of the request is set to `application/json`, it parses the body of the request into a JavaScript object. After parsing, this object is available on `req.body` within our route handlers or downstream middleware, making it easier to work with JSON input.
+                - `const apiRouter = express.Router();`
+                    - This line creates a new router object. Think of it as a mini-application capable only of performing middleware and routing functions. We have not defined any routes yet at this point; we have simply created an instance of a router that we will define routes on.
+                - ``app.use(`/api`, apiRouter);``
+                    - Here, we are telling our main Express application (`app`) to use the router (`apiRouter`) for any requests that start with `/api`. This is a way of modularizing your routes and can be particularly useful for separating different API versions (e.g., `/api/v1`, `/api/v2`) or categorizing routes (e.g., `/api/users`, `/api/posts`).
+                    - `app.use()` is a method to configure middleware in our Express application. When we pass `/api` as the first argument, we are specifying a path prefix. Therefore, the router `apiRouter` becomes active only for paths that start with `/api`.
+                    - After this line, any routes we define on `apiRouter` will be prefixed with `/api`. For example, if yoweu define a route like `apiRouter.get('/users', callback)`, it will be accessible at `/api/users` in our application.
+                - `apiRouter.get('/scores', (_req, res) => {`
+                    - `res.send(scores);`
+                - `});`
+                    - The underscore (`_`) prefix before req in the callback function `(_req, res) => {}` is a naming convention used by some developers to indicate that the variable will not be used within the function. In the context of this `apiRouter.get('/scores', (_req, res) => {})` example, the underscore signifies that the request object (`req`) is not being utilized to process this specific endpoint's logic, which only needs to send back the `scores` response.
+        7. Modify the Simon application code to make service endpoint requests to our newly created HTTP service code.
+            - `async function loadScores() {`
+                - `const response = await fetch("/api/scores")`
+                - `const scores = await response.json()`
+
+                - // Modify the DOM to display the scores
+            - `}`

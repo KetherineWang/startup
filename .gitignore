@@ -1,3 +1,4 @@
 *.pem
 keys
 node_modules
+dbConfig.json

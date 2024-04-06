@@ -107,14 +107,12 @@ function skipQuestion() {
   console.log("Entered skipQuestion function");
 
   counter += 1;
-  displayLyricAndOptions();
 }
 
 function nextQuestion() {
   console.log("Entered nextQuestion function");
 
   counter += 1;
-  displayLyricAndOptions();
 }
 
 function endGame() {
@@ -191,8 +189,12 @@ function initPlay() {
   displayPlayerUsername();
   displayLyricAndOptions();
   handleEmojiClick();
-  document.querySelector("#next").addEventListener("click", nextQuestion);
-  document.querySelector("#skip").addEventListener("click", skipQuestion);
+  document
+    .querySelector("#next")
+    .addEventListener("click", displayLyricAndOptions);
+  document
+    .querySelector("#skip")
+    .addEventListener("click", displayLyricAndOptions);
 }
 
 document.addEventListener("DOMContentLoaded", initPlay);
