@@ -1,63 +1,66 @@
 # Amazon Web Services - Route 53
+
 - Use a domain name to represent the web application to make it easy to remember and secure.
 - A domain name can be used to create DNS records that will map domain names to IP addresses (A records) or other domain names (CNAME records).
 - DNS Records
-    - Root Domain DNS Record = `yourdomain`
-    - Subdomain DNS Record = `*.yourdomain`
-        - `*` represents a wildcard.
-    - Both root domain DNS record and subdomain DNS record have a record type, A.
+  - Root Domain DNS Record = `yourdomain`
+  - Subdomain DNS Record = `*.yourdomain`
+    - `*` represents a wildcard.
+  - Both root domain DNS record and subdomain DNS record have a record type, A.
 - Other Records Types
-    - The name server (NS) record contains the names of the authoritative name servers that authorize the user to place DNS records in the DNS server. 
-        - Those same authoritative name servers are listed with the registrar that the user leases their domain name from. 
-        - That way the authoritative name server can verify that the DNS records and the DNS registration match and are authorized to represent the domain name when defining DNS records.
-        - Otherwise, a hacker could just add DNS records and take over the user's domain name.
-    - The start of authority (SOA) record provides contact information about the owner of the domain name.
+  - The name server (NS) record contains the names of the authoritative name servers that authorize the user to place DNS records in the DNS server.
+    - Those same authoritative name servers are listed with the registrar that the user leases their domain name from.
+    - That way the authoritative name server can verify that the DNS records and the DNS registration match and are authorized to represent the domain name when defining DNS records.
+    - Otherwise, a hacker could just add DNS records and take over the user's domain name.
+  - The start of authority (SOA) record provides contact information about the owner of the domain name.
 - Acronyms and Terms
-    - DNS = Domain Name System
-    - NS = Name Server
-    - SOA = Start of Authority
+  - DNS = Domain Name System
+  - NS = Name Server
+  - SOA = Start of Authority
 
 # HTTPS, TLS, and Web Certificates
+
 - Usually, only websites that do commerce need a secure connection.
 - The web moved from simple document servers (Web 1.0) to full-on web applications (Web 2.0).
 - Web 2.0 accepts information from users and displays that information within the application.
 - Without a secure connection, anyone who has access to the network traffic, at any point, from the user's computer to the server handling the request could easily capture all the data sent in either direction.
 - HTTPS and TLS
-    - The secure version of HTTP is called Secure Hypertext Transport Protocol (HTTPS).
-    - This is basically HTTP with a negotiated secure connection that happens before any data is exchanged.
-    - Having a secure connection means that all the data is encrypted using the TLS protocol.
-    - TLS is sometimes referred to by a now unsecured predecessor protocol named SSL.
-    - TLS works by negotiating a shared secret that is then used to encrypt data.
-    - `curl -v -s https://byu.edu > /dev/null`
-        - The actual negotiation that happens can be seen by using the console browser-based application `curl`, along with the `-v` parameter to see the verbose output of the HTTPS exchange.
-        - The `> /dev/null` redirection throws away the actual HTTP response, since we only care about the negotiation, by redirecting the output to the null device.
-    - A core piece of the handshake of the negotiation is the exchange of a web certificate that identifies the domain name of the server creating the secure connection.
-    - The browser will compare the certificate domain name to the one represented in the URL, and if they do not match, or the certificate is invalid or out of date, it will display a massive warning.
+  - The secure version of HTTP is called Secure Hypertext Transport Protocol (HTTPS).
+  - This is basically HTTP with a negotiated secure connection that happens before any data is exchanged.
+  - Having a secure connection means that all the data is encrypted using the TLS protocol.
+  - TLS is sometimes referred to by a now unsecured predecessor protocol named SSL.
+  - TLS works by negotiating a shared secret that is then used to encrypt data.
+  - `curl -v -s https://byu.edu > /dev/null`
+    - The actual negotiation that happens can be seen by using the console browser-based application `curl`, along with the `-v` parameter to see the verbose output of the HTTPS exchange.
+    - The `> /dev/null` redirection throws away the actual HTTP response, since we only care about the negotiation, by redirecting the output to the null device.
+  - A core piece of the handshake of the negotiation is the exchange of a web certificate that identifies the domain name of the server creating the secure connection.
+  - The browser will compare the certificate domain name to the one represented in the URL, and if they do not match, or the certificate is invalid or out of date, it will display a massive warning.
 - Web Certificates
-    - Web Certificates are generated by a trusted 3rd party using public/private key encryption.
-    - The certificate issuer is responsible for verifying that the certificate owner actually owns the domain name represented by the certificate.
-    - Once the user has a certificate for their domain name, the user can serve the certificate from their web server and then the browser can validate the certificate by using the public keys of the certificate issuer.
-    - Caddy uses Let's Encrypt to generate a web certificate every time an HTTPS request is made for a domain name that Caddy does not have a web certificate for.
-    - When this happens Caddy asks Let's Encrypt to verify that the domain for the requested certificate is actually owned by the requester.
-    - Let's Encrypt does that by telling the requester to return a specific digitally signed response for a temporary URL when an HTTP request to the domain is made.
-    - Let's Encrypt then makes the HTTP request, and if successful, issues the certificate to the requester.
+  - Web Certificates are generated by a trusted 3rd party using public/private key encryption.
+  - The certificate issuer is responsible for verifying that the certificate owner actually owns the domain name represented by the certificate.
+  - Once the user has a certificate for their domain name, the user can serve the certificate from their web server and then the browser can validate the certificate by using the public keys of the certificate issuer.
+  - Caddy uses Let's Encrypt to generate a web certificate every time an HTTPS request is made for a domain name that Caddy does not have a web certificate for.
+  - When this happens Caddy asks Let's Encrypt to verify that the domain for the requested certificate is actually owned by the requester.
+  - Let's Encrypt does that by telling the requester to return a specific digitally signed response for a temporary URL when an HTTP request to the domain is made.
+  - Let's Encrypt then makes the HTTP request, and if successful, issues the certificate to the requester.
 - Modern browsers now expect web servers to exclusively use HTTPS for all communication.
 - In fact, the next version of HTTP (v3) only supports secure connections.
 - For this reason, the user should always support HTTPS for any web application that they build.
 - The user can obtain and renew a web certificate by enabling the ACME protocol for their web server and communicating with Let's Encrypt to generate the needed certificates.
 - This is not difficult to do, and many languages such as Rust, Node.js, or Go support this functionality by simply including an additional library.
 - Caddy
-    - Caddy has ACME support built into it by default.
-    - By not specifying a port, the Caddy rule will serve up files using port 443 (HTTPS), and any request to port 80 (HTTP) will automatically redirect the browser to port 443. 
+  - Caddy has ACME support built into it by default.
+  - By not specifying a port, the Caddy rule will serve up files using port 443 (HTTPS), and any request to port 80 (HTTP) will automatically redirect the browser to port 443.
 - Acronyms and Terms
-    - HTTP = Non-Secure Hypertext Transport Protocol
-    - HTTPS - Secure Hypertext Transport Protocol
-    - TLS = Transport Layer Security
-    - SSL = Secure Sockets Layer
-    - IETF - Internet Engineering Task Force
-    - ACME = Automatic Certificate Management Environment
+  - HTTP = Non-Secure Hypertext Transport Protocol
+  - HTTPS - Secure Hypertext Transport Protocol
+  - TLS = Transport Layer Security
+  - SSL = Secure Sockets Layer
+  - IETF - Internet Engineering Task Force
+  - ACME = Automatic Certificate Management Environment
 
 # The Console
+
 - Before the creation of graphical user interfaces, all computing systems were simple console environments consisting of a prompt for inputting a command and the display of the command output.
 - All of the original programming tools ran as console applications.
 - The console tradition is still actively used by professional developers and most programming tools execute within a console window.
@@ -72,307 +75,313 @@
 - At any given point in time, the console is located in one of the directories in the file system.
 - The other primary purpose of the console is to execute commands.
 - The input and output of commands can also be chained using special characters.
-    - `|` = Take the output from the command on the left and pipe or pass it to the command on the right.
-    - `>` = Redirect output to a file. Overwrites the file if it exists.
-    - `>>` = Redirect output to a file. Appends if file exists.
+  - `|` = Take the output from the command on the left and pipe or pass it to the command on the right.
+  - `>` = Redirect output to a file. Overwrites the file if it exists.
+  - `>>` = Redirect output to a file. Appends if file exists.
 - There are also keystrokes that have special meaning in the console.
-    - `CTRL-R`= Use type ahead to find previous commands.
-    - `CTRL-C` = Kill the currently running command
+  - `CTRL-R`= Use type ahead to find previous commands.
+  - `CTRL-C` = Kill the currently running command
 - Acronyms and Terms
-    - POSIX = Portable Operating System Interface
+  - POSIX = Portable Operating System Interface
 - Commands
-    - `echo` = output the parameters of the command
-    - `cd` = change directory
-    - `mkdir` = make directory
-    - `rmdir` = remove directory
-    - `rm` = remove file(s)
-    - `mv` = move file(s)
-    - `cp` = copy file(s)
-    - `ls` = list files
-    - `curl` = command line client URL browser
-    - `grep` = regular expression search
-    - `find` = find files
-    - `top` = view running processes with CPU and memory usage
-    - `df` = view disk statistics
-    - `cat` = output the content of a file
-    - `less` = interactively output the contents of a file
-    - `wc` = count the words in a file
-    - `ps` = view the currently running processes
-    - `kill` = kill a currently running process
-    - `sudo` = execute a command as a super user (admin)
-    - `ssh` = create a secure shell on a remote computer
-    - `scp` = securely copy files to a remote computer
-    - `history` = show the history of commands
-    - `ping` = check if a website is up
-    - `tracert` - trace the connections to a website
-    - `dig` = show the DNS information for a domain
-    - `man` = look up a command in the manual
-    - `pwd` = present working directory
+  - `echo` = output the parameters of the command
+  - `cd` = change directory
+  - `mkdir` = make directory
+  - `rmdir` = remove directory
+  - `rm` = remove file(s)
+  - `mv` = move file(s)
+  - `cp` = copy file(s)
+  - `ls` = list files
+  - `curl` = command line client URL browser
+  - `grep` = regular expression search
+  - `find` = find files
+  - `top` = view running processes with CPU and memory usage
+  - `df` = view disk statistics
+  - `cat` = output the content of a file
+  - `less` = interactively output the contents of a file
+  - `wc` = count the words in a file
+  - `ps` = view the currently running processes
+  - `kill` = kill a currently running process
+  - `sudo` = execute a command as a super user (admin)
+  - `ssh` = create a secure shell on a remote computer
+  - `scp` = securely copy files to a remote computer
+  - `history` = show the history of commands
+  - `ping` = check if a website is up
+  - `tracert` - trace the connections to a website
+  - `dig` = show the DNS information for a domain
+  - `man` = look up a command in the manual
+  - `pwd` = present working directory
 
 # HTML Input
+
 - HTML Elements
-    - `form`
-        - Input container and submission 
-        - `<form action="form.html" method="post">`
-            - The `method="post"` attribute in an HTML form specifies how the browser should send form data to the server. When using `method="post"`, the form data is sent in the body of the HTTP request, not in the URL.
-            - The `POST` method is typically used for forms that change server data (like database updates), while the `GET` method is used for forms that request data without side effects (like a search form).
-    - `fieldset`
-        - Labeled input group
-        - `<fieldset> ... </fieldset>`
-            - The `<fieldset>` tag in HTML is used to group related elements within a form. It draws a box around the related form items, making the form easier to understand and navigate. This is particularly useful when a form has multiple sections or categories of inputs.
-    - `input`
-        - Multiple types of user input
-            - `<input type=" />`
-    - `select`
-        - Selection dropdown
-        - `<select><option>1</option></select>`
-    - `optgroup`
-        - Grouped selection dropdown
-        - `<optgroup><option>1</option></optgroup>`
-    - `option`
-        - Selection option
-        - `<option selected>option2</option>`
-    - `textarea`
-        - Multiline text input
-        - `<textarea></textarea>`
-    - `label`
-        - Individual input label
-        - `<label for="range">Range: </label>`
-    - `output`
-        - Output of input
-        - `<output for="range">0</output>`
-    - `meter`
-        - Display value with a known range
-        - `<meter min="0" max="100" value="50"></meter>`
+  - `form`
+    - Input container and submission
+    - `<form action="form.html" method="post">`
+      - The `method="post"` attribute in an HTML form specifies how the browser should send form data to the server. When using `method="post"`, the form data is sent in the body of the HTTP request, not in the URL.
+      - The `POST` method is typically used for forms that change server data (like database updates), while the `GET` method is used for forms that request data without side effects (like a search form).
+  - `fieldset`
+    - Labeled input group
+    - `<fieldset> ... </fieldset>`
+      - The `<fieldset>` tag in HTML is used to group related elements within a form. It draws a box around the related form items, making the form easier to understand and navigate. This is particularly useful when a form has multiple sections or categories of inputs.
+  - `input`
+    - Multiple types of user input
+      - `<input type=" />`
+  - `select`
+    - Selection dropdown
+    - `<select><option>1</option></select>`
+  - `optgroup`
+    - Grouped selection dropdown
+    - `<optgroup><option>1</option></optgroup>`
+  - `option`
+    - Selection option
+    - `<option selected>option2</option>`
+  - `textarea`
+    - Multiline text input
+    - `<textarea></textarea>`
+  - `label`
+    - Individual input label
+    - `<label for="range">Range: </label>`
+  - `output`
+    - Output of input
+    - `<output for="range">0</output>`
+  - `meter`
+    - Display value with a known range
+    - `<meter min="0" max="100" value="50"></meter>`
 - Form Element
-    - The main purpose of the form `element` is to submit the values of the inputs it contains.
-    - Before JavaScript was introduced, the `form` container element was essential because it was the only way for the browser to send the input data to a web server as part of a request to process the input and generate a new web page displaying the result of the input.
-    - For example, in a single-page application, the JavaScript will dynamically rebuild the HTML elements to reflect the results of the user interaction.
-    - With this ability, the data may not even be sent to the server.
-    - This greatly reduces the necessity of the `form` element, but it is often still used simply as a container.
+  - The main purpose of the form `element` is to submit the values of the inputs it contains.
+  - Before JavaScript was introduced, the `form` container element was essential because it was the only way for the browser to send the input data to a web server as part of a request to process the input and generate a new web page displaying the result of the input.
+  - For example, in a single-page application, the JavaScript will dynamically rebuild the HTML elements to reflect the results of the user interaction.
+  - With this ability, the data may not even be sent to the server.
+  - This greatly reduces the necessity of the `form` element, but it is often still used simply as a container.
 - Example:
 - `<form action="submission.html" method="post">`
-    - `<label for="ta">TextArea: </label>`
-    - `<textarea id="ta" name="ta-id">`
+  - `<label for="ta">TextArea: </label>`
+  - `<textarea id="ta" name="ta-id">`
 - `Some text`
-    - `</textarea>`
-    - `<button type="submit">Submit</button>`
+  - `</textarea>`
+  - `<button type="submit">Submit</button>`
 - `</form>`
-    - The `for` attribute in the `<label>` tag specifies which form element a label is bound to. In this case, `for="ta"` means that this label is associated with the form element that has the id of `"ta"`.
-    - The `id` attribute specifies a unique id for the HTML element. It is used here to link the `<textarea>` with its `<label>`. Since the id is  `"ta"`, it matches the `for="ta"` in the `<label>`, establishing the connection between them.
-    - The `name` attribute is named `"ta-id"` in the `<textarea>`. This is important for when the form is submitted. The data entered into this `<textarea>` will be sent to the server as part of the HTTP request with `"ta-id"` as the key. For instance, if a user types "Hello" in the textarea, the server receives this data in the form of ta-id=Hello.
-    - Pressing the submit button sends the following data to the web server.
-    - The browser generates the data by combining the textarea's `name` attribute with the current value of the textarea.
-        - ta-id=Some+text
+  - The `for` attribute in the `<label>` tag specifies which form element a label is bound to. In this case, `for="ta"` means that this label is associated with the form element that has the id of `"ta"`.
+  - The `id` attribute specifies a unique id for the HTML element. It is used here to link the `<textarea>` with its `<label>`. Since the id is `"ta"`, it matches the `for="ta"` in the `<label>`, establishing the connection between them.
+  - The `name` attribute is named `"ta-id"` in the `<textarea>`. This is important for when the form is submitted. The data entered into this `<textarea>` will be sent to the server as part of the HTTP request with `"ta-id"` as the key. For instance, if a user types "Hello" in the textarea, the server receives this data in the form of ta-id=Hello.
+  - Pressing the submit button sends the following data to the web server.
+  - The browser generates the data by combining the textarea's `name` attribute with the current value of the textarea.
+    - ta-id=Some+text
 - Input Elements
-    - The input elements represent many different input types.
-    - The type of input is set with the `type` attribute.
-    - Different input types include different flavors of textual, numeric, date, and color inputs.
-        - `text` = single line textual value
-        - `pass` = obscured password
-        - `email` = email address
-        - `tel` = telephone number
-        - `url` = URL address
-        - `number` = numerical value
-        - `checkbox` = inclusive selection
-        - `radio` = exclusive selection
-        - `range` = range limited number
-        - `date` = year, month, day
-        - `datetime-local` = date and time
-        - `month` = year, month
-        - `week` = week of year
-        - `color` = color
-        - `file` = local file
-        - `submit` = button to trigger form submission
-    - In order to create an input, the desired `type` attribute is specified along with any other attribute associated with that specific input.
+  - The input elements represent many different input types.
+  - The type of input is set with the `type` attribute.
+  - Different input types include different flavors of textual, numeric, date, and color inputs.
+    - `text` = single line textual value
+    - `pass` = obscured password
+    - `email` = email address
+    - `tel` = telephone number
+    - `url` = URL address
+    - `number` = numerical value
+    - `checkbox` = inclusive selection
+    - `radio` = exclusive selection
+    - `range` = range limited number
+    - `date` = year, month, day
+    - `datetime-local` = date and time
+    - `month` = year, month
+    - `week` = week of year
+    - `color` = color
+    - `file` = local file
+    - `submit` = button to trigger form submission
+  - In order to create an input, the desired `type` attribute is specified along with any other attribute associated with that specific input.
 - Example: `<label for="checkbox1">Check me</label> <input type="checkbox" name="varCheckbox" value="checkbox1" checked />`
-    - Most input elements share some common attributes.
-        - `name` = The name of the input. This is submitted as the name of the input if used in a form.
-        - `disabled` = Disables the ability for the user to interact with the input.
-        - `value` = The initial value of the input
-        - `required` = Signifies that a value is required in order to be valid.
+  - Most input elements share some common attributes.
+    - `name` = The name of the input. This is submitted as the name of the input if used in a form.
+    - `disabled` = Disables the ability for the user to interact with the input.
+    - `value` = The initial value of the input
+    - `required` = Signifies that a value is required in order to be valid.
 - Input Validation
-    - Several of the input elements have validation built into them.
-    - This means that they will not accept a value that is not, for example, a number, a URL, outside of a range, or an email address.
-    - The `required` attribute can also be specified on an input element to mark it as requiring a value before it can be submitted.
-    - The `pattern` attribute exists on `text`, `search`, `url`, `tel`, `email`, and `password` inputs.
-    - When present, the `pattern` attribute provides a regular expression that must match for the input to be considered valid.
-    - Validation should also be built into HavaScript for checking input data to ensure everything is valid before it is submitted.
-    - All of the input elements support functions for determining their validation state.
-    - Additionally, there are CSS style selectors for visualizing the validity of the input.
-    - In order to have a good user experience, it is critical that sufficient user feedback is provided early in the input process.
-    - A good design will give feedback as, or before, the user begins to input.
-    - A poor design will keep the user guessing as to why the data is not being accepted, or even if it was accepted.
+  - Several of the input elements have validation built into them.
+  - This means that they will not accept a value that is not, for example, a number, a URL, outside of a range, or an email address.
+  - The `required` attribute can also be specified on an input element to mark it as requiring a value before it can be submitted.
+  - The `pattern` attribute exists on `text`, `search`, `url`, `tel`, `email`, and `password` inputs.
+  - When present, the `pattern` attribute provides a regular expression that must match for the input to be considered valid.
+  - Validation should also be built into HavaScript for checking input data to ensure everything is valid before it is submitted.
+  - All of the input elements support functions for determining their validation state.
+  - Additionally, there are CSS style selectors for visualizing the validity of the input.
+  - In order to have a good user experience, it is critical that sufficient user feedback is provided early in the input process.
+  - A good design will give feedback as, or before, the user begins to input.
+  - A poor design will keep the user guessing as to why the data is not being accepted, or even if it was accepted.
 - CodenPen Assignment
-    - `<ul>`
-        - In HTML, the `<ul>` tag stands for "Unordered List." It is a way to create a list of items that do not have a specific order or hierarchy. The `<ul>` tag is typically used for bulleted lists, where the order of items is not important.
-        - Here is how to use the `<ul>` tag:
-            - Wrap the entire list with `<ul>` tags.
-            - Each item in the list is placed within an `<li>` (List Item) tag.
-    - `<input type="text" id="text" name="varText" placeholder="text here" required pattern="[Aa].*" />`
-        - The `pattern="[Aa].*"` attribute in HTML is used within an `<input>` element, typically of `type="text"` or similar, to specify a regular expression that the input's value must match in order for the form to be submitted.
-        - Here is a breakdown of what this specific pattern means:
-            - `Aa`: This part of the pattern means that the input value must start with either an uppercase "A" or a lowercase "a".
-            - `.*`: This part of the pattern is a regular expression that matches any sequence of characters (including no characters at all). The dot `.` represents any character (except newline), and the asterisk `*` means "zero or more occurrences of the preceding element."
-    - `<!-- Submit form with POST method and enctype="multipart/form-data" to send file contents. -->`
-        - `POST` Method: When a form is submitted with the `method="post"` attribute, the form data is sent in the request body, not in the URL. This is typically used for sending large amounts of data and is more secure than `GET` because the data does not appear in the URL.
-        - `enctype="multipart/form-data"`: This attribute specifies how the form data should be encoded when submitting it to the server. The `enctype="multipart/form-data"` is necessary when a form includes any `<input type="file">` elements because it allows files to be uploaded to the server. It is used when the form is meant to perform file uploads along with other text fields.
-    - `<input type="tel" id="tel" name="varTel" placeholder="###-####" pattern="\d{3}-\d{4}" />`
-        - The `pattern="\d{3}-\d{4}"` attribute in an HTML `<input type="tel">` element is a regular expression that specifies a validation pattern the inputted data must match for the form to be submitted. Let us break down what this specific pattern means:
-            - `\d`: This represents a digit (0-9). It is a shorthand character class in regular expressions that matches any single digit.
-            - `{3}`: This quantifier specifies that exactly three occurrences of the preceding element (in this case, a digit) must be present.
-            - `-`: This is a literal dash character. It must appear exactly as it is in the user's input.
-            - `\d{4}`: This means that four digits must follow the dash.
-    - `<output id="rangeOutput" for="range">0</output>`
-        - The `<output>` element in conjunction with the `<input type="range">` serves as a way to display the current value of the range input dynamically. This is particularly useful for providing immediate visual feedback to the user, as the default range input does not always show the current value while it is being adjusted.
+  - `<ul>`
+    - In HTML, the `<ul>` tag stands for "Unordered List." It is a way to create a list of items that do not have a specific order or hierarchy. The `<ul>` tag is typically used for bulleted lists, where the order of items is not important.
+    - Here is how to use the `<ul>` tag:
+      - Wrap the entire list with `<ul>` tags.
+      - Each item in the list is placed within an `<li>` (List Item) tag.
+  - `<input type="text" id="text" name="varText" placeholder="text here" required pattern="[Aa].*" />`
+    - The `pattern="[Aa].*"` attribute in HTML is used within an `<input>` element, typically of `type="text"` or similar, to specify a regular expression that the input's value must match in order for the form to be submitted.
+    - Here is a breakdown of what this specific pattern means:
+      - `Aa`: This part of the pattern means that the input value must start with either an uppercase "A" or a lowercase "a".
+      - `.*`: This part of the pattern is a regular expression that matches any sequence of characters (including no characters at all). The dot `.` represents any character (except newline), and the asterisk `*` means "zero or more occurrences of the preceding element."
+  - `<!-- Submit form with POST method and enctype="multipart/form-data" to send file contents. -->`
+    - `POST` Method: When a form is submitted with the `method="post"` attribute, the form data is sent in the request body, not in the URL. This is typically used for sending large amounts of data and is more secure than `GET` because the data does not appear in the URL.
+    - `enctype="multipart/form-data"`: This attribute specifies how the form data should be encoded when submitting it to the server. The `enctype="multipart/form-data"` is necessary when a form includes any `<input type="file">` elements because it allows files to be uploaded to the server. It is used when the form is meant to perform file uploads along with other text fields.
+  - `<input type="tel" id="tel" name="varTel" placeholder="###-####" pattern="\d{3}-\d{4}" />`
+    - The `pattern="\d{3}-\d{4}"` attribute in an HTML `<input type="tel">` element is a regular expression that specifies a validation pattern the inputted data must match for the form to be submitted. Let us break down what this specific pattern means:
+      - `\d`: This represents a digit (0-9). It is a shorthand character class in regular expressions that matches any single digit.
+      - `{3}`: This quantifier specifies that exactly three occurrences of the preceding element (in this case, a digit) must be present.
+      - `-`: This is a literal dash character. It must appear exactly as it is in the user's input.
+      - `\d{4}`: This means that four digits must follow the dash.
+  - `<output id="rangeOutput" for="range">0</output>`
+    - The `<output>` element in conjunction with the `<input type="range">` serves as a way to display the current value of the range input dynamically. This is particularly useful for providing immediate visual feedback to the user, as the default range input does not always show the current value while it is being adjusted.
 
 # HTML Media
+
 - The HTML elements that represent media include `img`, `augio`, `video`, `svg`, and `canvas`.
 - The `img`, `audio`, and `video` elements are all simple references to an external file, but `svg` and `canvas` both contain the code to render a visual image that can even be animated.
 - External Media
-    - The media tags that reference external media all take a URL as an attribute.
-    - The path represented by the URL can either be a relative path or a full path.
-    -  A full path includes the protocol. domain name, and path to the file.
-        - https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg
-    - A relative path references a file that is served from the same location as the HTML page rendering the element.
-    - The path should be made as relative as possible so that the code can be moved around without having to actually adjust all of the external page references.
-    - For example, if the HTML page is located in a directory with a subdirectory named `images` that contains a file named `photo.jpg`, a relative path would be used as follows.
-        - images/photo.jpg
+  - The media tags that reference external media all take a URL as an attribute.
+  - The path represented by the URL can either be a relative path or a full path.
+  - A full path includes the protocol. domain name, and path to the file.
+    - https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg
+  - A relative path references a file that is served from the same location as the HTML page rendering the element.
+  - The path should be made as relative as possible so that the code can be moved around without having to actually adjust all of the external page references.
+  - For example, if the HTML page is located in a directory with a subdirectory named `images` that contains a file named `photo.jpg`, a relative path would be used as follows.
+    - images/photo.jpg
 - Image
-    - To include an image in the content, use the `img` element and specify the `src` attribute with the URL to the source image.
-    - In order to support accessibility, an `alt` attribute should also be included that describes the image.
-    - A full `img` element would look like the following:
-        - `<img alt="mountain landscape" src="https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg" />`
+  - To include an image in the content, use the `img` element and specify the `src` attribute with the URL to the source image.
+  - In order to support accessibility, an `alt` attribute should also be included that describes the image.
+  - A full `img` element would look like the following:
+    - `<img alt="mountain landscape" src="https://images.pexels.com/photos/164170/pexels-photo-164170.jpeg" />`
 - Audio
-    - To include an audio file in the content, use the `audio` element and specify the `src` attribute with the URL to the source audio file.
-    - The `controls` attribute can be included to enable the user to control the audio playback.
-    - If the `controls` are not displayed, then there is no visual representation of the audio on the rendered page.
-    - The `autoplay` attribute starts the audio playing as soon as the audio file is loaded, and the `loop` attribute keeps it playing over and over.
-    - Note that automatically playing audio is strongly discouraged unless a way for the user to opt-in to that behavior is provided.
-        - `<audio controls src="testAudio.mp3"></audio>`
+  - To include an audio file in the content, use the `audio` element and specify the `src` attribute with the URL to the source audio file.
+  - The `controls` attribute can be included to enable the user to control the audio playback.
+  - If the `controls` are not displayed, then there is no visual representation of the audio on the rendered page.
+  - The `autoplay` attribute starts the audio playing as soon as the audio file is loaded, and the `loop` attribute keeps it playing over and over.
+  - Note that automatically playing audio is strongly discouraged unless a way for the user to opt-in to that behavior is provided.
+    - `<audio controls src="testAudio.mp3"></audio>`
 - Video
-    - To include a video in the content, use the `video` element and specify the `src` attribute with the URL to the source video.
-    - Like the `audio` element, the `controls` or `autoplay` attributes can be included.
-    - Note that the `crossorigin="anonymous"` attribute may need to be included if requesting files from a different domain than the one serving the content.
+  - To include a video in the content, use the `video` element and specify the `src` attribute with the URL to the source video.
+  - Like the `audio` element, the `controls` or `autoplay` attributes can be included.
+  - Note that the `crossorigin="anonymous"` attribute may need to be included if requesting files from a different domain than the one serving the content.
 - Example:
 - `<video controls width="300" crossorigin="anonymous">`
-    - `<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />`
+  - `<source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />`
 - `</video>`
 - Internal Media
 - The internal media elements `svg` and `canvas` allow the programmer to actually create images directly within the HTML.
-    - Scalable Vector Graphics (SVG)
-        - SCG is an extremely powerful and widely supported way to render graphics inline in HTML.
+  - Scalable Vector Graphics (SVG)
+    - SCG is an extremely powerful and widely supported way to render graphics inline in HTML.
 - Example:
 - `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" stroke="red" fill="red" style="border: 1px solid #000000">`
-    - `<circle cx="150" cy="100" r="50" />`
+  - `<circle cx="150" cy="100" r="50" />`
 - `</svg>`
-    - `viewBox="0 0 300 200"`: This attribute defines the position and dimension, in user space, of an SVG viewport. Here, it is creating a viewport of 300 units wide and 200 units high.
-    - `xmlns="http://www.w3.org/2000/svg"`: This specifies the XML namespace for SVG. It is necessary for the SVG to be correctly interpreted.
-    - `stroke="red"` and `fill="red"`: These attributes set the stroke (border) and fill (interior) colors of all shapes contained within this SVG element to red.
-    - `style="border: 1px solid #000000"`: This applies CSS styling to the SVG element, giving it a 1-pixel solid black border.
-    - `cx="150"` and `cy="100"`: These attributes define the x and y coordinates of the center of the circle. Given the viewBox size, this places the center of the circle in the middle of the SVG element.
-    - `r="50"`: This sets the radius of the circle to 50 units.
-        - Some amazing visualizations can be produced combined with JavaScript and CSS.
-    - Canvas
-        - The `canvas` element was introduced to HTML in order to facilitate 2D drawing and animation.
-        - The HTML for the `canvas` element is fairly simple, but actually drawing on the canvas requires JavaScript support.
+  - `viewBox="0 0 300 200"`: This attribute defines the position and dimension, in user space, of an SVG viewport. Here, it is creating a viewport of 300 units wide and 200 units high.
+  - `xmlns="http://www.w3.org/2000/svg"`: This specifies the XML namespace for SVG. It is necessary for the SVG to be correctly interpreted.
+  - `stroke="red"` and `fill="red"`: These attributes set the stroke (border) and fill (interior) colors of all shapes contained within this SVG element to red.
+  - `style="border: 1px solid #000000"`: This applies CSS styling to the SVG element, giving it a 1-pixel solid black border.
+  - `cx="150"` and `cy="100"`: These attributes define the x and y coordinates of the center of the circle. Given the viewBox size, this places the center of the circle in the middle of the SVG element.
+  - `r="50"`: This sets the radius of the circle to 50 units.
+    - Some amazing visualizations can be produced combined with JavaScript and CSS.
+  - Canvas
+    - The `canvas` element was introduced to HTML in order to facilitate 2D drawing and animation.
+    - The HTML for the `canvas` element is fairly simple, but actually drawing on the canvas requires JavaScript support.
 
 # HTML Structure
+
 - The two major purposes of HTML is to provide structure and content to the web application.
 - Some of the common HTML structural elements include `body`, `header`, `footer`, `main`, `section`, `aside`, `p`, `table`, `ol/ul`, `div`, and `span`.
 - HTML Structural Elements
-    - `p` = paragraph
-    - `b` = bold
-    - `nav` = navigation
-    - `div` = division
-    - `aside` = content that does not fit the content flow of the sections
+  - `p` = paragraph
+  - `b` = bold
+  - `nav` = navigation
+  - `div` = division
+  - `aside` = content that does not fit the content flow of the sections
 - Tags
-    - `<a>` = anchor
-        - Each `<a>` element has an `href` attribute that points to the respective websites.
-    - `<tr>` = table row
-    - `<th>` = table header
-    - `<td>` = table data
+  - `<a>` = anchor
+    - Each `<a>` element has an `href` attribute that points to the respective websites.
+  - `<tr>` = table row
+  - `<th>` = table header
+  - `<td>` = table data
 - Properly representing the page structure using the elements is important not only so it makes logical sense to a programmer, but also so that automated tools like search indexing crawlers and accessibility screen readers can correctly interpret the document.
 - Block and Inline
-    - There is a distinction between structure elements that are block vs. inline.
-    - A block element is meant to be a distinct block in the flow of the content structure.
-    - An inline element is meant to be inline with the content flow of a block element.
-    - In other words, inline elements do not disrupt the flow of a block element's content.
-    - For example, the block element `div` could have an inline element `b` in order to bring attention to a portion of its sub-text.
-    - Likewise, a `p` element could have a `span` to mark the paragraph's sub-text as a person's name.
+  - There is a distinction between structure elements that are block vs. inline.
+  - A block element is meant to be a distinct block in the flow of the content structure.
+  - An inline element is meant to be inline with the content flow of a block element.
+  - In other words, inline elements do not disrupt the flow of a block element's content.
+  - For example, the block element `div` could have an inline element `b` in order to bring attention to a portion of its sub-text.
+  - Likewise, a `p` element could have a `span` to mark the paragraph's sub-text as a person's name.
 
 # Startup HTML
+
 - An HTML file is needed for each of the main components of the application.
 - The default component of the application must be represented in a file named `index.html` since that is the file a browser will load by default.
 - A placeholder is needed for all the technologies that will eventually be needed to represent the application.
-    - Application data: A rendering of application data that will eventually populate.
-    - For Simon, this is the simple SVG graphic buttons, the user name, and a random inspirational quote.
-    - Authentication: An input for the user to create an account and login.
-    - The user's name should be displayed after they log in.
-    - Database data: A rendering of application data that is stored in the database.
-    - For Simon, this is the highest score of all players.
-    - WebSocket data: A rendering of data that is received from the server.
-    - This may be real-time data sent from other users (e.g., chat or scoring data), or real-time data that the service is generating (e.g., stock prices or latest high scores).
-    - For Simon, this updates every time another user creates or ends a game.
+  - Application data: A rendering of application data that will eventually populate.
+  - For Simon, this is the simple SVG graphic buttons, the user name, and a random inspirational quote.
+  - Authentication: An input for the user to create an account and login.
+  - The user's name should be displayed after they log in.
+  - Database data: A rendering of application data that is stored in the database.
+  - For Simon, this is the highest score of all players.
+  - WebSocket data: A rendering of data that is received from the server.
+  - This may be real-time data sent from other users (e.g., chat or scoring data), or real-time data that the service is generating (e.g., stock prices or latest high scores).
+  - For Simon, this updates every time another user creates or ends a game.
 - Once the application is developed to where it is wanted, it needs to be released to the production environment.
 - `./deployFiles.sh -k <yourpemkey> -h <yourdomain> -s startup`
 - Doing this will make this deliverable of the startup available from `https://startup.yourdomainname`.
 
 # Simon HTML
+
 - index.html
-    - `<meta charset="UTF-8" />`
-        - A metadata element in HTML is used to provide information about the HTML document, which is not displayed directly on the web page itself. This information is primarily intended for web browsers, search engines, and other automated systems that process the web page. Metadata elements are placed within the `<head>` section of an HTML document.
-        - `UTF-8`: This is a character encoding that encompasses almost all characters and symbols in use around the world. By specifying UTF-8, we ensure that the browser correctly interprets the text in our HTML document. This is especially important for displaying non-ASCII characters like those found in many languages other than English. Without this specification, browsers might default to a different encoding, potentially misinterpreting special characters in our document.
-    - `<link rel="icon" href="favicon.ico" />`
-        - `<link>` Tag: This tag defines the relationship between the current document and an external resource. It is placed within the `<head>` section of an HTML document.
-        - `rel="icon"`: The `rel` (relationship) attribute specifies the type of relationship that the document has with the linked resource. In this case, `icon` indicates that the linked resource is an icon representing the document.
-        - `href="favicon.ico"`: The href attribute specifies the path to the icon file. In this example, it points to a file named favicon.ico. This file should be located in the same directory as the HTML file or the path should be adjusted to point to the correct location where the icon file is stored.
-    - `<hr />`
-        - The `<hr />` tag in HTML is used to create a horizontal rule or line across the webpage. It serves as a thematic break in an HTML page, often to divide content or to denote a shift in topic within a page. It is self-closing.
-    - `<br />`
-        - The `<br />` tag in HTML is used to insert a line break in the text. It stands for "break" and is typically employed to create a new line in the content, without starting a new paragraph. It is self-closing.
+  - `<meta charset="UTF-8" />`
+    - A metadata element in HTML is used to provide information about the HTML document, which is not displayed directly on the web page itself. This information is primarily intended for web browsers, search engines, and other automated systems that process the web page. Metadata elements are placed within the `<head>` section of an HTML document.
+    - `UTF-8`: This is a character encoding that encompasses almost all characters and symbols in use around the world. By specifying UTF-8, we ensure that the browser correctly interprets the text in our HTML document. This is especially important for displaying non-ASCII characters like those found in many languages other than English. Without this specification, browsers might default to a different encoding, potentially misinterpreting special characters in our document.
+  - `<link rel="icon" href="favicon.ico" />`
+    - `<link>` Tag: This tag defines the relationship between the current document and an external resource. It is placed within the `<head>` section of an HTML document.
+    - `rel="icon"`: The `rel` (relationship) attribute specifies the type of relationship that the document has with the linked resource. In this case, `icon` indicates that the linked resource is an icon representing the document.
+    - `href="favicon.ico"`: The href attribute specifies the path to the icon file. In this example, it points to a file named favicon.ico. This file should be located in the same directory as the HTML file or the path should be adjusted to point to the correct location where the icon file is stored.
+  - `<hr />`
+    - The `<hr />` tag in HTML is used to create a horizontal rule or line across the webpage. It serves as a thematic break in an HTML page, often to divide content or to denote a shift in topic within a page. It is self-closing.
+  - `<br />`
+    - The `<br />` tag in HTML is used to insert a line break in the text. It stands for "break" and is typically employed to create a new line in the content, without starting a new paragraph. It is self-closing.
 - play.html
-    - The `class` attribute
-        - CSS Styling: The primary reason for using the class attribute is to define a specific scope for CSS styling. By assigning a class to an HTML element, we can target that element in our CSS stylesheet to apply specific styles. For example, any CSS rules defined for the class `player-name` will apply to all elements with that class.
-        - JavaScript Interaction: Classes can also be used as selectors in JavaScript to manipulate elements. For instance, we can easily select all elements with the class player-name and apply JavaScript functions to them.
-    - When to use `<div>`?
-        - Grouping Elements: `<div>` is commonly used to group together elements for styling purposes. By placing a set of elements inside a `<div>`, we can apply CSS styles to them collectively, rather than individually.
-        - Layout Purposes: `<div>` elements are often used as containers to create different sections or areas within a web page, such as headers, footers, navigation bars, or content sections. 
-        - Applying CSS Classes or IDs: When we want to apply specific CSS classes or IDs to a part of our webpage for styling or scripting purposes, wrapping these elements in a `<div>` can be an efficient way to do this.
-        - JavaScript Targeting: If we need a container to target with JavaScript—for instance, to dynamically load content or handle user interactions—a `<div>` can serve as a useful hook.
-    - `<svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">`
-        - `aria-hidden="true"`
-            - Accessibility: The attribute tells assistive technologies to skip the SVG element. This is useful when the SVG is purely decorative and does not contribute to the understanding of the page's content, or when an alternative representation of the SVG content is provided elsewhere on the page.
-            - Screen Readers: Screen readers and other assistive technologies will not read or describe the content of the SVG element. This helps prevent redundant or irrelevant information from being announced to users who rely on these technologies.
-        - `<path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />`
-            - `d="M 95,5 95,95 5,95 Q 5,5 95,5"`
-                - `M 95,5`: The `M` command stands for "moveto". It moves the pen to a new location without drawing anything. Here, it moves to the point (95,5).
-                - `95,95 5,95`: After moving to (95,5), the pen draws a line to (95,95), then another line to (5,95). This is implied by the lack of a command letter before the coordinates, meaning it continues the last command, which in this case is drawing a line.
-                - `Q 5,5 95,5`: The Q command stands for a quadratic Bézier curve. This curve requires two points: the control point and the endpoint. The control point (5,5) determines the curvature, and the endpoint (95,5) is where the curve finishes.
+  - The `class` attribute
+    - CSS Styling: The primary reason for using the class attribute is to define a specific scope for CSS styling. By assigning a class to an HTML element, we can target that element in our CSS stylesheet to apply specific styles. For example, any CSS rules defined for the class `player-name` will apply to all elements with that class.
+    - JavaScript Interaction: Classes can also be used as selectors in JavaScript to manipulate elements. For instance, we can easily select all elements with the class player-name and apply JavaScript functions to them.
+  - When to use `<div>`?
+    - Grouping Elements: `<div>` is commonly used to group together elements for styling purposes. By placing a set of elements inside a `<div>`, we can apply CSS styles to them collectively, rather than individually.
+    - Layout Purposes: `<div>` elements are often used as containers to create different sections or areas within a web page, such as headers, footers, navigation bars, or content sections.
+    - Applying CSS Classes or IDs: When we want to apply specific CSS classes or IDs to a part of our webpage for styling or scripting purposes, wrapping these elements in a `<div>` can be an efficient way to do this.
+    - JavaScript Targeting: If we need a container to target with JavaScript—for instance, to dynamically load content or handle user interactions—a `<div>` can serve as a useful hook.
+  - `<svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">`
+    - `aria-hidden="true"`
+      - Accessibility: The attribute tells assistive technologies to skip the SVG element. This is useful when the SVG is purely decorative and does not contribute to the understanding of the page's content, or when an alternative representation of the SVG content is provided elsewhere on the page.
+      - Screen Readers: Screen readers and other assistive technologies will not read or describe the content of the SVG element. This helps prevent redundant or irrelevant information from being announced to users who rely on these technologies.
+    - `<path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />`
+      - `d="M 95,5 95,95 5,95 Q 5,5 95,5"`
+        - `M 95,5`: The `M` command stands for "moveto". It moves the pen to a new location without drawing anything. Here, it moves to the point (95,5).
+        - `95,95 5,95`: After moving to (95,5), the pen draws a line to (95,95), then another line to (5,95). This is implied by the lack of a command letter before the coordinates, meaning it continues the last command, which in this case is drawing a line.
+        - `Q 5,5 95,5`: The Q command stands for a quadratic Bézier curve. This curve requires two points: the control point and the endpoint. The control point (5,5) determines the curvature, and the endpoint (95,5) is where the curve finishes.
 - deployFiles.sh
-    - Shebang (`#!/bin/bash`)
-        - This line indicates that the script should be executed using Bash, a common Unix shell.
-    - Option Parsing (`getopts`)
-        - The `getopts` command is used to parse command-line options. In this script, it looks for three options: `-k`, `-h`, and `-s`.
-            - `-k` is for specifying a PEM key file, which is likely used for SSH authentication.
-            - `-h` is for specifying the hostname of the remote server.
-            - `-s` is for specifying the service name.
-    - Variables (`key`, `hostname`, `service`)
-        - These variables are assigned the values provided by the command line options.
-    - Input Validation
-        - The script checks if any of the variables key, hostname, or service are empty. If any are, it prints an error message and exits.
-    - Deployment Notification
-        - If all required parameters are provided, the script prints a message indicating that it is deploying files for the specified service to the specified hostname using the provided key.
-    - Step 1: Clearing Previous Distribution
-        - The script logs into the remote server (`ubuntu@$hostname`) using SSH with the specified key.
-        - Once logged in, it removes the existing `public` directory within the specified service's directory and then creates a new `public` directory.
-            - `rm -rf services/${service}/public`: Removes the existing public directory.
-            - `mkdir -p services/${service}/public`: Creates a new public directory, along with any necessary parent directories.
-    - Step 2: Copying Distribution Package
-        - The script then uses scp (secure copy) to copy the distribution package to the target server.
-            - `scp -r -i "$key" * ubuntu@$hostname:services/$service/public`: This copies all files (`*`) from the current directory on the local machine to the `public` directory of the service on the remote server.
+  - Shebang (`#!/bin/bash`)
+    - This line indicates that the script should be executed using Bash, a common Unix shell.
+  - Option Parsing (`getopts`)
+    - The `getopts` command is used to parse command-line options. In this script, it looks for three options: `-k`, `-h`, and `-s`.
+      - `-k` is for specifying a PEM key file, which is likely used for SSH authentication.
+      - `-h` is for specifying the hostname of the remote server.
+      - `-s` is for specifying the service name.
+  - Variables (`key`, `hostname`, `service`)
+    - These variables are assigned the values provided by the command line options.
+  - Input Validation
+    - The script checks if any of the variables key, hostname, or service are empty. If any are, it prints an error message and exits.
+  - Deployment Notification
+    - If all required parameters are provided, the script prints a message indicating that it is deploying files for the specified service to the specified hostname using the provided key.
+  - Step 1: Clearing Previous Distribution
+    - The script logs into the remote server (`ubuntu@$hostname`) using SSH with the specified key.
+    - Once logged in, it removes the existing `public` directory within the specified service's directory and then creates a new `public` directory.
+      - `rm -rf services/${service}/public`: Removes the existing public directory.
+      - `mkdir -p services/${service}/public`: Creates a new public directory, along with any necessary parent directories.
+  - Step 2: Copying Distribution Package
+    - The script then uses scp (secure copy) to copy the distribution package to the target server.
+      - `scp -r -i "$key" * ubuntu@$hostname:services/$service/public`: This copies all files (`*`) from the current directory on the local machine to the `public` directory of the service on the remote server.
 
 # Startup HTML Deliverable
+
 - In HTML, the `<input>` tag is used for creating interactive fields where users can enter data. For example, text fields, checkboxes, radio buttons, and submit buttons are all created using the `<input>` tag.
 - On the other hand, the `<p>` tag is used for defining paragraphs of text. It is a block-level element that represents a block of text that can be styled with CSS to change its appearance.
 - The `id` attribute is for singular, and the `class` attribute is for broad.
@@ -380,57 +389,58 @@
 - `action="play.html"`: The action attribute defines the location (a URL) where the form's collected data should be sent when it is submitted. In this case, the data is sent to a web page named `play.html`, which is where the server-side processing would take place.
 - The `target="_blank"` attribute in an `<a>` (anchor) tag specifies that the linked document (the href URL) should open in a new tab or window rather than in the current frame or window. This is commonly used when the website designer wants to keep their website open in the user's browser while also directing them to an external site or resource.
 - `<div>` (Division element):
-    - It is a block-level element, which means it starts on a new line and takes up the full width available horizontally.
-    - `<div>` elements are typically used to group larger blocks of content or to create layout structures.
+  - It is a block-level element, which means it starts on a new line and takes up the full width available horizontally.
+  - `<div>` elements are typically used to group larger blocks of content or to create layout structures.
 - `<span>` (Span element):
-    - It is an inline element, meaning it does not start on a new line and only takes up as much width as necessary.
-    - `<span>` elements are typically used to wrap a small portion of text or other inline elements for styling purposes or for applying JavaScript actions.
+  - It is an inline element, meaning it does not start on a new line and only takes up as much width as necessary.
+  - `<span>` elements are typically used to wrap a small portion of text or other inline elements for styling purposes or for applying JavaScript actions.
 
 # Cascading Style Sheets
+
 - In modern web applications, CSS styling focuses more on helping the developer create complex renderings of dynamic content that is responsive to the actions of the user and the device the application is rendered on.
 - With CSS, a web programmer can animate the page, deploy custom fonts, respond to user actions, and dynamically alter the entire layout of the page based on the size of a device and its orientation.
 - Functionally, CSS is primarily concerned with defining `rulesets`, or simply `rules`.
 - A rule is comprised of a `selector` that selects the elements to apply the rule to, and one or more `declarations` that represent the `property` to style with the given `property value`.
 - Associating CSS with HTML
-    - There are three ways that CSS can be associated with HTML.
-    - The first way is to use the `style` attribute of an HTML element and explicitly assign one or more declarations.
-        - `<p style="color:green">CSS</p>`
-    - The next way to associate CSS is to use the HTML `style` element to define CSS rules within the HTML document.
-    - The `style` element should appear in the `head` element of the document so that the rules apply to all elements of the document.
-        - `<head>`
-            - `<style>`
-                - `p {`
-                    - `color: green;`
-                - `}`
-            - `</style>`
-        - `</head>`
-        - `<body>`
-            - `<p>CSS</p>`
-        - `</body>`
-    - The final way to associate CSS is to use the HTML `link` element to create a hyperlink reference to an external file containing CSS rules.
-    The `link` element must appear in the `head` element of the document.
-        - `<link rel="stylesheet" href="styles.css" />`
+  - There are three ways that CSS can be associated with HTML.
+  - The first way is to use the `style` attribute of an HTML element and explicitly assign one or more declarations.
+    - `<p style="color:green">CSS</p>`
+  - The next way to associate CSS is to use the HTML `style` element to define CSS rules within the HTML document.
+  - The `style` element should appear in the `head` element of the document so that the rules apply to all elements of the document.
+    - `<head>`
+      - `<style>`
+        - `p {`
+          - `color: green;`
+        - `}`
+      - `</style>`
+    - `</head>`
+    - `<body>`
+      - `<p>CSS</p>`
+    - `</body>`
+  - The final way to associate CSS is to use the HTML `link` element to create a hyperlink reference to an external file containing CSS rules.
+    The `link` element must appear in the `head` element of the document. - `<link rel="stylesheet" href="styles.css" />`
 - Cascading Styles
-    - Because elements inherit the rules applied to their parents, it often ends up with the same declaration property applied to a single element multiple times. 
-    - In this case, the rules cascade down from the highest nodes in the DOM tree to the lowest level.
-    - Any declaration property defined at a lower level will override the higher declaration.
+  - Because elements inherit the rules applied to their parents, it often ends up with the same declaration property applied to a single element multiple times.
+  - In this case, the rules cascade down from the highest nodes in the DOM tree to the lowest level.
+  - Any declaration property defined at a lower level will override the higher declaration.
 - The Box Model
-    - CSS defines everything as boxes.
-    - When applying styles, they are being applied to a region of the display that is a rectangular box.
-    - Within an element's box, there are several internal boxes.
-    - The innermost box holds the element's content, where things like the text or image of an element are displayed.
-    - Next comes the padding, which will inherit things like the background color.
-    - After padding is the border, which has properties like color, thickness, and line style.
-    - The final box is the margin, which is considered external to the actual styling of the box and therefore only represents whitespace.
-    - By default, the width and height of an element are defined by the width and height of the content box.
-    - The `box-sizing` CSS property can be changed from the default value of `content-box` to `border-box` in order to redefine the width and height to also include the padding and the border.
-    - This often makes it easier to style elements when their visual size matches their actual size.
+  - CSS defines everything as boxes.
+  - When applying styles, they are being applied to a region of the display that is a rectangular box.
+  - Within an element's box, there are several internal boxes.
+  - The innermost box holds the element's content, where things like the text or image of an element are displayed.
+  - Next comes the padding, which will inherit things like the background color.
+  - After padding is the border, which has properties like color, thickness, and line style.
+  - The final box is the margin, which is considered external to the actual styling of the box and therefore only represents whitespace.
+  - By default, the width and height of an element are defined by the width and height of the content box.
+  - The `box-sizing` CSS property can be changed from the default value of `content-box` to `border-box` in order to redefine the width and height to also include the padding and the border.
+  - This often makes it easier to style elements when their visual size matches their actual size.
 - CSS Versions
-    - Beginning with CSS3, the specification was divided into modules so that they could be implemented at different levels of maturity.
+  - Beginning with CSS3, the specification was divided into modules so that they could be implemented at different levels of maturity.
 - Acronyms and Terms
-    - DOM = Document Object Model
+  - DOM = Document Object Model
 
 # CSS Selectors
+
 - Example
 - `<body>`
   - `<h1>Departments</h1>`
@@ -452,47 +462,48 @@
 - By default, every browser defines a base set of styles that it applies to all HTML, which varies slight from browser to browser.
 
 # CSS Flexbox
+
 - The `flex` display layout is useful when partitioning our application into areas that responsively move around as the window resizes or the orientation changes.
 - In order to demonstrate the power of flex, we will build an application that has a header, footer, and a main content area that is split into two sections, with controls on the left and content on the right.
 - `<body>`
-    - `<header>`
-        - `<h1>CSS flex &amp; media query</h1>`
-    - `</header>`
-    - `<main>`
-        - `<section>`
-            - `<h2>Controls</h2>`
-        - `</section>`
-        - `<section>`
-            - `<h2>Content</h2>`
-        - `</section>`
-    - `</main>`
-    - `<footer>`
-        - `<h2>Footer</h2>`
-    - `</footer>`
+  - `<header>`
+    - `<h1>CSS flex &amp; media query</h1>`
+  - `</header>`
+  - `<main>`
+    - `<section>`
+      - `<h2>Controls</h2>`
+    - `</section>`
+    - `<section>`
+      - `<h2>Content</h2>`
+    - `</section>`
+  - `</main>`
+  - `<footer>`
+    - `<h2>Footer</h2>`
+  - `</footer>`
 - `</body>`
 - Flexbox
-    - Flexbox Container: The element on which it is applied `display: flex` or `display: inline-flex` becomes a Flexbox container
-    - `flex-direction`: This property defines the main axis of the container and thus the direction in which the flex items are laid out. By default, it is set to `row`, which means items are placed in a horizontal line. When we set `flex-direction: column;`, we change the main axis to vertical, so the flex items stack vertically.
+  - Flexbox Container: The element on which it is applied `display: flex` or `display: inline-flex` becomes a Flexbox container
+  - `flex-direction`: This property defines the main axis of the container and thus the direction in which the flex items are laid out. By default, it is set to `row`, which means items are placed in a horizontal line. When we set `flex-direction: column;`, we change the main axis to vertical, so the flex items stack vertically.
 - We make the body element into a responsive Flexbox by including the CSS `display` property with the value of `flex`.
 - This tells the browser that all of the children of this element are to be displayed in a flex-flow.
 - We want our top-level Flexbox children to be column-oriented so we add the `flex-direction` property with a value of `column`.
-    - In the HTML example above, if we were to apply Flexbox, typically to the `<body>` element, the top-level Flexbox children would be `<header>`, `<main>`, and `<footer>`.
+  - In the HTML example above, if we were to apply Flexbox, typically to the `<body>` element, the top-level Flexbox children would be `<header>`, `<main>`, and `<footer>`.
 - We then add some simple other declarations to zero out the margin and fill the entire viewport with our application frame.
 - `body {`
-    - `display: flex;`
-    - `flex-direction: column;`
-    - `margin: 0;`
-    - `height: 100vh;`
+  - `display: flex;`
+  - `flex-direction: column;`
+  - `margin: 0;`
+  - `height: 100vh;`
 - `}`
 - To get the division of space for the Flexbox children correct, we add the following flex properties to each of the children.
-    - `<header>` - `flex: 0 80px` - Zero means it will not grow and 80px means it has a starting basis height of 80 pixels. This creates a fixed-size box.
-        - The `flex` property is a shorthand that combines the `flex-grow`, `flex-shrink`, and `flex-basis` properties.
-        - `flex-grow` = 0
-        - `flex-basis` = 80px
-        - If the `flex-direction` were a row, `flex-basis` would apply to the width instead of the height.
-        - The absence of a value for `flex-shrink` in the shorthand `flex: 0 80px` means it defaults to its initial value, which is 1. This means the element can shrink if necessary, down from its initial size, to prevent overflow of the container.
-    - `<footer>` - `flex: 0 30px` - Like the header, it will not grow and has a height of 30 pixels.
-    - `<main>` - `flex: 1` - One means it will get one fractional unit of growth, and since it is the only child with a non-zero growth value, it will get all the remaining space. Main also gets some additional properties because we want to also be a Flexbox container for the controls and content area. So we set its display for to be `flex` and specify the  `flex-direction` to be a row so that the children are oriented side by side.
+  - `<header>` - `flex: 0 80px` - Zero means it will not grow and 80px means it has a starting basis height of 80 pixels. This creates a fixed-size box.
+    - The `flex` property is a shorthand that combines the `flex-grow`, `flex-shrink`, and `flex-basis` properties.
+    - `flex-grow` = 0
+    - `flex-basis` = 80px
+    - If the `flex-direction` were a row, `flex-basis` would apply to the width instead of the height.
+    - The absence of a value for `flex-shrink` in the shorthand `flex: 0 80px` means it defaults to its initial value, which is 1. This means the element can shrink if necessary, down from its initial size, to prevent overflow of the container.
+  - `<footer>` - `flex: 0 30px` - Like the header, it will not grow and has a height of 30 pixels.
+  - `<main>` - `flex: 1` - One means it will get one fractional unit of growth, and since it is the only child with a non-zero growth value, it will get all the remaining space. Main also gets some additional properties because we want to also be a Flexbox container for the controls and content area. So we set its display for to be `flex` and specify the `flex-direction` to be a row so that the children are oriented side by side.
 - `header {`
   - `flex: 0 80px;`
   - `background: hsl(223, 57%, 38%);`
@@ -520,668 +531,720 @@
   - `background-color: white;`
 - `}`
 - Media Query
-    - We can add some media queries that drop the header and footer if the viewport gets too short, and orient the main sections as rows if it gets too narrow.
-    - To support the narrow screen (portrait mode), we include a media query that detects when we are in portrait orientation and sets the `flex-direction` of the main element to be column instead of row.
-    - This causes the children to be stacked on top of each other instead of side by side.
-    - To handle making our header and footer disappear when the screen is too short to display them, we use a media query that triggers when our viewport height has a maximum value of 700 pixels.
-    - When that is true, we change the `display` property for both the header and the footer to `none` so that they will be hidden.
-    - When that happens, the main element becomes the only child and since it has a flex value of 1, it takes over everything.
+  - We can add some media queries that drop the header and footer if the viewport gets too short, and orient the main sections as rows if it gets too narrow.
+  - To support the narrow screen (portrait mode), we include a media query that detects when we are in portrait orientation and sets the `flex-direction` of the main element to be column instead of row.
+  - This causes the children to be stacked on top of each other instead of side by side.
+  - To handle making our header and footer disappear when the screen is too short to display them, we use a media query that triggers when our viewport height has a maximum value of 700 pixels.
+  - When that is true, we change the `display` property for both the header and the footer to `none` so that they will be hidden.
+  - When that happens, the main element becomes the only child and since it has a flex value of 1, it takes over everything.
 - `text-align` affects the alignment of text and inline elements within their containing block-level element. It centers the content inside the element but does not affect the element's positioning within its parent container.
 - `justify-content` in a Flexbox context is used to align flex items along the main axis of the flex container. For a row (`flex-direction: row;`), this would horizontally align items within the container, and for a column (`flex-direction: column;`), it would vertically align them. This property is crucial for spacing flex items within their container.
 - `align-items` is used to align flex items along the cross axis (perpendicular to the main axis) of the flex container. In a row layout (`flex-direction: row;`), align-items controls the vertical alignment of items, and in a column layout (`flex-direction: column;`), it controls the horizontal alignment.
 
 # Simon CSS
+
 - This application deliverable demonstrates the use of basic CSS for styling and a responsive design.
 - The addition of CSS makes our application visually appealing and adds intuitive user interface elements, but it is still not functional due to the lack of interactivity.
 - This deliverable adds a single CSS file (`main.css`) that contains the CSS for the entire application.
 - Each of the HTML files references the CSS file using the `link` element.
-    - `<link rel="stylesheet" href="main.css" />`
+  - `<link rel="stylesheet" href="main.css" />`
 - Flex is used to delimit the header, main, and footer elements, which makes them responsive to different screen sizes.
 - The use of absolute positioning relative to the parent element for the game controls. ???
-- The selection based on class attributes to style elements. 
+- The selection based on class attributes to style elements.
 - The override of Bootstrap in order to keep the menu from changing the flex direction to column on small screens. ???
 - The use of `@media` selectors to hide content when the screen is too small.
 - As the application get more complicated, we will break up the CSS into individual files that correspond to the component they style.
 
 # JavaScript Introduction
+
 - Officially known as ECMAScript, JavaScript is a weakly typed language based upon concepts found in C, Java, and Scheme.
-    - C is a general-purpose, procedural programming language developed in the early 1970s by Dennis Ritchie for use with the UNIX operating system.
-    - Java is a high-level, class-based, object-oriented programming language that was designed to have as few implementation dependencies as possible.
-    - Scheme is a minimalist, multi-paradigm programming language, a dialect of Lisp, designed in the 1970s, with a focus on functional programming and powerful macro systems.
+  - C is a general-purpose, procedural programming language developed in the early 1970s by Dennis Ritchie for use with the UNIX operating system.
+  - Java is a high-level, class-based, object-oriented programming language that was designed to have as few implementation dependencies as possible.
+  - Scheme is a minimalist, multi-paradigm programming language, a dialect of Lisp, designed in the 1970s, with a focus on functional programming and powerful macro systems.
 - It is commonly used as a web server language and for creating serverless functions.
 - Typically, JavaScript is executed using an interpreter at runtime instead of compiling it into a machine-specific binary at build time.
-    - Build Time
-        - Definition: Build time refers to the phase in software development when the source code is compiled, linked, and packaged into executable programs or libraries. This is when various processes like preprocessing, compilation, linking, and packaging occur.
-        - Activities: During build time, source code is transformed into machine-readable code (binaries). Build tools and compilers are involved in this process, and various optimizations can be performed to improve performance or reduce the size of the executable.
-    - Runtime
-        - Definition: Runtime refers to the period when a program is executing commands and operations in a live environment after being launched. This phase starts when a user or another system triggers the execution of the program and ends when the program completes its execution or is terminated.
-        - Activities: During runtime, the program interacts with the system resources (memory, CPU, I/O devices) to perform its tasks. It handles dynamic operations such as user input, memory allocation, and error handling.
+  - Build Time
+    - Definition: Build time refers to the phase in software development when the source code is compiled, linked, and packaged into executable programs or libraries. This is when various processes like preprocessing, compilation, linking, and packaging occur.
+    - Activities: During build time, source code is transformed into machine-readable code (binaries). Build tools and compilers are involved in this process, and various optimizations can be performed to improve performance or reduce the size of the executable.
+  - Runtime
+    - Definition: Runtime refers to the period when a program is executing commands and operations in a live environment after being launched. This phase starts when a user or another system triggers the execution of the program and ends when the program completes its execution or is terminated.
+    - Activities: During runtime, the program interacts with the system resources (memory, CPU, I/O devices) to perform its tasks. It handles dynamic operations such as user input, memory allocation, and error handling.
 - This has the advantage of making JavaScript very portable, but also allows for many errors, such as using an undefined variable.
 - These types of errors commonly only get discovered when the program crashes during execution.
 - Example
-    - Method 1: `'Hello' + ' ' + 'world';`
-    - Method 2:
-        - We can also call the JavaScript runtime's built-in function `console.log` to output the string to the debugger console.
-            - `console.log('Hello' + ' ' + 'world');`
-            - // OUTPUT: Hello world
-    - Method 3:
-        - `function join(a, b) {`
-            - `return a + ' ' + b;`
-        - `}`
 
-        - `console.log(join('Hello', 'world'));`
-        - // OUTPUT: Hello world
+  - Method 1: `'Hello' + ' ' + 'world';`
+  - Method 2:
+    - We can also call the JavaScript runtime's built-in function `console.log` to output the string to the debugger console.
+      - `console.log('Hello' + ' ' + 'world');`
+      - // OUTPUT: Hello world
+  - Method 3:
+
+    - `function join(a, b) {`
+      - `return a + ' ' + b;`
+    - `}`
+
+    - `console.log(join('Hello', 'world'));`
+    - // OUTPUT: Hello world
+
 - We can comment on our JavaScript with either line or block comments
-    - // Line comment
-    - /*
-    - Block comment
-    - */
+  - // Line comment
+  - /\*
+  - Block comment
+  - \*/
 - Code Delimiters
-    - While not technically required in most cases, it is considered good form to end JavaScript statements with a semicolon (`;`).
-    - Code blocks, and their resulting scope, are defined with curly braces (`{}`).
+  - While not technically required in most cases, it is considered good form to end JavaScript statements with a semicolon (`;`).
+  - Code blocks, and their resulting scope, are defined with curly braces (`{}`).
 - Two Ways to Write and Run JavaScript
-    - Use an online sandbox like CodePen
-        - With CodePen, we can write whatever JavaScript we would like and immediately see the results.
-        - Make sure we display the CodePen's console window if our JavaScript is using the console.log function.
-    - Use our browser's debugger
-        - For example, if we open Chrome and press `F12`, the debugger will display.
-        - Select the `Console` menu option, and this will display a JavaScrip interpreter where we can write and execute our code.
+  - Use an online sandbox like CodePen
+    - With CodePen, we can write whatever JavaScript we would like and immediately see the results.
+    - Make sure we display the CodePen's console window if our JavaScript is using the console.log function.
+  - Use our browser's debugger
+    - For example, if we open Chrome and press `F12`, the debugger will display.
+    - Select the `Console` menu option, and this will display a JavaScrip interpreter where we can write and execute our code.
 - Acronyms and Terms
-    - MDN = Mozilla Developer Network
-    - ECMA = European Computer Manufacturers Association
+  - MDN = Mozilla Developer Network
+  - ECMA = European Computer Manufacturers Association
 
 # JavaScript Console
+
 - The JavaScript console object provides interaction with the JavaScript runtime's debugger console.
 - This usage of the console should not be confused with the operating system's console (AKA terminal or command line).
 - The console object provides functionality for outputting the value of text and objects, running timers, and counting iterations.
 - These are useful debugging tools when we can actually execute our code in an interactive debugger (such as Visual Studio Code).
 - Log
-    - The basic usage of the console object is to output a log message.
-        - `console.log('hello');`
-        - // OUTPUT: hello
-    - We can create formatted messages in the log parameter.
-        - `console.log('hello %s', 'world');`
-        - // OUTPUT: hello world
-            - `'hello %s'` is the format string, where `%s` specifies where to insert the string value that follows.
-            - `'world'` is the value that will be inserted in the place of `%s`.
-            - The output of the code is hello world because `%s` is replaced with the string `'world'`.
-    - We can even specify CSS declarations in order to style the log output.
-        - `console.log('%c JavaScript Demo', 'font-size:1.5em; color:green;');`
-        - // OUTPUT: JavaScript Demo //in large green text
+  - The basic usage of the console object is to output a log message.
+    - `console.log('hello');`
+    - // OUTPUT: hello
+  - We can create formatted messages in the log parameter.
+    - `console.log('hello %s', 'world');`
+    - // OUTPUT: hello world
+      - `'hello %s'` is the format string, where `%s` specifies where to insert the string value that follows.
+      - `'world'` is the value that will be inserted in the place of `%s`.
+      - The output of the code is hello world because `%s` is replaced with the string `'world'`.
+  - We can even specify CSS declarations in order to style the log output.
+    - `console.log('%c JavaScript Demo', 'font-size:1.5em; color:green;');`
+    - // OUTPUT: JavaScript Demo //in large green text
 - Timers
-    - If we are trying to see how long a piece of code is running, we can wrap it with `time` and `timeEnd` calls, and it will output the duration between the `time` and `timeEnd` calls.
-        - `console.time('demo time');`
-        - // ... some code that takes a long time.
-        - `console.timeEnd('demo time');`
-        - // OUTPUT: demo time: 9762.74 ms
+  - If we are trying to see how long a piece of code is running, we can wrap it with `time` and `timeEnd` calls, and it will output the duration between the `time` and `timeEnd` calls.
+    - `console.time('demo time');`
+    - // ... some code that takes a long time.
+    - `console.timeEnd('demo time');`
+    - // OUTPUT: demo time: 9762.74 ms
 - Count
-    - To see how many times a block of code is called, we can use the `count` function.
-        - `console.count('a');`
-        - // OUTPUT: a: 1
-        - `console.count('a');`
-        - // OUTPUT: a: 2
-        - `console.count('b');`
-        - // OUTPUT: b: 1
+  - To see how many times a block of code is called, we can use the `count` function.
+    - `console.count('a');`
+    - // OUTPUT: a: 1
+    - `console.count('a');`
+    - // OUTPUT: a: 2
+    - `console.count('b');`
+    - // OUTPUT: b: 1
 
 # Adding JavaScript to HTML
+
 - We can insert JavaScript into HTML either by directly including it in the HTML within the content of a `<script>` element, or by using the `src` attribute of the script element to reference an external JavaScript file.
-    - index.js
-        - `function sayHello() {`
-            - `console.log('hello');`
+  - index.js
+    - `function sayHello() {`
+      - `console.log('hello');`
+    - `}`
+  - index.html
+    - `<head>`
+      - `<script src="index.js"></script>`
+    - `</head>`
+    - `<body>`
+      - `<button onclick="sayHello()">Say Hello</button>`
+      - `<button onclick="sayGoodbye()">Say Goodbye</button>`
+      - `<script>`
+        - `function sayGoodbye() {`
+          - `alert('Goodbye');`
         - `}`
-    - index.html
-        - `<head>`
-            - `<script src="index.js"></script>`
-        - `</head>`
-        - `<body>`
-            - `<button onclick="sayHello()">Say Hello</button>`
-            - `<button onclick="sayGoodbye()">Say Goodbye</button>`
-            - `<script>`
-                - `function sayGoodbye() {`
-                    - `alert('Goodbye');`
-                - `}`
-            - `</script>`
-        - `</body>`
-    - `alert()`
-        - User Interaction: The `alert` function creates a modal dialog box that displays a message to the user. This is a form of direct user interaction, making it immediately visible to the user regardless of their current interaction with the browser's developer console.
-        - Blocking Operation: When an `alert` box is displayed, it blocks the user from interacting with the webpage until the dialog box is acknowledged (usually by pressing "OK"). This can be useful for ensuring the user sees and acknowledges the message before proceeding.
-        - Purpose: Typically used in web pages for notifications, warnings, or confirmations that require immediate attention from the user.
-    - Notice that we call the `sayHello` and `sayGoodbye` JavaScript functions from the HTML in the `onclick` attribute of the button element.
-    - Special attributes like `onclick` automatically create event listeners for different DOM events that call the code contained in the attribute's value.
-    - The code specified by the attribute's value can be a simple call to a function or any JavaScript code.
-        - `<button onclick="let i=1;i++;console.log(i)">press me</button>`
-        - <!-- OUTPUT: 2 -->
-            - *The JavaScript code above is just an example as it has a syntax error and a scope issue.
-                - Syntax Error: The `onclick` attribute's value is a string that is evaluated as JavaScript code when the event is triggered. However, using `let` within this string (especially in the way it is shown) can lead to syntax errors because the `let` declaration is not valid in this context. Specifically, the issue is with trying to declare a variable and then use it immediately after in a semicolon-separated list of expressions within the `onclick` attribute.
-                - Scope: Variables declared with `let` in an `onclick` attribute have their scope limited to that attribute's expression. This means even if it worked syntax-wise, the variable `i` would be re-declared and reset to `1` every time the button is clicked, not preserving its value between clicks as might be intended.
-            - *The correct approach is below:
-                - `<button onclick="incrementAndLog()">press me</button>`
-                - `<script>`
-                    - `let i = 1;` // Declare i outside the onclick handler
-                    - `function incrementAndLog() {`
-                        - `i++;` // Increment i
-                        - `console.log(i);` // Log the current value of i
-                    - `}`
-                - `</script>`
+      - `</script>`
+    - `</body>`
+  - `alert()`
+    - User Interaction: The `alert` function creates a modal dialog box that displays a message to the user. This is a form of direct user interaction, making it immediately visible to the user regardless of their current interaction with the browser's developer console.
+    - Blocking Operation: When an `alert` box is displayed, it blocks the user from interacting with the webpage until the dialog box is acknowledged (usually by pressing "OK"). This can be useful for ensuring the user sees and acknowledges the message before proceeding.
+    - Purpose: Typically used in web pages for notifications, warnings, or confirmations that require immediate attention from the user.
+  - Notice that we call the `sayHello` and `sayGoodbye` JavaScript functions from the HTML in the `onclick` attribute of the button element.
+  - Special attributes like `onclick` automatically create event listeners for different DOM events that call the code contained in the attribute's value.
+  - The code specified by the attribute's value can be a simple call to a function or any JavaScript code.
+    - `<button onclick="let i=1;i++;console.log(i)">press me</button>`
+    - <!-- OUTPUT: 2 -->
+      - \*The JavaScript code above is just an example as it has a syntax error and a scope issue.
+        - Syntax Error: The `onclick` attribute's value is a string that is evaluated as JavaScript code when the event is triggered. However, using `let` within this string (especially in the way it is shown) can lead to syntax errors because the `let` declaration is not valid in this context. Specifically, the issue is with trying to declare a variable and then use it immediately after in a semicolon-separated list of expressions within the `onclick` attribute.
+        - Scope: Variables declared with `let` in an `onclick` attribute have their scope limited to that attribute's expression. This means even if it worked syntax-wise, the variable `i` would be re-declared and reset to `1` every time the button is clicked, not preserving its value between clicks as might be intended.
+      - \*The correct approach is below:
+        - `<button onclick="incrementAndLog()">press me</button>`
+        - `<script>`
+          - `let i = 1;` // Declare i outside the onclick handler
+          - `function incrementAndLog() {`
+            - `i++;` // Increment i
+            - `console.log(i);` // Log the current value of i
+          - `}`
+        - `</script>`
 
 # JavaScript Types, Operators, Constructs, Conditionals, and Loops
+
 - Declaring Variables
-    - Variables are declared using either `let` or `const` keyword.
-    - `let` allows us to change the value of the variable while `const` will cause an error if we attempt to change it.
-        - `let x = 1;`
-        - `const y = 2;`
-    - Originally, JavaScript used the keyword `var` to define variables.
-    - This has been deprecated because they cause hard-to-detect errors in code related to the scope of the variable.
+  - Variables are declared using either `let` or `const` keyword.
+  - `let` allows us to change the value of the variable while `const` will cause an error if we attempt to change it.
+    - `let x = 1;`
+    - `const y = 2;`
+  - Originally, JavaScript used the keyword `var` to define variables.
+  - This has been deprecated because they cause hard-to-detect errors in code related to the scope of the variable.
 - Type
-    - JavaScript defines several primitive types.
-        - `Null`: The type of a variable that has not been assigned a value.
-        - `Undefined`: The type of a variable that has not been defined.
-        - `Boolean`: True or false.
-        - `Number`: A 64-bit signed number.
-        - `BigInt`: A number of arbitrary magnitudes.
-        - `String`: A textual sequence of characters.
-        - `Symbol`: A unique value.
-    - Of these types, boolean, number, and string are the types commonly thought of when creating variables.
-    - However, variables may commonly refer to the `Null` or `Undefined` primitive.
-    - Because JavaScript does not enforce the declaration of a variable before we use it, it is entirely possible for a variable to have the type of `Undefined`.
-    - In addition to the above primitives, JavaScript defines several object types.
-        - `Object`: A collection of properties represented by name-value pairs, in which values can be of any type.
-            - `{a:3, b:'fish'}`
-        - `Function`: An object that has the ability to be called.
-            - `function a() {}`
-        - `Date`: Calendar dates and times.
-            - `new Date('1995-12-17')`
-        - `Array`: An ordered sequence of any type.
-            - `[3, 'fish']`
-        - `Map`: A collection of key-value pairs that support efficient lookups.
-            - `new Map()`
-        - `JSON`: A lightweight data-interchange format used to share information across programs.
-            - `{"a":3, "b":"fish"}`
+  - JavaScript defines several primitive types.
+    - `Null`: The type of a variable that has not been assigned a value.
+    - `Undefined`: The type of a variable that has not been defined.
+    - `Boolean`: True or false.
+    - `Number`: A 64-bit signed number.
+    - `BigInt`: A number of arbitrary magnitudes.
+    - `String`: A textual sequence of characters.
+    - `Symbol`: A unique value.
+  - Of these types, boolean, number, and string are the types commonly thought of when creating variables.
+  - However, variables may commonly refer to the `Null` or `Undefined` primitive.
+  - Because JavaScript does not enforce the declaration of a variable before we use it, it is entirely possible for a variable to have the type of `Undefined`.
+  - In addition to the above primitives, JavaScript defines several object types.
+    - `Object`: A collection of properties represented by name-value pairs, in which values can be of any type.
+      - `{a:3, b:'fish'}`
+    - `Function`: An object that has the ability to be called.
+      - `function a() {}`
+    - `Date`: Calendar dates and times.
+      - `new Date('1995-12-17')`
+    - `Array`: An ordered sequence of any type.
+      - `[3, 'fish']`
+    - `Map`: A collection of key-value pairs that support efficient lookups.
+      - `new Map()`
+    - `JSON`: A lightweight data-interchange format used to share information across programs.
+      - `{"a":3, "b":"fish"}`
 - Common Operators
-    - When dealing with a number variable, JavaScript supports standard mathematical operators like `+` (add), `-` (subtract), `*` (multiply), `/` (divide), and `===` (equality).
-    - For string variables, JavaScript support `+` (concatenation) and `===` (eqaulity).
+  - When dealing with a number variable, JavaScript supports standard mathematical operators like `+` (add), `-` (subtract), `*` (multiply), `/` (divide), and `===` (equality).
+  - For string variables, JavaScript support `+` (concatenation) and `===` (eqaulity).
 - Type Conversions
-    - JavaScipt is a weakly typed language, which means that a variable always has a type, but the variable can change type when it is assigned to a new value, or that type can be automatically converted based upon the context that they are used in.
-    - Sometimes the results of automatic conversions can be unexpected for programmers who are used to strongly typed languages.
-        - `2 + '3';`
-        - // OUTPUT: '23'
-        - `2 * '3';`
-        - // OUTPUT: 6
-        - `[2] + [3];`
-        - // OUTPUT: '23'
-        - `true + null;`
-        - // OUTPUT: 1
-        - `true + undefined;`
-        - // OUTPUT: NaN
-    - Getting unexpected results is especially common when dealing with the equality operator.
-        - `1 == '1';`
-        - // OUTPUT: true
-        - `null == undefined;`
-        - // OUTPUT: true
-        - `'' == false;`
-        - // OUTPUT: true
-    - The unexpected results happen in JavaScript because it uses complex rules for defining equality that depend upon the conversion of a type to a boolean value.
-    - We will sometimes hear this referred to as falsy and truthy evaluations.
-    - To remove this confusion, JavaScript introduced the strict equality (`===`) and inequality (`!==`) operators.
-    - The strict operators skip the type conversion when computing equality.
-        - `1 === '1';`
-        - // OUTPUT: false
-        - `null === undefined;`
-        - // OUTPUT: false
-        - `'' === false;`
-        - // OUTPUT: false
-    - Interesting Example: `('b' + 'a' + +'a' + 'a').toLowerCase();` // OUTPUT: banana
-        - `'b'` + `'a'`: Concatenates the strings `'b'` and `'a'`, resulting in `'ba'`.
-        - `+'a'`: The unary plus operator tries to convert the string `'a'` into a number. Since `'a'` is not a valid number, this conversion results in `NaN` (Not-a-Number).
-            - The unary plus operator in JavaScript is a prefix operator that is placed before its operand and has the effect of converting the operand to a number. It is represented by a plus sign (`+`). This operator is useful for type coercion, turning its operand into a numeric type.
-        - `'ba'` + `NaN`: Concatenating a string with NaN converts NaN to its string representation, resulting in the string `'baNaN'`.
-        - `'baNaN'` + `'a'`: Concatenates `'baNaN'` with `'a'`, resulting in `'baNaNa'`.
-        - `.toLowerCase()`: Converts the entire string to lowercase, which does not change its appearance in this case since all letters are already lowercase. So, the final result is `'banana'`.
+  - JavaScipt is a weakly typed language, which means that a variable always has a type, but the variable can change type when it is assigned to a new value, or that type can be automatically converted based upon the context that they are used in.
+  - Sometimes the results of automatic conversions can be unexpected for programmers who are used to strongly typed languages.
+    - `2 + '3';`
+    - // OUTPUT: '23'
+    - `2 * '3';`
+    - // OUTPUT: 6
+    - `[2] + [3];`
+    - // OUTPUT: '23'
+    - `true + null;`
+    - // OUTPUT: 1
+    - `true + undefined;`
+    - // OUTPUT: NaN
+  - Getting unexpected results is especially common when dealing with the equality operator.
+    - `1 == '1';`
+    - // OUTPUT: true
+    - `null == undefined;`
+    - // OUTPUT: true
+    - `'' == false;`
+    - // OUTPUT: true
+  - The unexpected results happen in JavaScript because it uses complex rules for defining equality that depend upon the conversion of a type to a boolean value.
+  - We will sometimes hear this referred to as falsy and truthy evaluations.
+  - To remove this confusion, JavaScript introduced the strict equality (`===`) and inequality (`!==`) operators.
+  - The strict operators skip the type conversion when computing equality.
+    - `1 === '1';`
+    - // OUTPUT: false
+    - `null === undefined;`
+    - // OUTPUT: false
+    - `'' === false;`
+    - // OUTPUT: false
+  - Interesting Example: `('b' + 'a' + +'a' + 'a').toLowerCase();` // OUTPUT: banana
+    - `'b'` + `'a'`: Concatenates the strings `'b'` and `'a'`, resulting in `'ba'`.
+    - `+'a'`: The unary plus operator tries to convert the string `'a'` into a number. Since `'a'` is not a valid number, this conversion results in `NaN` (Not-a-Number).
+      - The unary plus operator in JavaScript is a prefix operator that is placed before its operand and has the effect of converting the operand to a number. It is represented by a plus sign (`+`). This operator is useful for type coercion, turning its operand into a numeric type.
+    - `'ba'` + `NaN`: Concatenating a string with NaN converts NaN to its string representation, resulting in the string `'baNaN'`.
+    - `'baNaN'` + `'a'`: Concatenates `'baNaN'` with `'a'`, resulting in `'baNaNa'`.
+    - `.toLowerCase()`: Converts the entire string to lowercase, which does not change its appearance in this case since all letters are already lowercase. So, the final result is `'banana'`.
 - Conditionals
-    - JavaScript supports many common programming language conditional constructs, which include `if`, `else`, and `if else`.
-        - `if (a === 1) {`
-            - //...
-        - `} else if (b === 2) {`
-            - //...
-        - `} else {`
-            //...
-        - `}`
-    - We can also use the ternary operator, which provides a compact `if else` representation.
-        - `a === 1 ? console.log(1) : console.log('not 1');`
-            - The ternary operator is used to decide which of two expressions should be evaluated and returned, based on the truthiness of a given condition. It is represented as `condition ? expression1 : expression2`.
-            - `Condition: a === 1`: This part checks if the variable `a` is strictly equal to the number `1`. The strict equality operator (`===`) tests for both value and type equality, meaning `a` must be the number `1` (not just any truthy value or a string "1") for the condition to be true.
-            - `?`: If the condition is true, the expression immediately following the `?` is executed. In this case, if `a` is indeed equal to `1`, then `console.log(1)` is executed, logging `1` to the console.
-            - `:`: If the condition is false, the expression following the `:` is executed. If `a` is not equal to `1`, then `console.log('not 1')` is executed, logging `'not 1'` to the console.
-    - We can use boolean operations in the expression to create complex predicates.
-    - Common boolean operators include `&&` (and), `||` (or), and `!` (not).
-        - `if (true && (!false || true)) {`
-            - //...
-        - `}`
+  - JavaScript supports many common programming language conditional constructs, which include `if`, `else`, and `if else`.
+    - `if (a === 1) {`
+      - //...
+    - `} else if (b === 2) {`
+      - //...
+    - `} else {`
+      //...
+    - `}`
+  - We can also use the ternary operator, which provides a compact `if else` representation.
+    - `a === 1 ? console.log(1) : console.log('not 1');`
+      - The ternary operator is used to decide which of two expressions should be evaluated and returned, based on the truthiness of a given condition. It is represented as `condition ? expression1 : expression2`.
+      - `Condition: a === 1`: This part checks if the variable `a` is strictly equal to the number `1`. The strict equality operator (`===`) tests for both value and type equality, meaning `a` must be the number `1` (not just any truthy value or a string "1") for the condition to be true.
+      - `?`: If the condition is true, the expression immediately following the `?` is executed. In this case, if `a` is indeed equal to `1`, then `console.log(1)` is executed, logging `1` to the console.
+      - `:`: If the condition is false, the expression following the `:` is executed. If `a` is not equal to `1`, then `console.log('not 1')` is executed, logging `'not 1'` to the console.
+  - We can use boolean operations in the expression to create complex predicates.
+  - Common boolean operators include `&&` (and), `||` (or), and `!` (not).
+    - `if (true && (!false || true)) {`
+      - //...
+    - `}`
 - Loops
-    - JavaScript supports many common programming language looping constructs, which include `for`, `for in`, `for of`, `while`, `do while`, and `switch`.
-        - `for`
-            - `for (let i = 0; i < 2; i++) {`
-                - `console.log(i);`
-            - `}`
-                - // OUTPUT: 0 1
-        - `do while`
-            - `let i = 0;`
-            - `do {`
-                - `console.log(i);`
-                - `i++;`
-            - `} while (i < 2);`
-            - // OUTPUT: 0 1
-        - `while`
-            - `let i = 0;`
-            - `while (i < 2) {`
-                - `console.log(i);`
-                - `i++;`
-            - `}`
-            - // OUTPUT: 0 1
-        - `for in`
-            - The `for in` statement iterates over an object's property names.
-                - `const obj = { a: 1, b: 'fish' };`
-                - `for (const name in obj) {`
-                    - `console.log(name);`
-                - `}`
-                - // OUTPUT: a
-                - // OUTPUT: b
-            - For arrays, the object's name is the array index.
-                - `const arr = ['a', 'b'];`
-                - `for (const name in arr) {`
-                    `console.log(name);`
-                - `}`
-                - // OUTPUT: 0
-                - // OUTPUT: 1
-        - `for of`
-            - The `for of` statement iterates over an iterable's (array, map, set, ...) property values.
-                - `const arr = ['a', 'b'];`
-                - `for (const val of arr) {`
-                    - `console.log(val);`
-                - `}`
-                - // OUTPUT: 'a'
-                - // OUTPUT: 'b'
-- Break and Continue
-    - All of the looping constructs demonstrated above allow for either a `break` or `continue` statement to abort or advance the loop.
-        - `let i = 0;`
-        - `while (true) {`
-            - `console.log(i);`
-            - `if (i === 0) {`
-                - `i++;`
-                - `continue;`
-            - `} else {`
-                - `break;`
-            - `}`
-        - `}`
+  - JavaScript supports many common programming language looping constructs, which include `for`, `for in`, `for of`, `while`, `do while`, and `switch`.
+    - `for`
+      - `for (let i = 0; i < 2; i++) {`
+        - `console.log(i);`
+      - `}`
         - // OUTPUT: 0 1
+    - `do while`
+      - `let i = 0;`
+      - `do {`
+        - `console.log(i);`
+        - `i++;`
+      - `} while (i < 2);`
+      - // OUTPUT: 0 1
+    - `while`
+      - `let i = 0;`
+      - `while (i < 2) {`
+        - `console.log(i);`
+        - `i++;`
+      - `}`
+      - // OUTPUT: 0 1
+    - `for in`
+      - The `for in` statement iterates over an object's property names.
+        - `const obj = { a: 1, b: 'fish' };`
+        - `for (const name in obj) {`
+          - `console.log(name);`
+        - `}`
+        - // OUTPUT: a
+        - // OUTPUT: b
+      - For arrays, the object's name is the array index.
+        - `const arr = ['a', 'b'];`
+        - `for (const name in arr) {`
+          `console.log(name);`
+        - `}`
+        - // OUTPUT: 0
+        - // OUTPUT: 1
+    - `for of`
+      - The `for of` statement iterates over an iterable's (array, map, set, ...) property values.
+        - `const arr = ['a', 'b'];`
+        - `for (const val of arr) {`
+          - `console.log(val);`
+        - `}`
+        - // OUTPUT: 'a'
+        - // OUTPUT: 'b'
+- Break and Continue
+  - All of the looping constructs demonstrated above allow for either a `break` or `continue` statement to abort or advance the loop.
+    - `let i = 0;`
+    - `while (true) {`
+      - `console.log(i);`
+      - `if (i === 0) {`
+        - `i++;`
+        - `continue;`
+      - `} else {`
+        - `break;`
+      - `}`
+    - `}`
+    - // OUTPUT: 0 1
 
 # JavaScript Strings
+
 - Strings are a primitive type in JavaScript.
 - A string variable is specified by surrounding a sequence of characters with single quotes (`'`), double quotes (`"`), or backticks (`).
 - The meaning of single or double quotes are equivalent, but the backtick defines a string literal that may contain JavaScript that is evaluated in place and concatenated into the string.
 - A string literal replacement specifier is declared with a dollar sign followed by a curly brace pair.
 - Anything inside the curly braces is evaluated as JavaScript.
 - We can also use backticks to create multiline strings without having to explicitly escape the newline characters using `\n`.
-    - `'quoted text'; // " also works`
 
-    - `const l = 'literal';`
-    - `console.log(`string ${l + (1 + 1)} text`);`
-    - // OUTPUT: string literal2 text
+  - `'quoted text'; // " also works`
+
+  - `const l = 'literal';`
+  - `console.log(`string ${l + (1 + 1)} text`);`
+  - // OUTPUT: string literal2 text
+
 - Unicode Support
-    - JavaScript supports Unicode by defining a string as a 16-bit unsigned integer that represents UTF-16 strings.
-        - Unicode is a universal character encoding standard that provides a unique number for every character, no matter the platform, program, or language. It is designed to support the diverse set of characters used across modern and historical texts, including not just letters from various alphabets but also symbols, emoji, and many other character types.
-        - An unsigned integer is a type of integer that can only represent non-negative numbers (0 and positive numbers). The key characteristic of unsigned integers, as opposed to signed integers, is that they do not allocate a bit for indicating the sign (positive or negative) of the number. This absence of a sign bit effectively doubles the upper limit of the numbers that can be represented with the same number of bits used by a signed integer.
-        - UTF-16 (Unicode Transformation Format - 16-bit) is a character encoding for Unicode characters, where each character is represented by one or two 16-bit units. UTF-16 is one of several encoding schemes (including UTF-8 and UTF-32) used to encode Unicode characters, enabling the representation of virtually every character from every written language in use today, as well as many symbols and special characters.
-    - Unicode support allows JavaScript to represent most languages spoken on the planet, which include those that are read from right to left.
-    - However, there are several important steps we must take in order to make our web application fully internationalized, which include handling currency, time, dates, iconography, units of measure, keyboard layouts, and respecting local customs.
+  - JavaScript supports Unicode by defining a string as a 16-bit unsigned integer that represents UTF-16 strings.
+    - Unicode is a universal character encoding standard that provides a unique number for every character, no matter the platform, program, or language. It is designed to support the diverse set of characters used across modern and historical texts, including not just letters from various alphabets but also symbols, emoji, and many other character types.
+    - An unsigned integer is a type of integer that can only represent non-negative numbers (0 and positive numbers). The key characteristic of unsigned integers, as opposed to signed integers, is that they do not allocate a bit for indicating the sign (positive or negative) of the number. This absence of a sign bit effectively doubles the upper limit of the numbers that can be represented with the same number of bits used by a signed integer.
+    - UTF-16 (Unicode Transformation Format - 16-bit) is a character encoding for Unicode characters, where each character is represented by one or two 16-bit units. UTF-16 is one of several encoding schemes (including UTF-8 and UTF-32) used to encode Unicode characters, enabling the representation of virtually every character from every written language in use today, as well as many symbols and special characters.
+  - Unicode support allows JavaScript to represent most languages spoken on the planet, which include those that are read from right to left.
+  - However, there are several important steps we must take in order to make our web application fully internationalized, which include handling currency, time, dates, iconography, units of measure, keyboard layouts, and respecting local customs.
 - String Functions
-    - `length`: The number of characters in the string
-    - `indexOf()`: The starting index of a given substring
-    - `split()`: Split the string into an array on the given delimiter string
-    - `startsWith()`: True if the string has a given prefix
-    - `endsWith()`: True if the string has a given suffix
-    - `toLowerCase()`: Converts all characters to lowercase
-        - `const s = 'Example:조선글';`
 
-        - `console.log(s.length);`
-        - // OUTPUT: 11
-        - `console.log(s.indexOf('조선글'));`
-        - // OUTPUT: 8
-        - `console.log(s.split(':'));`
-        - // OUTPUT: ['Example', '조선글']
-        - `console.log(s.startsWith('Ex'));`
-        - // OUTPUT: true
-        - `console.log(s.endsWith('조선글'));`
-        - // OUTPUT: true
-        - `console.log(s.toLowerCase());`
-        - // OUTPUT: example:조선글
+  - `length`: The number of characters in the string
+  - `indexOf()`: The starting index of a given substring
+  - `split()`: Split the string into an array on the given delimiter string
+  - `startsWith()`: True if the string has a given prefix
+  - `endsWith()`: True if the string has a given suffix
+  - `toLowerCase()`: Converts all characters to lowercase
+
+    - `const s = 'Example:조선글';`
+
+    - `console.log(s.length);`
+    - // OUTPUT: 11
+    - `console.log(s.indexOf('조선글'));`
+    - // OUTPUT: 8
+    - `console.log(s.split(':'));`
+    - // OUTPUT: ['Example', '조선글']
+    - `console.log(s.startsWith('Ex'));`
+    - // OUTPUT: true
+    - `console.log(s.endsWith('조선글'));`
+    - // OUTPUT: true
+    - `console.log(s.toLowerCase());`
+    - // OUTPUT: example:조선글
 
 # JavaScript Functions
+
 - In JavaScipt, functions are first-class objects, which means that they can be assigned a name, passed a parameter, returned as a result, and referenced from an object or array just like any other variable.
 - The basic syntax of a function begins with the `function` keyword followed by zero or more parameters and a body that may contain zero or more return statements.
 - The return statement may return a single value.
 - Note that there are no type declarations, as the type is always inferred by the assignment of the value to the parameter.
-    - `function hello(who) {`
-        - `return 'hello ' + who;`
-    - `}`
 
-    - `console.log(hello('world'));`
-    - // OUTPUT: hello world
+  - `function hello(who) {`
+    - `return 'hello ' + who;`
+  - `}`
+
+  - `console.log(hello('world'));`
+  - // OUTPUT: hello world
+
 - A function without a return value usually exists to produce some side effects like modifying a parameter or interacting with an external program.
 - In the following example, the side effect of the function is to output text to the debugger console.
-    - `function hello(who) {`
-        - `who.count++;`
-        - `console.log('hello ' + who.name);`
+
+  - `function hello(who) {`
+    - `who.count++;`
+    - `console.log('hello ' + who.name);`
+  - `}`
+
+  - `hello({ name: 'world', count: 0 });`
+    // OUTPUT: hello world
+
+- Function Parameters
+
+  - When a function is called, the caller may choose what parameters to provide.
+  - If a parameter is not provided, then the value of the parameter is `undefined` when the function executes.
+  - In addition to explicitly passing the value of a parameter to a function, the function can define a default value, which is done by assigning a value to the parameter in the function declaration.
+
+    - `function labeler(value, title = 'title') {`
+      - `console.log(`${title}=${value}`);`
     - `}`
 
-    - `hello({ name: 'world', count: 0 });`
-    // OUTPUT: hello world
-- Function Parameters
-    - When a function is called, the caller may choose what parameters to provide.
-    - If a parameter is not provided, then the value of the parameter is `undefined` when the function executes.
-    - In addition to explicitly passing the value of a parameter to a function, the function can define a default value, which is done by assigning a value to the parameter in the function declaration.
-        - `function labeler(value, title = 'title') {`
-            - `console.log(`${title}=${value}`);`
-        - `}`
+    - `labeler();`
+    - // OUTPUT: title=undefined
 
-        - `labeler();`
-        - // OUTPUT: title=undefined
+    - `labeler('fish');`
+    - // OUTPUT: title=fish
 
-        - `labeler('fish');`
-        - // OUTPUT: title=fish
+    - `labeler('fish', 'animal');`
+    - // OUTPUT: animal=fish
 
-        - `labeler('fish', 'animal');`
-        - // OUTPUT: animal=fish
 - Anonymous Functions
-    - Functions in JavaScript are commonly assigned to a variable so that they can be passed as a parameter to some other functions or stored as an object property.
-    - To easily support this common use, we can define a function anonymously and assign it to a variable.
-        - // Function that takes a function as a parameter
-        - `function doMath(operation, a, b) {`
-            - `return operation(a, b);`
-        - `}`
 
-        - // Anonymous function assigned to a variable
-        - `const add = function (a, b) {`
-            - `return a + b;`
-        - `};`
+  - Functions in JavaScript are commonly assigned to a variable so that they can be passed as a parameter to some other functions or stored as an object property.
+  - To easily support this common use, we can define a function anonymously and assign it to a variable.
 
-        - `console.log(doMath(add, 5, 3));`
-        - // OUTPUT: 8
+    - // Function that takes a function as a parameter
+    - `function doMath(operation, a, b) {`
+      - `return operation(a, b);`
+    - `}`
 
-        - // Anonymous function assigned to a parameter
-        - `console.log(`
-            - `doMath(`
-                - `function (a, b) {`
-                - `return a - b;`
-                - `},`
-                - `5,`
-                - `3`
-            - `)`
-        - `);`
-        - // OUTPUT: 2
-- Creating, Passing, and Returning Functions
-    - // Anonymous declaration of the function that is later assigned to a variable
+    - // Anonymous function assigned to a variable
     - `const add = function (a, b) {`
-        - `return a + b;`
+      - `return a + b;`
     - `};`
 
-    - // Function that logs as a side effect of its execution
-    - `function labeler(label, value) {`
-        - `console.log(label + '=' + value);`
-    - `}`
+    - `console.log(doMath(add, 5, 3));`
+    - // OUTPUT: 8
 
-    - // Function that takes a function as a parameter and then executes the function as a side effect
-    - `function addAndLabel(labeler, label, adder, a, b) {`
-        - `labeler(label, adder(a, b));`
-    - `}`
+    - // Anonymous function assigned to a parameter
+    - `console.log(`
+      - `doMath(`
+        - `function (a, b) {`
+        - `return a - b;`
+        - `},`
+        - `5,`
+        - `3`
+      - `)`
+    - `);`
+    - // OUTPUT: 2
 
-    - // Passing a function to a function
-    - `addAndLabel(labeler, 'a+b', add, 1, 3);`
-    - // OUTPUT: a+b=4
+- Creating, Passing, and Returning Functions
 
-    - // Function that returns a function
-    - `function labelMaker(label) {`
-        - `return function (value) {`
-            - `console.log(label + '=' + value);`
-        - `};`
-    - `}`
+  - // Anonymous declaration of the function that is later assigned to a variable
+  - `const add = function (a, b) {`
+    - `return a + b;`
+  - `};`
 
-    - // Assign a function from the return value of the function
-    - `const nameLabeler = labelMaker('name');`
+  - // Function that logs as a side effect of its execution
+  - `function labeler(label, value) {`
+    - `console.log(label + '=' + value);`
+  - `}`
 
-    - // Calling the returned function
-    - `nameLabeler('value');`
-    - // OUTPUT: name=value
+  - // Function that takes a function as a parameter and then executes the function as a side effect
+  - `function addAndLabel(labeler, label, adder, a, b) {`
+    - `labeler(label, adder(a, b));`
+  - `}`
+
+  - // Passing a function to a function
+  - `addAndLabel(labeler, 'a+b', add, 1, 3);`
+  - // OUTPUT: a+b=4
+
+  - // Function that returns a function
+  - `function labelMaker(label) {`
+    - `return function (value) {`
+      - `console.log(label + '=' + value);`
+    - `};`
+  - `}`
+
+  - // Assign a function from the return value of the function
+  - `const nameLabeler = labelMaker('name');`
+
+  - // Calling the returned function
+  - `nameLabeler('value');`
+  - // OUTPUT: name=value
+
 - Inner Functions
-    - Functions can also be declared inside other functions.
-    - This allows us to modularize our code without always exposing private details.
-        - `function labeler(value) {`
-            - `function stringLabeler(value) {`
-                - `console.log('string=' + value);`
-            - `}`
-            - `function numberLabeler(value) {`
-                - `console.log('number=' + value);`
-            - `}`
 
-            - `if (typeof value == 'string') {`
-                - `stringLabeler(value);`
-            - `} else if (typeof value == 'number') {`
-                - `numberLabeler(value);`
-            - `}`
-        - `}`
+  - Functions can also be declared inside other functions.
+  - This allows us to modularize our code without always exposing private details.
 
-        - `labeler(5);`
-        // OUTPUT: number=5
+    - `function labeler(value) {`
 
-        - `labeler('fish');`
-        // OUTPUT: string=fish
+      - `function stringLabeler(value) {`
+        - `console.log('string=' + value);`
+      - `}`
+      - `function numberLabeler(value) {`
+        - `console.log('number=' + value);`
+      - `}`
+
+      - `if (typeof value == 'string') {`
+        - `stringLabeler(value);`
+      - `} else if (typeof value == 'number') {`
+        - `numberLabeler(value);`
+      - `}`
+
+    - `}`
+
+    - `labeler(5);`
+      // OUTPUT: number=5
+
+    - `labeler('fish');`
+      // OUTPUT: string=fish
 
 # JavaScript Arrow Functions
+
 - Because functions are first-class objects in JavaScript, they can be declared anywhere and passed as parameters, and this results in code with lots of anonymous functions cluttering things up.
 - To make the code more compact the `arrow` syntax was created, and this syntax replaces the need for the `function` keyword with the symbols `=>` placed after the parameter declaration, in which the enclosing braces are also optional.
 - Below is a function in arrow syntax that takes no parameters and always returns 3.
-    - `() => 3;`
+  - `() => 3;`
 - The following invocations of sort are equivalent.
-    - `const a = [1, 2, 3, 4];`
 
-    - // standard function syntax
-    - `a.sort(function (v1, v2) {`
-        - `return v1 - v2;`
-    - `});`
+  - `const a = [1, 2, 3, 4];`
 
-    - // arrow function syntax
-    - `a.sort((v1, v2) => v1 - v2);`
+  - // standard function syntax
+  - `a.sort(function (v1, v2) {`
+    - `return v1 - v2;`
+  - `});`
+
+  - // arrow function syntax
+  - `a.sort((v1, v2) => v1 - v2);`
+
 - `a` is an array `[1, 2, 3, 4]`.
 - The `sort` method is called on array `a`.
 - A comparison function is provided as an argument to `sort`. This function takes two arguments (`v1` and `v2`), which represent any two elements from the array being sorted.
 - The comparison function returns the result of `v1 - v2`.
-    - If the result is negative, `v1` is sorted before `v2`.
-    - If the result is positive, `v2` is sorted before `v1`.
-    - If the result is zero, no change is made with respect to the order of `v1` and `v2`.
+  - If the result is negative, `v1` is sorted before `v2`.
+  - If the result is positive, `v2` is sorted before `v1`.
+  - If the result is zero, no change is made with respect to the order of `v1` and `v2`.
 - Besides being compact, the arrow function syntax has some important semantic differences from the standard function syntax, which include restrictions that the arrow functions cannot be used for constructors or iterator generators.
 - Return Values
-    - Arrow functions also have a special rule for the `return` keyword.
-    - The return keyword is optional if no curly braces are provided for the function and it contains a single expression.
-    - In that case, the result of the expression is automatically returned.
-    - If curly braces are provided, then the arrow function behaves just like a standard function.
-        - `() => 3;`
-        - // RETURNS: 3
 
-        - `() => {`
-            - `3;`
-        - `};`
-        - // RETURNS: undefined
+  - Arrow functions also have a special rule for the `return` keyword.
+  - The return keyword is optional if no curly braces are provided for the function and it contains a single expression.
+  - In that case, the result of the expression is automatically returned.
+  - If curly braces are provided, then the arrow function behaves just like a standard function.
 
-        - `() => {`
-            - `return 3;`
-        - `};`
-        - // RETURNS: 3
+    - `() => 3;`
+    - // RETURNS: 3
+
+    - `() => {`
+      - `3;`
+    - `};`
+    - // RETURNS: undefined
+
+    - `() => {`
+      - `return 3;`
+    - `};`
+    - // RETURNS: 3
+
 - This Pointer
-    - Next, arrow functions inherit the `this` pointer from the scope of where it is created.
-    - This makes what is known as a `closure`.
-    - A closure allows a function to continue referencing its creation scope, even after it has passed out of that scope.
-    - In the following example, the function `makeClosure` returns an anonymous function using the arrow syntax.
-    - Notice that the `a` parameter is overridden, a new `b` variable is created, and both `a` and `b` are referenced in the arrow function.
-    - Because of that reference, they are both part of the closure for the returned function.
-        - `function makeClosure(a) {`
-            - `a = 'a2';`
-            - `const b = 'b2';`
-            - `return () => [a, b];`
-        - `}`
-    - Next, we declare the variables `a` and `b` at the top-level scope, and call `makeClosure` with `a`.
-        - `const a = 'a';`
-        - `const b = 'b';`
 
-        - `const closure = makeClosure(a);`
-    - Now, when we call the `closure` function, it will output the values contained in the scope where it was created instead of the current values of the variables.
-        - `console.log(closure());`
-        - // OUTPUT: ['a2', 'b2']
+  - Next, arrow functions inherit the `this` pointer from the scope of where it is created.
+  - This makes what is known as a `closure`.
+  - A closure allows a function to continue referencing its creation scope, even after it has passed out of that scope.
+  - In the following example, the function `makeClosure` returns an anonymous function using the arrow syntax.
+  - Notice that the `a` parameter is overridden, a new `b` variable is created, and both `a` and `b` are referenced in the arrow function.
+  - Because of that reference, they are both part of the closure for the returned function.
+    - `function makeClosure(a) {`
+      - `a = 'a2';`
+      - `const b = 'b2';`
+      - `return () => [a, b];`
+    - `}`
+  - Next, we declare the variables `a` and `b` at the top-level scope, and call `makeClosure` with `a`.
 
-        - `console.log(a, b);`
-        - // OUTPUT: 'a' 'b'
-    - Closures provide a valuable property when we do things like execute JavaScript within the scope of an HTML page because it can remember the values of variables when the function was created instead of what they are when they are executed.
+    - `const a = 'a';`
+    - `const b = 'b';`
+
+    - `const closure = makeClosure(a);`
+
+  - Now, when we call the `closure` function, it will output the values contained in the scope where it was created instead of the current values of the variables.
+
+    - `console.log(closure());`
+    - // OUTPUT: ['a2', 'b2']
+
+    - `console.log(a, b);`
+    - // OUTPUT: 'a' 'b'
+
+  - Closures provide a valuable property when we do things like execute JavaScript within the scope of an HTML page because it can remember the values of variables when the function was created instead of what they are when they are executed.
+
 - Putting It All Together
-    - The point of a debounce function is to only execute a specified function once within a given time window.
-    - Any requests to execute the debounce function more frequently than this will cause the time window to reset.
-    - This is important in cases where a user can trigger expensive events thousands of times per second.
-    - Without a debounce, the performance of our application can greatly suffer.
-    - The following code calls the browser's `window.addEventListener` function to add a callback function that is invoked whenever the user scrolls the browser's web page.
-    - The first parameter to `addEventListener` specifies that it wants to listen for `scroll` events.
-    - The second parameter provides the function to call when a scroll event happens.
-    - In this case, we call a function named `debounce`.
-    - The `debounce` function takes two parameters, the time window for executing the window function, and the window function to call within that limit.
-    - In this case, we will execute the arrow function at most every 500 milliseconds.
-        - `window.addEventListener(`
-            - `'scroll',`
-            - `debounce(500, () => {`
-                - `console.log('Executed an expensive calculation');`
-            - `})`
-        - `);`
-    - The `debounce` function implements the execution of windowFunc within the restricted time window by creating a closure that contains the current timeout and returning a function that will reset the timeout every time it is called.
-    - The returned function is what the scroll event will actually call when the user scrolls the page.
-    - However, instead of directly executing the `windowFunc`, it sets a timer based on the value of `windowMS`.
-    - If the `debounce` function is called again before the window times out then it resets the timeout.
-        - `function debounce(windowMs, windowFunc) {`
-            - `let timeout;`
-            - `return function () {`
-                - `console.log('scroll event');`
-                - `clearTimeout(timeout);`
-                - `timeout = setTimeout(() => windowFunc(), windowMs);`
-            - `};`
-        - `}`
-    - Event Listener: The `addEventListener` method is used to attach a `scroll` event listener to the `window`. The second argument to `addEventListener` is the debounced version of our expensive function, created by calling `debounce(500, () => { console.log('Executed an expensive calculation'); })`.
-    - `Debounce` Function: The `debounce` function takes two parameters: `windowMs`, the debounce interval in milliseconds, and `windowFunc`, the function to execute once the debounce interval has passed without any further scroll events. It initializes a `timeout` variable to keep track of the current debounce timeout ID.
-    - Returned Function from `Debounce`: The `debounce` function returns a new function that acts as the actual event handler for the `scroll` event. This function logs `'scroll event'` to the console every time a scroll event occurs, indicating the event has been detected. It then clears any previous timeout set by earlier scroll events, using `clearTimeout(timeout)`. This step is crucial because it prevents `windowFunc` from executing if a new scroll event occurs within the debounce interval (`windowMs`). Finally, it sets a new timeout using `setTimeout(() => windowFunc(), windowMs)`, scheduling `windowFunc` to execute after `windowMs` milliseconds. If no more scroll events occur within this interval, `windowFunc` will execute, logging `'Executed an expensive calculation'` to the console.
-    - Closure
-        - Variable in Lexical Scope: The `debounce` function declares a `timeout` variable in its lexical scope. This variable is used to keep track of the timeout ID for the debounced function.
-        - Returned Function: The `debounce` function returns a new anonymous function. This returned function is able to access the `timeout` variable defined in the outer `debounce` function's scope.
-        - Closure: The returned anonymous function forms a closure. It captures and retains access to the `timeout` variable even after the `debounce` function has finished execution. This is essential for the debouncing mechanism because each invocation of the event handler (triggered by the `scroll` event) needs to be able to clear the previous timeout (if any) and set a new one. The ability to access and modify the `timeout` variable across multiple invocations of the event handler, over time, is made possible by the closure.
+  - The point of a debounce function is to only execute a specified function once within a given time window.
+  - Any requests to execute the debounce function more frequently than this will cause the time window to reset.
+  - This is important in cases where a user can trigger expensive events thousands of times per second.
+  - Without a debounce, the performance of our application can greatly suffer.
+  - The following code calls the browser's `window.addEventListener` function to add a callback function that is invoked whenever the user scrolls the browser's web page.
+  - The first parameter to `addEventListener` specifies that it wants to listen for `scroll` events.
+  - The second parameter provides the function to call when a scroll event happens.
+  - In this case, we call a function named `debounce`.
+  - The `debounce` function takes two parameters, the time window for executing the window function, and the window function to call within that limit.
+  - In this case, we will execute the arrow function at most every 500 milliseconds.
+    - `window.addEventListener(`
+      - `'scroll',`
+      - `debounce(500, () => {`
+        - `console.log('Executed an expensive calculation');`
+      - `})`
+    - `);`
+  - The `debounce` function implements the execution of windowFunc within the restricted time window by creating a closure that contains the current timeout and returning a function that will reset the timeout every time it is called.
+  - The returned function is what the scroll event will actually call when the user scrolls the page.
+  - However, instead of directly executing the `windowFunc`, it sets a timer based on the value of `windowMS`.
+  - If the `debounce` function is called again before the window times out then it resets the timeout.
+    - `function debounce(windowMs, windowFunc) {`
+      - `let timeout;`
+      - `return function () {`
+        - `console.log('scroll event');`
+        - `clearTimeout(timeout);`
+        - `timeout = setTimeout(() => windowFunc(), windowMs);`
+      - `};`
+    - `}`
+  - Event Listener: The `addEventListener` method is used to attach a `scroll` event listener to the `window`. The second argument to `addEventListener` is the debounced version of our expensive function, created by calling `debounce(500, () => { console.log('Executed an expensive calculation'); })`.
+  - `Debounce` Function: The `debounce` function takes two parameters: `windowMs`, the debounce interval in milliseconds, and `windowFunc`, the function to execute once the debounce interval has passed without any further scroll events. It initializes a `timeout` variable to keep track of the current debounce timeout ID.
+  - Returned Function from `Debounce`: The `debounce` function returns a new function that acts as the actual event handler for the `scroll` event. This function logs `'scroll event'` to the console every time a scroll event occurs, indicating the event has been detected. It then clears any previous timeout set by earlier scroll events, using `clearTimeout(timeout)`. This step is crucial because it prevents `windowFunc` from executing if a new scroll event occurs within the debounce interval (`windowMs`). Finally, it sets a new timeout using `setTimeout(() => windowFunc(), windowMs)`, scheduling `windowFunc` to execute after `windowMs` milliseconds. If no more scroll events occur within this interval, `windowFunc` will execute, logging `'Executed an expensive calculation'` to the console.
+  - Closure
+    - Variable in Lexical Scope: The `debounce` function declares a `timeout` variable in its lexical scope. This variable is used to keep track of the timeout ID for the debounced function.
+    - Returned Function: The `debounce` function returns a new anonymous function. This returned function is able to access the `timeout` variable defined in the outer `debounce` function's scope.
+    - Closure: The returned anonymous function forms a closure. It captures and retains access to the `timeout` variable even after the `debounce` function has finished execution. This is essential for the debouncing mechanism because each invocation of the event handler (triggered by the `scroll` event) needs to be able to clear the previous timeout (if any) and set a new one. The ability to access and modify the `timeout` variable across multiple invocations of the event handler, over time, is made possible by the closure.
 
 # JavaScript Arrays
+
 - JavaScript array objects represent a sequence of other objects and primitives.
 - We can reference the members of the array using a zero-based index.
 - We can create an array with the `Array` constructor (`new Array()`) or using the array literal notation (`[]`) shown below.
-    - `const a = [1, 2, 3];`
-    - `console.log(a[1]);`
-    - // OUTPUT: 2
 
-    - `console.log(a.length);`
-    - // OUTPUT: 3
+  - `const a = [1, 2, 3];`
+  - `console.log(a[1]);`
+  - // OUTPUT: 2
+
+  - `console.log(a.length);`
+  - // OUTPUT: 3
+
 - Array Object Functions
-    - `push`: Add an item to the end of the array
-        - `a.push(4)`
-    - `pop`: Remove an item from the end of the array
-        - `x = a.pop()`
-    - `slice`: Return a sub-array
-        - `a.slice(1,-1)`
-    - `sort`: Run a function to sort an array in place
-        - `a.sort((a,b) => b-a)`
-    - `values`: Creates an iterator for use with a `for of` loop
-        - `for (i of a.values()) {...}`
-    - `find`: Find the first item satisfied by a test function
-        - `a.find(i => i < 2)`
-    - `forEach`: Run a function on each array item
-        - `a.forEach(console.log)`
-    - `reduce`: Run a function to reduce each array item to a single item
-        - `a.reduce((a, c) => a + c)`
-    - `map`: Run a function to map an array to a new array
-        - `a.map(i => i+i)`
-    - `filter`: Run a function to remove items
-        - `a.filter(i => i%2)`
-    - `every`: Run a function to test if all items match
-        - `a.every(i => i < 3)`
-    - `some`: Run a function to test if any items match
-        - `a.some(i => i < 1)`
-    - `const a = [1, 2, 3];`
 
-    - `console.log(a.map((i) => i + i));`
-    - // OUTPUT: [2,4,6]
-    - `console.log(a.reduce((v1, v2) => v1 + v2));`
-    - // OUTPUT: 6
-    - `console.log(a.sort((v1, v2) => v2 - v1));`
-    - // OUTPUT: [3,2,1]
+  - `push`: Add an item to the end of the array
+    - `a.push(4)`
+  - `pop`: Remove an item from the end of the array
+    - `x = a.pop()`
+  - `slice`: Return a sub-array
+    - `a.slice(1,-1)`
+  - `sort`: Run a function to sort an array in place
+    - `a.sort((a,b) => b-a)`
+  - `values`: Creates an iterator for use with a `for of` loop
+    - `for (i of a.values()) {...}`
+  - `find`: Find the first item satisfied by a test function
+    - `a.find(i => i < 2)`
+  - `forEach`: Run a function on each array item
+    - `a.forEach(console.log)`
+  - `reduce`: Run a function to reduce each array item to a single item
+    - `a.reduce((a, c) => a + c)`
+  - `map`: Run a function to map an array to a new array
+    - `a.map(i => i+i)`
+  - `filter`: Run a function to remove items
+    - `a.filter(i => i%2)`
+  - `every`: Run a function to test if all items match
+    - `a.every(i => i < 3)`
+  - `some`: Run a function to test if any items match
+    - `a.some(i => i < 1)`
+  - `const a = [1, 2, 3];`
 
-    - `a.push(4);`
-    - `console.log(a.length);`
-    - // OUTPUT: 4
-    - `reduce`
-        - For the first call, `v1` is 1 (the first element of the array), and `v2` is 2 (the second element of the array). The return value is 3.
-        - For the second call, `v1` is 3 (the result of the first call) and `v2` is 3 (the third element of the array). The return value is 6.
-        - The array has no more elements to process, so the final result is 6.
-    
+  - `console.log(a.map((i) => i + i));`
+  - // OUTPUT: [2,4,6]
+  - `console.log(a.reduce((v1, v2) => v1 + v2));`
+  - // OUTPUT: 6
+  - `console.log(a.sort((v1, v2) => v2 - v1));`
+  - // OUTPUT: [3,2,1]
+
+  - `a.push(4);`
+  - `console.log(a.length);`
+  - // OUTPUT: 4
+  - `reduce`
+    - For the first call, `v1` is 1 (the first element of the array), and `v2` is 2 (the second element of the array). The return value is 3.
+    - For the second call, `v1` is 3 (the result of the first call) and `v2` is 3 (the third element of the array). The return value is 6.
+    - The array has no more elements to process, so the final result is 6.
+
 # JSON
+
 - JSON provides a simple, and yet effective way, to share and store data.
 - By design, JSON is easily convertible to, and from JavaScript objects.
 - This makes it a very convenient data format when working with web technologies.
 - Because of its simplicity, standardization, and compatibility with JavaScript, JSON has become one of the world's most popular data formats.
 - Format
-    - A JSON document contains one of the following data types:
-        - string
-            - `"crockford"`
-        - number
-            - `42`
-        - boolean
-            - `true`
-        - array
-            - `[null,42,"crockford"]`
-        - object
-            - `{"a":1,"b":"crockford"}`
-        - null
-            - `null`
-    - Most commonly, a JSON document contains an object.
-    - Objects contain zero or more key-value pairs.
-    - The key is always a string, and the value must be one of the valid JSON data types.
-    - Key-value pairs are delimited with commas.
-    - Curly braces delimit an object, square brackets and commas delimit arrays, and strings are always delimited with double quotes.
-        - `{`
-            - `"class": {`
-                - `"title": "web programming",`
-                - `"description": "Amazing"`
-            - `},`
-            - `"enrollment": ["Marco", "Jana", "فَاطِمَة"],`
-            - `"start": "2025-02-01",`
-            - `"end": null`
-        - `}`
-    - JSON is always encoded with UTF-8, which allows for the representation of global data.
+  - A JSON document contains one of the following data types:
+    - string
+      - `"crockford"`
+    - number
+      - `42`
+    - boolean
+      - `true`
+    - array
+      - `[null,42,"crockford"]`
+    - object
+      - `{"a":1,"b":"crockford"}`
+    - null
+      - `null`
+  - Most commonly, a JSON document contains an object.
+  - Objects contain zero or more key-value pairs.
+  - The key is always a string, and the value must be one of the valid JSON data types.
+  - Key-value pairs are delimited with commas.
+  - Curly braces delimit an object, square brackets and commas delimit arrays, and strings are always delimited with double quotes.
+    - `{`
+      - `"class": {`
+        - `"title": "web programming",`
+        - `"description": "Amazing"`
+      - `},`
+      - `"enrollment": ["Marco", "Jana", "فَاطِمَة"],`
+      - `"start": "2025-02-01",`
+      - `"end": null`
+    - `}`
+  - JSON is always encoded with UTF-8, which allows for the representation of global data.
 - Converting to JavaScript
-    - We can convert JSON to, and from, JavaScript using the `JSON.parse` and `JSON.stringify` functions.
-        - `const obj = { a: 2, b: 'crockford', c: undefined };`
-        - `const json = JSON.stringify(obj);`
-        - `const objFromJson = JSON.parse(json);`
 
-        - `console.log(obj, json, objFromJson);`
+  - We can convert JSON to, and from, JavaScript using the `JSON.parse` and `JSON.stringify` functions.
 
-        - // OUTPUT:
-        - // {a: 2, b: 'crockford', c: undefined}
-        - // {"a":2, "b":"crockford"}
-        - // {a: 2, b: 'crockford'}
-    - Notice that in this example, JSON cannot represent the JavaScript `undefined` object so it gets dropped when converting from JavaScript to JSON.
+    - `const obj = { a: 2, b: 'crockford', c: undefined };`
+    - `const json = JSON.stringify(obj);`
+    - `const objFromJson = JSON.parse(json);`
+
+    - `console.log(obj, json, objFromJson);`
+
+    - // OUTPUT:
+    - // {a: 2, b: 'crockford', c: undefined}
+    - // {"a":2, "b":"crockford"}
+    - // {a: 2, b: 'crockford'}
+
+  - Notice that in this example, JSON cannot represent the JavaScript `undefined` object so it gets dropped when converting from JavaScript to JSON.
+
 - Acronyms and Terms
-    - JSON = JavaScript Object Notation
-    - RFC = Requests for Comments
-        - RFCs are a series of numbered documents that describe, specify, and standardize the protocols and technologies used throughout the Internet and the World Wide Web.
+  - JSON = JavaScript Object Notation
+  - RFC = Requests for Comments
+    - RFCs are a series of numbered documents that describe, specify, and standardize the protocols and technologies used throughout the Internet and the World Wide Web.
 
 # JavaScript Objects and Classes
+
 - A JavaScript object represents a collection of name-value pairs referred to as properties.
 - The property name must be of type String or Symbol, but the value can be of any type.
 - Objects also have common object-oriented functionality such as constructors, a `this` pointer, statis properties and functions, and inheritance.
@@ -1189,249 +1252,291 @@
 - Once declared, we can add properties to the object by simply referencing the property name in an assignment.
 - Any type of variables can be assigned to a property, which include a sub-object, array, or function.
 - The properties of an object can be referenced either with dot (`obj.prop`) or bracket notation (`obj['prop']`)
-    - `const obj = new Object({ a: 3 });`
-    - `obj['b'] = 'fish';`
-    - `obj.c = [1, 2, 3];`
-    - `obj.hello = function () {`
-        - `console.log('hello');`
-    - `};`
 
-    - `console.log(obj);`
-    - // OUTPUT: {a: 3, b: 'fish', c: [1,2,3], hello: func}
+  - `const obj = new Object({ a: 3 });`
+  - `obj['b'] = 'fish';`
+  - `obj.c = [1, 2, 3];`
+  - `obj.hello = function () {`
+    - `console.log('hello');`
+  - `};`
+
+  - `console.log(obj);`
+  - // OUTPUT: {a: 3, b: 'fish', c: [1,2,3], hello: func}
+
 - The ability to dynamically modify an object is incredibly useful when manipulating data with a indeterminate structure.
 - Note the different uses of the term `object`: object can refer to the standard JavaScript objects (e.g., `Promise`, `Map`, `Object`, `Function`, `Date`, ...), or it can refer specifically to the JavaScript `Object` object (i.e., `new Object()`), or it can refer to any JavaScript object we create (e.g., `{a:'a', b:2}`).
 - Object-Literals
-    - We can also declare a variable of object type with the `object-literal` syntax, which allows us to provide the initial composition of the object.
-        - `const obj = {`
-            - `a: 3,`
-            - `b: 'fish',`
-        - `};`
+  - We can also declare a variable of object type with the `object-literal` syntax, which allows us to provide the initial composition of the object.
+    - `const obj = {`
+      - `a: 3,`
+      - `b: 'fish',`
+    - `};`
 - Object Functions
-    - `entries`: Returns an array of key-value pairs
-    - `keys`: Returns an array of keys
-    - `values`: Returns an array of values
-        - `const obj = {`
-            - `a: 3,`
-            - `b: 'fish',`
-        - `};`
 
-        - `console.log(Object.entries(obj));`
-        - // OUTPUT: [['a', 3], ['b', 'fish']]
-        - `console.log(Object.keys(obj));`
-        - // OUTPUT: ['a', 'b']
-        - `console.log(Object.values(obj));`
-        - // OUTPUT: [3, 'fish']
+  - `entries`: Returns an array of key-value pairs
+  - `keys`: Returns an array of keys
+  - `values`: Returns an array of values
+
+    - `const obj = {`
+      - `a: 3,`
+      - `b: 'fish',`
+    - `};`
+
+    - `console.log(Object.entries(obj));`
+    - // OUTPUT: [['a', 3], ['b', 'fish']]
+    - `console.log(Object.keys(obj));`
+    - // OUTPUT: ['a', 'b']
+    - `console.log(Object.values(obj));`
+    - // OUTPUT: [3, 'fish']
+
 - Constructor
-    - Any function that returns an object is considered a `constructor` and can be invoked with the `new` operator.
-        - `function Person(name) {`
-            - `return {`
-                - `name: name,`
-            - `};`
-        - `}`
 
-        - `const p = new Person('Eich');`
-        - `console.log(p);`
-        - // OUTPUT: {name: 'Eich'}
-    - Because objects can have any type of property value, we can create methods on the object as part of its encapsulation.
-        - `function Person(name) {`
-            - `return {`
-                - `name: name,`
-                - `log: function () {`
-                    - `console.log('My name is ' + this.name);`
-                - `},`
-            - `};`
-        - `}`
+  - Any function that returns an object is considered a `constructor` and can be invoked with the `new` operator.
 
-        - `const p = new Person('Eich');`
-        - `p.log();`
-        - // OUTPUT: My name is Eich
+    - `function Person(name) {`
+      - `return {`
+        - `name: name,`
+      - `};`
+    - `}`
+
+    - `const p = new Person('Eich');`
+    - `console.log(p);`
+    - // OUTPUT: {name: 'Eich'}
+
+  - Because objects can have any type of property value, we can create methods on the object as part of its encapsulation.
+
+    - `function Person(name) {`
+      - `return {`
+        - `name: name,`
+        - `log: function () {`
+          - `console.log('My name is ' + this.name);`
+        - `},`
+      - `};`
+    - `}`
+
+    - `const p = new Person('Eich');`
+    - `p.log();`
+    - // OUTPUT: My name is Eich
+
 - This Pointer
-    - Notice in the example above the use of the keyword `this` when we referred to the name property (`this.name`).
-    - This meaning of `this` depends upon the scope of where it is used, but the in the context of an object, it refers to a pointer to the object.
+  - Notice in the example above the use of the keyword `this` when we referred to the name property (`this.name`).
+  - This meaning of `this` depends upon the scope of where it is used, but the in the context of an object, it refers to a pointer to the object.
 - Classes
-    - We can use classes to define objects.
-    - Using a class clarifies the intent to create a reusable component rather than a one-off object.
-    - Class declarations look similar to declaring an object, but classes have an explicit constructor and assumed function declarations.
-    - The person object from above would look like the following when converted to a class.
-        - `class Person {`
-            - `constructor(name) {`
-                - `this.name = name;`
-            - `}`
 
-            - `log() {`
-                - `console.log('My name is ' + this.name);`
-            - `}`
-        - `}`
+  - We can use classes to define objects.
+  - Using a class clarifies the intent to create a reusable component rather than a one-off object.
+  - Class declarations look similar to declaring an object, but classes have an explicit constructor and assumed function declarations.
+  - The person object from above would look like the following when converted to a class.
 
-        - `const p = new Person('Eich');`
-        - `p.log();`
-        - // OUTPUT: My name is Eich
-    - We can make properties and functions of classes private by prefixing them with a `#`.
-        - `class Person {`
-            - `#name;`
+    - `class Person {`
 
-            - `constructor(name) {`
-                - `this.#name = name;`
-            - `}`
-        - `}`
+      - `constructor(name) {`
+        - `this.name = name;`
+      - `}`
 
-        - `const p = new Person('Eich');`
-        - `p.#name = 'Lie';`
-        - // OUTPUT: Uncaught SyntaxError: Private field '#name' must be declared in an enclosing class
-    - Encapsulation: One of the core principles of object-oriented programming is encapsulation—the idea that an object's internal state should only be accessible through its public interface. Private fields enforce this principle by making certain data inaccessible from outside the class.
-    - Information Hiding: Private fields allow a class to hide its internal state and implementation details from the outside, exposing only what is necessary through methods. This makes the class easier to use and understand without needing to know its internal workings.
-    - Data Protection: By making the name property private, we ensure that it cannot be directly accessed or modified from outside the class. This helps protect the internal state of our objects from unintended modifications, which can prevent bugs and ensure data integrity.
-    - Controlled Access: If we want to provide read or write access to a private field, we can do so through public methods (e.g., getters and setters). This allows we to implement validation or other logic whenever the field is accessed or modified.
-    - As shown in the example above, attempting to access or modify a private field from outside its class results in a SyntaxError. This immediate feedback can help developers quickly identify and correct attempts to improperly access private parts of an object.
+      - `log() {`
+        - `console.log('My name is ' + this.name);`
+      - `}`
+
+    - `}`
+
+    - `const p = new Person('Eich');`
+    - `p.log();`
+    - // OUTPUT: My name is Eich
+
+  - We can make properties and functions of classes private by prefixing them with a `#`.
+
+    - `class Person {`
+
+      - `#name;`
+
+      - `constructor(name) {`
+        - `this.#name = name;`
+      - `}`
+
+    - `}`
+
+    - `const p = new Person('Eich');`
+    - `p.#name = 'Lie';`
+    - // OUTPUT: Uncaught SyntaxError: Private field '#name' must be declared in an enclosing class
+
+  - Encapsulation: One of the core principles of object-oriented programming is encapsulation—the idea that an object's internal state should only be accessible through its public interface. Private fields enforce this principle by making certain data inaccessible from outside the class.
+  - Information Hiding: Private fields allow a class to hide its internal state and implementation details from the outside, exposing only what is necessary through methods. This makes the class easier to use and understand without needing to know its internal workings.
+  - Data Protection: By making the name property private, we ensure that it cannot be directly accessed or modified from outside the class. This helps protect the internal state of our objects from unintended modifications, which can prevent bugs and ensure data integrity.
+  - Controlled Access: If we want to provide read or write access to a private field, we can do so through public methods (e.g., getters and setters). This allows we to implement validation or other logic whenever the field is accessed or modified.
+  - As shown in the example above, attempting to access or modify a private field from outside its class results in a SyntaxError. This immediate feedback can help developers quickly identify and correct attempts to improperly access private parts of an object.
+
 - Inheritance
-    - Classes can be extended by using the `extends` keyword to define inheritance.
-    - Parameters that need to be passed to the parent class are delivered using the `super` function.
-    - Any functions defined on the child that have the same name as the parent override the parent's implementation.
-    - A parent's function can be explicitly accessed using the `super` keyword.
-        - `class Person {`
-            - `constructor(name) {`
-                - `this.name = name;`
-            - `}`
 
-            - `print() {`
-                - `return 'My name is ' + this.name;`
-            - `}`
-        - `}`
+  - Classes can be extended by using the `extends` keyword to define inheritance.
+  - Parameters that need to be passed to the parent class are delivered using the `super` function.
+  - Any functions defined on the child that have the same name as the parent override the parent's implementation.
+  - A parent's function can be explicitly accessed using the `super` keyword.
 
-        - `class Employee extends Person {`
-            - `constructor(name, position) {`
-                - `super(name);`
-                - `this.position = position;`
-            - `}`
+    - `class Person {`
 
-            - `print() {`
-                - `return super.print() + '. I am a ' + this.position;`
-            - `}`
-        - `}`
+      - `constructor(name) {`
+        - `this.name = name;`
+      - `}`
 
-        - `const e = new Employee('Eich', 'programmer');`
-        - `console.log(e.print());`
-        // OUTPUT: My name is Eich. I am a programmer
+      - `print() {`
+        - `return 'My name is ' + this.name;`
+      - `}`
+
+    - `}`
+
+    - `class Employee extends Person {`
+
+      - `constructor(name, position) {`
+        - `super(name);`
+        - `this.position = position;`
+      - `}`
+
+      - `print() {`
+        - `return super.print() + '. I am a ' + this.position;`
+      - `}`
+
+    - `}`
+
+    - `const e = new Employee('Eich', 'programmer');`
+    - `console.log(e.print());`
+      // OUTPUT: My name is Eich. I am a programmer
 
 # JavaScript Regular Expressions
+
 - Regular expression support is built right into JavaScript.
 - We can think of regular expressions as textual pattern matchers.
 - We use a regular expression to find text in a string so that we can replace it, or simply to know that it exists.
 - We can create a regular expression using the class constructor or a regular expression literal.
-    - `const objRegex = new RegExp('ab*', 'i');`
-    - `const literalRegex = /ab*/i;`
+  - `const objRegex = new RegExp('ab*', 'i');`
+  - `const literalRegex = /ab*/i;`
 - The `string` class has several functions that accept regular expressions, which include `match`, `replace`, `search`, and `split`.
 - For a quick test to see if there is a match, we can use the regular expression object's `test` function.
-    - `const petRegex = /(dog)|(cat)|(bird)/gim;`
-    - `const text = 'Both cats and dogs are pets, but not rocks.';`
 
-    - `text.match(petRegex);`
-    - // RETURNS: ['cat', 'dog']
+  - `const petRegex = /(dog)|(cat)|(bird)/gim;`
+  - `const text = 'Both cats and dogs are pets, but not rocks.';`
 
-    - `text.replace(petRegex, 'animal');`
-    - // RETURNS: Both animals and animals are pets, but not rocks.
+  - `text.match(petRegex);`
+  - // RETURNS: ['cat', 'dog']
 
-    - `petRegex.test(text);`
-    - // RETURNS: true
+  - `text.replace(petRegex, 'animal');`
+  - // RETURNS: Both animals and animals are pets, but not rocks.
+
+  - `petRegex.test(text);`
+  - // RETURNS: true
+
 - The forward slashes `/` mark the beginning and end of a regular expression. They are used to delineate the pattern from the flags that may follow the pattern.
 - The `|` character is used as a logical OR operator between expressions. The regular expression will match if any of the expressions separated by `|` are found. In the example above, `(dog)|(cat)|(bird)` means the expression will match if it finds "dog", "cat", or "bird" in the target string.
 - Parentheses `()` are used for grouping in regular expressions. Grouping allows us to apply operators, such as `|`, to entire expressions. They also create a "capture group" for extracting a substring or backreferencing. In the example above, each animal type (dog, cat, bird) is wrapped in parentheses, creating separate capture groups for each. This means if the pattern matches, we can extract which specific animal type was found.
 - Flags modify the behavior of the regular expression. They are placed after the closing forward slash. In the example above, `gim` are used together, each having a distinct purpose:
-    - `g` (Global): The global flag means the search should not stop at the first match. Without this flag, the regular expression would return after finding the first match. With `g`, it will search through the entire string for all matches.
-    - `i` (Case-Insensitive): This flag makes the search case-insensitive, allowing "dog", "Dog", "DOG", etc., to all match the pattern.
-    - `m` (Multiline): The multiline flag allows the start (`^`) and end (`$`) anchor characters to match the start and end of a line, rather than the whole string. This is particularly useful when working with multiline strings and we want to match patterns that may start or end across different lines.
+  - `g` (Global): The global flag means the search should not stop at the first match. Without this flag, the regular expression would return after finding the first match. With `g`, it will search through the entire string for all matches.
+  - `i` (Case-Insensitive): This flag makes the search case-insensitive, allowing "dog", "Dog", "DOG", etc., to all match the pattern.
+  - `m` (Multiline): The multiline flag allows the start (`^`) and end (`$`) anchor characters to match the start and end of a line, rather than the whole string. This is particularly useful when working with multiline strings and we want to match patterns that may start or end across different lines.
 
 # JavaScript Rest and Spread
+
 - Rest
-    - Sometimes, we want a function to take an unknown number of parameters.
-    - For example, if we wanted to write a function that checks to see if some number in a list is equal to a given number, we could write this using an array.
-        - `function hasNumber(test, numbers) {`
-            - `return numbers.some((i) => i === test);`
-        - `}`
 
-        - `const a = [1, 2, 3];`
-        - `hasNumber(2, a);`
-        - // RETURNS: true
-    - However, sometimes, we do not have an array to work with.
-    - In this case, we could create one on the fly.
-         - `function hasTwo(a, b, c) {`
-            - `return hasNumber(2, [a, b, c]);`
-        - `}`
-    - But JavaScript provides the `rest` syntax to make this easier.
-    - Think of it as a parameter that contains the `rest` of the parameters.
-    - To turn the last parameter of any function into a `rest` parameter, we prefix it with three periods.
-    - We can then call it with any number of parameters and they are all automatically combined into an array.
-        - `function hasNumber(test, ...numbers) {`
-            - `return numbers.some((i) => i === test);`
-        - `}`
+  - Sometimes, we want a function to take an unknown number of parameters.
+  - For example, if we wanted to write a function that checks to see if some number in a list is equal to a given number, we could write this using an array.
 
-        - `hasNumber(2, 1, 2, 3);`
-        - // RETURNS: true
-    - Note that we can only make the last parameter a `rest` parameter.
-    - Otherwise, JavaScript would not know which parameters to combine into the array.
-    - Technically speaking, `rest` allows JavaScript to provide what is called variadic functions.
+    - `function hasNumber(test, numbers) {`
+      - `return numbers.some((i) => i === test);`
+    - `}`
+
+    - `const a = [1, 2, 3];`
+    - `hasNumber(2, a);`
+    - // RETURNS: true
+
+  - However, sometimes, we do not have an array to work with.
+  - In this case, we could create one on the fly.
+    - `function hasTwo(a, b, c) {`
+      - `return hasNumber(2, [a, b, c]);`
+    - `}`
+  - But JavaScript provides the `rest` syntax to make this easier.
+  - Think of it as a parameter that contains the `rest` of the parameters.
+  - To turn the last parameter of any function into a `rest` parameter, we prefix it with three periods.
+  - We can then call it with any number of parameters and they are all automatically combined into an array.
+
+    - `function hasNumber(test, ...numbers) {`
+      - `return numbers.some((i) => i === test);`
+    - `}`
+
+    - `hasNumber(2, 1, 2, 3);`
+    - // RETURNS: true
+
+  - Note that we can only make the last parameter a `rest` parameter.
+  - Otherwise, JavaScript would not know which parameters to combine into the array.
+  - Technically speaking, `rest` allows JavaScript to provide what is called variadic functions.
+
 - Spread
-    - `Spread` does the opposite of `rest`.
-    - It takes an object that is iterable (e.g., array or string) and expands it into a function's parameters.
-        - `function person(firstName, lastName) {`
-            - `return { first: firstName, last: lastName };`
-        - `}`
 
-        - `const p = person(...['Ryan', 'Dahl']);`
-        - `console.log(p);`
-        - // OUTPUT: {first: 'Ryan', last: 'Dahl'}
+  - `Spread` does the opposite of `rest`.
+  - It takes an object that is iterable (e.g., array or string) and expands it into a function's parameters.
+
+    - `function person(firstName, lastName) {`
+      - `return { first: firstName, last: lastName };`
+    - `}`
+
+    - `const p = person(...['Ryan', 'Dahl']);`
+    - `console.log(p);`
+    - // OUTPUT: {first: 'Ryan', last: 'Dahl'}
 
 # JavaScript Exceptions
+
 - JavaScript supports exception handling using the `try catch` and `throw` syntax.
 - An exception can be triggered whenever our code generates an exception using the `throw` keyword, or whenever an exception is generated by the JavaScript runtime, for example, when an undefined variable is used.
 - To catch a thrown exception, we wrap a code block with the `try` keyword and follow the `try` block with the `catch` block.
 - If within the `try` block, including any functions that the block calls, an exception is thrown, then all of the code after the `throw` is ignored, the call stack is unwound, and the `catch` block is called.
--  In addition to a `catch` block, we can specify a `finally` block that is always called whenever the `try` bloc is exited regardless if an exception was ever thrown.
-    - `try {`
-        - // normal execution code
-    - `} catch (err) {`
-        - // exception handling code
-    - `} finally {`
-        - // always called code
-    - `}`
-    - For example:
-    - `function connectDatabase() {`
-        - `throw new Error('connection error');`
-    - `}`
+- In addition to a `catch` block, we can specify a `finally` block that is always called whenever the `try` bloc is exited regardless if an exception was ever thrown.
 
-    - `try {`
-        - `connectDatabase();`
-        - `console.log('never executed');`
-    - `} catch (err) {`
-        - `console.log(err);`
-    - `} finally {`
-        - `console.log('always executed');`
-    - `}`
+  - `try {`
+    - // normal execution code
+  - `} catch (err) {`
+    - // exception handling code
+  - `} finally {`
+    - // always called code
+  - `}`
+  - For example:
+  - `function connectDatabase() {`
+    - `throw new Error('connection error');`
+  - `}`
 
-    - // OUTPUT: Error: connection error
-    - //         always executed
+  - `try {`
+    - `connectDatabase();`
+    - `console.log('never executed');`
+  - `} catch (err) {`
+    - `console.log(err);`
+  - `} finally {`
+    - `console.log('always executed');`
+  - `}`
+
+  - // OUTPUT: Error: connection error
+  - // always executed
+
 - When first using exception handling, it is tempting to use it as a way to handle normal flows of execution.
 - For example, throwing a `file not found` exception when it is common for users to request nonexistent files.
 - Throwing exceptions should only happen when something truly exceptional occurs.
 - For example, a `file not found` exception when the file is required for our code to run, such as a required configuration file.
 - Our code will be easier to debug, and our logs will be more meaningful if we restrict exceptions to truly exceptional situations.
 - Fallbacks
-    - The `fallback` pattern is commonly implemented using exception handling.
-    - To implement the fallback pattern, we put the normal feature path in a `try` block, and then provide a `fallback` implementation in the `catch` block.
-    - For example, normally we would get the high scores for a game by making a network request, but if the network is not available, then a locally cached version of the last available scores is used.
-    - By providing a fallback, we can always return something, even if the desired feature is temporarily unavailable.
-        - `function getScores() {`
-            - `try {`
-                - `const scores = scoringService.getScores();`
-                - // store the scores so that we can use them later if the network is not available
-                - `window.localStorage.setItem('scores', scores);`
-                - `return scores;`
-            - `} catch {`
-                - `return window.localStorage.getItem('scores');`
-            - `}`
-        - `}`
+  - The `fallback` pattern is commonly implemented using exception handling.
+  - To implement the fallback pattern, we put the normal feature path in a `try` block, and then provide a `fallback` implementation in the `catch` block.
+  - For example, normally we would get the high scores for a game by making a network request, but if the network is not available, then a locally cached version of the last available scores is used.
+  - By providing a fallback, we can always return something, even if the desired feature is temporarily unavailable.
+    - `function getScores() {`
+      - `try {`
+        - `const scores = scoringService.getScores();`
+        - // store the scores so that we can use them later if the network is not available
+        - `window.localStorage.setItem('scores', scores);`
+        - `return scores;`
+      - `} catch {`
+        - `return window.localStorage.getItem('scores');`
+      - `}`
+    - `}`
 
 # Document Object Model
+
 - The Document Object Model (DOM) is an object representation of the HTML elements that the browser uses to render the display.
 - The browser also exposes the DOM to external code so that we can write programs that dynamically manipulate the HTML.
 - The browser provides access to the DOM through a global variable named `document` that points to the root element of the DOM.
@@ -1440,94 +1545,106 @@
 - This includes elements, attributes, text, comments, and whitespace.
 - All of these nodes are from a big tree, with the document node at the top.
 - Accessing the DOM
-    - Every element in an HTML document implements the DOM Element interface, which is derived from the DOM Node interface.
-    - The DOM Element interface provides the means for iterating child elements, accessing parent elements, and manipulating the element's attributes.
-    - From our JavaScript code, we can start with the document variable and walk through every element in the tree.
-        - `function displayElement(el) {`
-            - `console.log(el.tagName);`
-            - `for (const child of el.children) {`
-                - `displayElement(child);`
-            - `}`
-        - `}`
 
-        - `displayElement(document);`
-    - We can provide a CSS selector to the `querySelectorAll` function in order to select elements from the document.
-    - The `textContent` property contains all of the element's text.
-    - We can even access a textual representation of an element's HTML content with the `innerHTML` property.
-        - `const listElements = document.querySelectorAll('p');`
-        - `for (const el of listElements) {`
-            - `console.log(el.textContent);`
-        - `}`
+  - Every element in an HTML document implements the DOM Element interface, which is derived from the DOM Node interface.
+  - The DOM Element interface provides the means for iterating child elements, accessing parent elements, and manipulating the element's attributes.
+  - From our JavaScript code, we can start with the document variable and walk through every element in the tree.
+
+    - `function displayElement(el) {`
+      - `console.log(el.tagName);`
+      - `for (const child of el.children) {`
+        - `displayElement(child);`
+      - `}`
+    - `}`
+
+    - `displayElement(document);`
+
+  - We can provide a CSS selector to the `querySelectorAll` function in order to select elements from the document.
+  - The `textContent` property contains all of the element's text.
+  - We can even access a textual representation of an element's HTML content with the `innerHTML` property.
+    - `const listElements = document.querySelectorAll('p');`
+    - `for (const el of listElements) {`
+      - `console.log(el.textContent);`
+    - `}`
+
 - Modifying the DOM
-    - The DOM supports the ability to insert, modify, or delete the elements in the DOM.
-    - To create a new element, we first create the element on the DOM document.
-    - We then insert the new element into the DOM tree by appending it to an existing element in the tree.
-        - `function insertChild(parentSelector, text) {`
-            - `const newChild = document.createElement('div');`
-            - `newChild.textContent = text;`
 
-            - `const parentElement = document.querySelector(parentSelector);`
-            - `parentElement.appendChild(newChild);`
-        - `}`
+  - The DOM supports the ability to insert, modify, or delete the elements in the DOM.
+  - To create a new element, we first create the element on the DOM document.
+  - We then insert the new element into the DOM tree by appending it to an existing element in the tree.
 
-        - `insertChild('#courses', 'new course');`
-    - To delete elements, call the `removeChild` function on the parent element.
-        - `function deleteElement(elementSelector) {`
-            - `const el = document.querySelector(elementSelector);`
-            - `el.parentElement.removeChild(el);`
-        - `}`
+    - `function insertChild(parentSelector, text) {`
 
-        - `deleteElement('#courses div');`
+      - `const newChild = document.createElement('div');`
+      - `newChild.textContent = text;`
+
+      - `const parentElement = document.querySelector(parentSelector);`
+      - `parentElement.appendChild(newChild);`
+
+    - `}`
+
+    - `insertChild('#courses', 'new course');`
+
+  - To delete elements, call the `removeChild` function on the parent element.
+
+    - `function deleteElement(elementSelector) {`
+      - `const el = document.querySelector(elementSelector);`
+      - `el.parentElement.removeChild(el);`
+    - `}`
+
+    - `deleteElement('#courses div');`
+
 - Injecting HTML
-    - The DOM also allows us to inject entire blocks of HTML into an element.
-    - The following code finds the first `div` element in the DOM and replaces all the HTML it contains.
-        - `const el = document.querySelector('div');`
-        - `el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';`
-    - However, directly injecting HTML as a block of text is a common attack vector for hackers.
-    - If an untrusted party can inject JavaScript anywhere in our application then that JavaScript can represent itself as the current user of the application.
-    - The attacker can then make requests for sensitive data, monitor activity, and steal credentials.
-    - The example below shows how the `img` element can be used to launch an attach as soon as the page is loaded.
-        - `<img src="bogus.png" onerror="console.log('All your base are belong to us')" />`
-    - If we are to inject HTML, make sure that it cannot be manipulated by a user.
-    - Common injection paths include HTML input controls, URL parameters, and HTTP headers.
-    - Either sanitize any HTML that contains variables or simply use DOM manipulation functions instead of using `innerHTML`.
+  - The DOM also allows us to inject entire blocks of HTML into an element.
+  - The following code finds the first `div` element in the DOM and replaces all the HTML it contains.
+    - `const el = document.querySelector('div');`
+    - `el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';`
+  - However, directly injecting HTML as a block of text is a common attack vector for hackers.
+  - If an untrusted party can inject JavaScript anywhere in our application then that JavaScript can represent itself as the current user of the application.
+  - The attacker can then make requests for sensitive data, monitor activity, and steal credentials.
+  - The example below shows how the `img` element can be used to launch an attach as soon as the page is loaded.
+    - `<img src="bogus.png" onerror="console.log('All your base are belong to us')" />`
+  - If we are to inject HTML, make sure that it cannot be manipulated by a user.
+  - Common injection paths include HTML input controls, URL parameters, and HTTP headers.
+  - Either sanitize any HTML that contains variables or simply use DOM manipulation functions instead of using `innerHTML`.
 - Event Listeners
-    - All DOM elements support the ability to attach a function that gets called when an event occurs on the element.
-    - These functions are called event listeners.
-    - Below is an example of an event listener that gets called when an element gets clicked.
-        - `const submitDataEl = document.querySelector('#submitData');`
-        - `submitDataEl.addEventListener('click', function (event) {`
-            - `console.log(event.type);`
-        - `});`
-    - There are lots of possible events that we can add a listener to.
-    - This includes things like mouse, keyboard, scrolling, animation, video, audio, WebSocket, and clipboard events.
-        - Clipboard: Cut, copied, pasted
-        - Focus: An element gets focus
-        - Keyboard: Keys are pressed
-        - Mouse: Click events
-        - Text selection: When text is selected
-    - We can also add event listeners directly in the HTML.
-    - For example, below is an `onclick` handler that is attached to a button.
-        - `<button onclick='alert("clicked")'>click me</button>`
+  - All DOM elements support the ability to attach a function that gets called when an event occurs on the element.
+  - These functions are called event listeners.
+  - Below is an example of an event listener that gets called when an element gets clicked.
+    - `const submitDataEl = document.querySelector('#submitData');`
+    - `submitDataEl.addEventListener('click', function (event) {`
+      - `console.log(event.type);`
+    - `});`
+  - There are lots of possible events that we can add a listener to.
+  - This includes things like mouse, keyboard, scrolling, animation, video, audio, WebSocket, and clipboard events.
+    - Clipboard: Cut, copied, pasted
+    - Focus: An element gets focus
+    - Keyboard: Keys are pressed
+    - Mouse: Click events
+    - Text selection: When text is selected
+  - We can also add event listeners directly in the HTML.
+  - For example, below is an `onclick` handler that is attached to a button.
+    - `<button onclick='alert("clicked")'>click me</button>`
 
 # Midterm Kahoot!
+
 - The `<p>` tag in HTML is used for block-level text.
 - Border vs. Margin
-    - The border surrounds the padding (if any) and the actual content of the element.
-    - The margin is the outermost layer and represents the space between the element's border and the neighboring elements.
+  - The border surrounds the padding (if any) and the actual content of the element.
+  - The margin is the outermost layer and represents the space between the element's border and the neighboring elements.
 - JSON
-    - `{'x':3}` is not valid JSON because the keys must be in double quotes.
-    - `{"x":undefined}` is not valid JSON because undefined is not a valid JSON value. JSON supports null but not undefined.
-    - `{x:3}` is not valid JSON because, again, the keys must be in double quotes.
-    - `{"x":3}` is valid JSON. The key is in double quotes, and the value is a number, which is a valid data type in JSON.
+  - `{'x':3}` is not valid JSON because the keys must be in double quotes.
+  - `{"x":undefined}` is not valid JSON because undefined is not a valid JSON value. JSON supports null but not undefined.
+  - `{x:3}` is not valid JSON because, again, the keys must be in double quotes.
+  - `{"x":3}` is valid JSON. The key is in double quotes, and the value is a number, which is a valid data type in JSON.
 - `chmod +x` is the console command that makes a script executable.
 - `CNAME` is the DNS record type that is used to point to another DNS record.
 - Promise
 - `const p = new Promise((resolve, reject) => {`
-    - `setTimeout(() =>) {`
-        - `console.log('taco');`
-        - `resolve(true);`
-    - `}, 10000);`
+  - `setTimeout(() =>) {`
+    - `console.log('taco');`
+    - `resolve(true);`
+  - `}, 10000);`
 - `});`
 - `console.log('burger')`
 
@@ -1537,278 +1654,295 @@
 - `.finally(() => console.log('noodles'))`
 
 - `console.log('fries')`
-    - A new `Promise` `p` is created. The `Promise` constructor takes a function that has two parameters, `resolve` and `reject`, which are both functions. This function is called the executor.
-    - Inside the `Promise` executor, there is a `setTimeout` call scheduled to execute after `10000` milliseconds (or 10 seconds). When the timeout is complete, it will log `'taco'` to the console and then resolve the `Promise` with the value `true`.
-    - Immediately after the `Promise` is created, `console.log('burger')` is executed. This is not part of the asynchronous code, so it will run immediately.
-    - After logging `'burger'`, the code sets up chained `.then`, `.catch`, and `.finally` methods on the `Promise` `p`. These methods are used to handle the fulfilled value, any errors, and cleanup operations, respectively.
-    - The `.then` method is used to handle the resolved value from the `Promise`. If the `Promise` is resolved, it will log `'shake'` to the console.
-    - The `.catch` method is for error handling. If the `Promise` were rejected, it would log `'salad'`. However, in this code, the `Promise` is never rejected, so `'salad'` will not be logged.
-    - The `.finally` method is called regardless of whether the `Promise` is resolved or rejected. This method will log `'noodles'` to the console.
-    - Finally, `console.log('fries')` will run immediately after setting up the `Promise` handlers, since it is not inside the asynchronous part of the code.
-        - `'burger`' will be the first output, since it is directly in the flow of execution.
-        - `'fries'` will be the second output, for the same reason as `'burger'`.
-        - After 10 seconds, `'taco'` will be logged when the `setTimeout` callback is invoked.
-        - Immediately after `'taco'`, `'shake'` will be logged because the `Promise` resolves to `true`.
-        - Finally, `'noodles'` will be logged because the `.finally` method is called after the `.then`.
+  - A new `Promise` `p` is created. The `Promise` constructor takes a function that has two parameters, `resolve` and `reject`, which are both functions. This function is called the executor.
+  - Inside the `Promise` executor, there is a `setTimeout` call scheduled to execute after `10000` milliseconds (or 10 seconds). When the timeout is complete, it will log `'taco'` to the console and then resolve the `Promise` with the value `true`.
+  - Immediately after the `Promise` is created, `console.log('burger')` is executed. This is not part of the asynchronous code, so it will run immediately.
+  - After logging `'burger'`, the code sets up chained `.then`, `.catch`, and `.finally` methods on the `Promise` `p`. These methods are used to handle the fulfilled value, any errors, and cleanup operations, respectively.
+  - The `.then` method is used to handle the resolved value from the `Promise`. If the `Promise` is resolved, it will log `'shake'` to the console.
+  - The `.catch` method is for error handling. If the `Promise` were rejected, it would log `'salad'`. However, in this code, the `Promise` is never rejected, so `'salad'` will not be logged.
+  - The `.finally` method is called regardless of whether the `Promise` is resolved or rejected. This method will log `'noodles'` to the console.
+  - Finally, `console.log('fries')` will run immediately after setting up the `Promise` handlers, since it is not inside the asynchronous part of the code.
+    - `'burger`' will be the first output, since it is directly in the flow of execution.
+    - `'fries'` will be the second output, for the same reason as `'burger'`.
+    - After 10 seconds, `'taco'` will be logged when the `setTimeout` callback is invoked.
+    - Immediately after `'taco'`, `'shake'` will be logged because the `Promise` resolves to `true`.
+    - Finally, `'noodles'` will be logged because the `.finally` method is called after the `.then`.
 - Typical Scenarios where a `Promise` would be rejected:
-    - An error occurs within the executor function, and we explicitly call the `reject` function with a reason (typically an Error object).
-        - `new Promise((resolve, reject) => {`
-            - // Some code that might fail
-            - `if (/* failure condition */) {`
-                - `reject(new Error("Failure reason"));`
-            - `} else {`
-                - `resolve(successValue);`
-            - `}`
-        - `});`
-    - An uncaught error is thrown within the executor function. If an error is thrown and not caught within a Promise executor, the Promise will be automatically rejected with that error.
-        - `new Promise((resolve, reject) => {`
-            - `throw new Error("Failure reason");`
-            - `// This will cause the Promise to be rejected with "Failure reason"`
-        - `});`
-    - A rejection happens within a Promise chain. If a `.then` or `.catch` handler throws an error or returns a Promise that gets rejected, the entire Promise chain is rejected until a `.catch` handler is encountered.
-        - `doSomethingAsync()`
-            - `.then(result => {`
-                - `throw new Error("Failure in then");`
-                - `// The chain is now in a rejected state`
-            - `})`
-            - `.catch(error => {`
-                - `// Handle the error`
-            - `});`
+  - An error occurs within the executor function, and we explicitly call the `reject` function with a reason (typically an Error object).
+    - `new Promise((resolve, reject) => {`
+      - // Some code that might fail
+      - `if (/* failure condition */) {`
+        - `reject(new Error("Failure reason"));`
+      - `} else {`
+        - `resolve(successValue);`
+      - `}`
+    - `});`
+  - An uncaught error is thrown within the executor function. If an error is thrown and not caught within a Promise executor, the Promise will be automatically rejected with that error.
+    - `new Promise((resolve, reject) => {`
+      - `throw new Error("Failure reason");`
+      - `// This will cause the Promise to be rejected with "Failure reason"`
+    - `});`
+  - A rejection happens within a Promise chain. If a `.then` or `.catch` handler throws an error or returns a Promise that gets rejected, the entire Promise chain is rejected until a `.catch` handler is encountered.
+    - `doSomethingAsync()`
+      - `.then(result => {`
+        - `throw new Error("Failure in then");`
+        - `// The chain is now in a rejected state`
+      - `})`
+      - `.catch(error => {`
+        - `// Handle the error`
+      - `});`
 - Async
 - `const a = async function() {`
-    - `return new Promise((resolve, reject) => {`
-        - `setTimeout(() => {`
-            - `console.log('D');`
-            - `resolve(true)`
-        - `},`
-        - `10000);`
-    - `})`
+  - `return new Promise((resolve, reject) => {`
+    - `setTimeout(() => {`
+      - `console.log('D');`
+      - `resolve(true)`
+    - `},`
+    - `10000);`
+  - `})`
 - `}`
 
 - `try {`
-    - `console.log('A');`
-    - `await a();`
-    - `console.log('B');`
+  - `console.log('A');`
+  - `await a();`
+  - `console.log('B');`
 - `} catch(e) {`
-    - `console.log('C');`
+  - `console.log('C');`
 - `}`
-    - `const a` is an `async function` that, when called, immediately returns a `Promise` because all `async` functions return a Promise implicitly.
-    - Inside the `async function`, a new `Promise` is explicitly returned, which uses a `setTimeout` to simulate asynchronous behavior. The `setTimeout` will call its callback function after 10 seconds (`10000` milliseconds), which logs `'D'` to the console and resolves the `Promise` with the value `true`.
-    - There is a `try` block that first logs `'A'` to the console.
-    - Then the `await` keyword is used to pause the execution within the `try` block until the `Promise` returned by `a()` is settled (either resolved or rejected). Since `a()` returns a `Promise` that resolves after 10 seconds, the `try` block is paused at this line until that time.
-    - After 10 seconds, when the `Promise` resolves, it will continue to execute the next line within the `try` block, which logs `'B'` to the console.
-    - There is no `reject` in the Promise executor, so the `catch` block is not executed. If there were any errors thrown inside the `try` block, the `catch` block would catch these errors, and `'C'` would be logged to the console.
-        - `'A'` is logged immediately when the `try` block executes.
-        - The script awaits the resolution of `a()`, which takes 10 seconds due to the `setTimeout`.
-        - After a 10-second delay, `'D'` is logged when the `setTimeout` in `a()` fires.
-        - Immediately after `'D'`, `'B'` is logged because the `Promise` has been resolved and control returns to the line after the `await a()` call.
-        - `'C'` is never logged because there is no error thrown.
+  - `const a` is an `async function` that, when called, immediately returns a `Promise` because all `async` functions return a Promise implicitly.
+  - Inside the `async function`, a new `Promise` is explicitly returned, which uses a `setTimeout` to simulate asynchronous behavior. The `setTimeout` will call its callback function after 10 seconds (`10000` milliseconds), which logs `'D'` to the console and resolves the `Promise` with the value `true`.
+  - There is a `try` block that first logs `'A'` to the console.
+  - Then the `await` keyword is used to pause the execution within the `try` block until the `Promise` returned by `a()` is settled (either resolved or rejected). Since `a()` returns a `Promise` that resolves after 10 seconds, the `try` block is paused at this line until that time.
+  - After 10 seconds, when the `Promise` resolves, it will continue to execute the next line within the `try` block, which logs `'B'` to the console.
+  - There is no `reject` in the Promise executor, so the `catch` block is not executed. If there were any errors thrown inside the `try` block, the `catch` block would catch these errors, and `'C'` would be logged to the console.
+    - `'A'` is logged immediately when the `try` block executes.
+    - The script awaits the resolution of `a()`, which takes 10 seconds due to the `setTimeout`.
+    - After a 10-second delay, `'D'` is logged when the `setTimeout` in `a()` fires.
+    - Immediately after `'D'`, `'B'` is logged because the `Promise` has been resolved and control returns to the line after the `await a()` call.
+    - `'C'` is never logged because there is no error thrown.
 
 # Midterm
+
 - `document.getElementsByTag(‘p #header’)[0].style.color = 'red';`
-    - Incorrect Method Name: There is no method called `getElementsByTag` in the Document Object Model (DOM). The correct method for selecting elements by their tag name is `getElementsByTagName`.
-    - Incorrect Selector Syntax: The syntax `‘p #header’` is not a valid argument for `getElementsByTagNam`e. This method expects a tag name (like `'p'`, `'div'`, etc.) as its argument, not a CSS selector. The `#header` part implies we are looking for an element with the ID of `header`, which is not something we can select with `getElementsByTagName`.
-    - Combining Selectors Incorrectly: `‘p #header’` implies we are trying to select an element with the ID of `header` that is a descendant of a `<p>` tag, which is a CSS selector strategy, not something we can directly achieve with `getElementsByTagName`. For selecting elements based on more complex criteria like this, `querySelector` or `querySelectorAll` would be used, and the correct syntax would be `document.querySelector('p #header')` (though this is also logically incorrect if `'header'` is an ID, as IDs should be unique within the page and not tied to specific tag types).
-    - Incorrect Approach for ID Selection: To select an element by its ID, the correct method is `getElementById`, as IDs are intended to be unique within a page. Thus, `document.getElementById('header')` is the proper way to select an element with the ID of the header.
+  - Incorrect Method Name: There is no method called `getElementsByTag` in the Document Object Model (DOM). The correct method for selecting elements by their tag name is `getElementsByTagName`.
+  - Incorrect Selector Syntax: The syntax `‘p #header’` is not a valid argument for `getElementsByTagNam`e. This method expects a tag name (like `'p'`, `'div'`, etc.) as its argument, not a CSS selector. The `#header` part implies we are looking for an element with the ID of `header`, which is not something we can select with `getElementsByTagName`.
+  - Combining Selectors Incorrectly: `‘p #header’` implies we are trying to select an element with the ID of `header` that is a descendant of a `<p>` tag, which is a CSS selector strategy, not something we can directly achieve with `getElementsByTagName`. For selecting elements based on more complex criteria like this, `querySelector` or `querySelectorAll` would be used, and the correct syntax would be `document.querySelector('p #header')` (though this is also logically incorrect if `'header'` is an ID, as IDs should be unique within the page and not tied to specific tag types).
+  - Incorrect Approach for ID Selection: To select an element by its ID, the correct method is `getElementById`, as IDs are intended to be unique within a page. Thus, `document.getElementById('header')` is the proper way to select an element with the ID of the header.
 - The `<li>` tag in HTML is used to define a list item in an ordered list (`<ol>`) or an unordered list (`<ul>`). It stands for "list item" and is used to mark each item that appears in a list. Each `<li>` element is part of a larger list defined by the enclosing `<ol>` or `<ul>` tags.
 - `<!DOCTYPE html>` informs the browser which version of HTML the page is written in (in this case, HTML5) to ensure that the browser renders the content correctly according to the HTML5 specifications.
 - In JavaScript, it is possible to add new properties to an object dynamically after it has been created. The given example demonstrates this capability by adding the `hasEaten` property with a value of `false` to the `squirrel` object. This flexibility is one of the features of JavaScript's dynamic nature.
-    - `squirrel = { hungry: true, sleeping: false };`
-    
-    - `squirrel.hasEaten = false;`
+  - `squirrel = { hungry: true, sleeping: false };`
+
+  - `squirrel.hasEaten = false;`
 - `demo.simon.myfunkychickens.click`
-    - `demo.simon` is the subdomain.
-    - `myfunkychickens.click` is the second-level domain.
-    - `click` is both the top-level domain and the root domain.
-        - The top-level domain is the rightmost part of a domain name, following the last dot `.`.
-        - In DNS notation, the root domain is represented by a single dot `.`.
+  - `demo.simon` is the subdomain.
+  - `myfunkychickens.click` is the second-level domain.
+  - `click` is both the top-level domain and the root domain.
+    - The top-level domain is the rightmost part of a domain name, following the last dot `.`.
+    - In DNS notation, the root domain is represented by a single dot `.`.
 - A DNS (Domain Name System) A record maps a domain name to an IP address. However, it is also possible for an A record to point to another A record. This is known as DNS aliasing or a DNS chain. It allows one domain to redirect to another domain or to another host without exposing the actual IP address of the destination.
 - Port 443 is reserved for the HTTPS (Hypertext Transfer Protocol Secure) protocol.
 
 # The Internet
+
 - The internet globally connects independent networks and computing devices.
 - In a simplistic way, we can think of the internet as a massive redundant collection of wires that connect up all the computers in the world.
 - A lot of those wires are wireless (Wi-Fi, satellite, or cell), and not all of computers in the world are connected, but generally, that is what the internet is.
 - The deeper our mental model of the internet is, the more effectively we will be able to create web applications.
 - Making Connections
-    - When one device wants to talk to another, it must have an IP address.
-    - For example, `128.187.16.184` is BYU's address.
-    - Usually, human users prefer a symbolic name over an IP address.
-    - The symbolic name is called a domain name.
-    - Domain names are converted to IP addresses by doing a lookup in the Domain Name System (DNS).
-    - We can look up the IP address for any domain name using the `dig` console utility.
-        - `dig byu.edu`
-        - `byu.edu.		5755	IN	A	128.187.16.184`
-    - Once we have the IP address, we connect to the device it represents by first asking for a connection route to the device.
-    - A connection route consists of many hops across the network until the destination is dynamically discovered and the connection established.
-    - With the connection, the transport and application layers start exchanging data.
+  - When one device wants to talk to another, it must have an IP address.
+  - For example, `128.187.16.184` is BYU's address.
+  - Usually, human users prefer a symbolic name over an IP address.
+  - The symbolic name is called a domain name.
+  - Domain names are converted to IP addresses by doing a lookup in the Domain Name System (DNS).
+  - We can look up the IP address for any domain name using the `dig` console utility.
+    - `dig byu.edu`
+    - `byu.edu.		5755	IN	A	128.187.16.184`
+  - Once we have the IP address, we connect to the device it represents by first asking for a connection route to the device.
+  - A connection route consists of many hops across the network until the destination is dynamically discovered and the connection established.
+  - With the connection, the transport and application layers start exchanging data.
 - Traceroute
-    - We can determine the hops in a connection using the `traceroute` console utility. 
-    - In the following example, we trace the route between a home computer and BYU.
-    - In the result, we see the first address `192.168.1.1`.
-    - This is the address of the network router the home computer is connected to.
-    - From there it goes through a couple of devices that do not identify themselves and then hits the Google Fiber gateway.
-    - Google Fiber is the internet service provider, or ISP, for the requesting device.
-    - Then we jump through a few more unidentified devices before finally arriving at BYU (`128.187.16.184`)
-        - `traceroute byu.edu`
-        - ` traceroute to byu.edu (128.187.16.184), 64 hops max, 52 byte packets`
-            - `1  192.168.1.1 (192.168.1.1)  10.942 ms  4.055 ms  4.694 ms`
-            - `2  * * *`
-            - `3  * * *`
-            - `4  192-119-18-212.mci.googlefiber.net (192.119.18.212)  5.369 ms  5.576 ms  6.456 ms`
-            - `5  216.21.171.197 (216.21.171.197)  6.283 ms  6.767 ms  5.532 ms`
-            - `6  * * *`
-            - `7  * * *`
-            - `8  * * *`
-            - `9  byu.com (128.187.16.184)  7.544 ms !X *  40.231 ms !X`
-    - If we run `traceroute` again, we might see a slightly different route since every connection through the internet is dynamically calculated.
-    - The ability to discover a route makes the internet resilient when network devices fail or disappear from the network.
+  - We can determine the hops in a connection using the `traceroute` console utility.
+  - In the following example, we trace the route between a home computer and BYU.
+  - In the result, we see the first address `192.168.1.1`.
+  - This is the address of the network router the home computer is connected to.
+  - From there it goes through a couple of devices that do not identify themselves and then hits the Google Fiber gateway.
+  - Google Fiber is the internet service provider, or ISP, for the requesting device.
+  - Then we jump through a few more unidentified devices before finally arriving at BYU (`128.187.16.184`)
+    - `traceroute byu.edu`
+    - ` traceroute to byu.edu (128.187.16.184), 64 hops max, 52 byte packets`
+      - `1  192.168.1.1 (192.168.1.1)  10.942 ms  4.055 ms  4.694 ms`
+      - `2  * * *`
+      - `3  * * *`
+      - `4  192-119-18-212.mci.googlefiber.net (192.119.18.212)  5.369 ms  5.576 ms  6.456 ms`
+      - `5  216.21.171.197 (216.21.171.197)  6.283 ms  6.767 ms  5.532 ms`
+      - `6  * * *`
+      - `7  * * *`
+      - `8  * * *`
+      - `9  byu.com (128.187.16.184)  7.544 ms !X *  40.231 ms !X`
+  - If we run `traceroute` again, we might see a slightly different route since every connection through the internet is dynamically calculated.
+  - The ability to discover a route makes the internet resilient when network devices fail or disappear from the network.
 - Network Internals
-    - The actual sending of data across the internet uses the TCP/IP model.
-    - This is a layered architecture that covers everything from the physical wires to the data that a web application sends.
-    - At the top of the TCP/IP protocol is the application layer.
-    - It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC).
-    - Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data.
-    - The actual connection is made using the internet layer.
-    - This finds the device we want to talk to and keeps the connection alive.
-    - Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
-    - TCP/IP Layers
-        - Layer: Application
-            - Example: HTTPS
-            - Purpose: Functionality like web browsing
-        - Layer: Transport
-            - Example: TCP
-            - Purpose: Moving connection information packets
-        - Layer: Internet
-            - Example: IP
-            - Purpose: Establishing connections
-        - Layer: Link
-            - Example: Fiber, Hardware
-            - Purpose: Physical connections
+  - The actual sending of data across the internet uses the TCP/IP model.
+  - This is a layered architecture that covers everything from the physical wires to the data that a web application sends.
+  - At the top of the TCP/IP protocol is the application layer.
+  - It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC).
+  - Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data.
+  - The actual connection is made using the internet layer.
+  - This finds the device we want to talk to and keeps the connection alive.
+  - Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
+  - TCP/IP Layers
+    - Layer: Application
+      - Example: HTTPS
+      - Purpose: Functionality like web browsing
+    - Layer: Transport
+      - Example: TCP
+      - Purpose: Moving connection information packets
+    - Layer: Internet
+      - Example: IP
+      - Purpose: Establishing connections
+    - Layer: Link
+      - Example: Fiber, Hardware
+      - Purpose: Physical connections
 - Acronyms and Terms
-    - ISP = Internet Service Provider
-    - SMTP = Simple Mail Transfer Protocol
-    - FTP = File Transfer Protocol
-    - SSH = Secure Shell
-    - IRC = Internet Relay Chat
+  - ISP = Internet Service Provider
+  - SMTP = Simple Mail Transfer Protocol
+  - FTP = File Transfer Protocol
+  - SSH = Secure Shell
+  - IRC = Internet Relay Chat
 
 # Web Servers
+
 - A web server is a computing device that hosts a web service that knows how to accept incoming internet connections and speak the HTTP application protocol.
 - Monolithic Web Servers
-    - In the early days of web programming, we would buy a massive, complex, expensive, software program that spoke HTTP and is installed on a hardware server.
-    - The package of server and software was considered the web server because the web service software was the only thing running on the server. 
-    - When Berners-Lee wrote his first web server, it only served up static HTML files.
-    - This soon advanced so that they allowed dynamic functionality, including the ability to generate all the HTML on demand in response to a user's interaction.
-    - That facilitated what we know as modern web applications.
+  - In the early days of web programming, we would buy a massive, complex, expensive, software program that spoke HTTP and is installed on a hardware server.
+  - The package of server and software was considered the web server because the web service software was the only thing running on the server.
+  - When Berners-Lee wrote his first web server, it only served up static HTML files.
+  - This soon advanced so that they allowed dynamic functionality, including the ability to generate all the HTML on demand in response to a user's interaction.
+  - That facilitated what we know as modern web applications.
 - Combining Web and Application Services
-    - Today, most modern programming languages include libraries that provide the ability to make connections and serve up HTTP.
-    - For example, here is a simple `Go` language program that is a fully functioning web service. 
-        - `package main`
 
-        - `import (`
-            - `"net/http"`
-        - `)`
+  - Today, most modern programming languages include libraries that provide the ability to make connections and serve up HTTP.
+  - For example, here is a simple `Go` language program that is a fully functioning web service.
 
-        - `func main() {`
-            - // Serve up files found in the public_html directory
-            - `fs := http.FileServer(http.Dir("./public_html"))`
-            - `http.Handle("/", fs)`
+    - `package main`
 
-            - // Listen for HTTP requests
-            - `http.ListenAndServe(":3000", nil)`
-        - `}`
-            - Package Declaration: Every Go file starts with a package declaration, which helps in organizing the code. Packages are Go's way of grouping related code together into a single unit. This makes the code modular, reusable, and maintainable.
-            - `package main`: Indicates that the package should compile as an executable program, not as a shared library. The compiler expects to find a `main` function within this package as the starting point of execution.
-            - `import ("net/http")`: This imports the `net/http` package, which contains functions and types for building HTTP servers and clients in Go.
-            - `func main() { ... }`: Every executable Go program starts with a main function. This is the entry point of our application.
-            - `fs := http.FileServer(http.Dir("./public_html"))`
-                - `http.Dir("./public_html")` specifies the directory from which to serve files. In this case, it is the `public_html` directory located in the same directory as our program.
-                - `http.FileServer(...)` takes a `http.FileSystem` (which `http.Dir` returns) and returns a handler that serves HTTP requests with the contents of the file system.
-            - `http.Handle("/", fs)`
-                - `http.Handle(pattern string, handler http.Handler)` registers the handler for the given pattern in the DefaultServeMux. Here, the pattern is `/`, meaning it will match all URLs. The handler `fs` is what we defined earlier to serve static files.
-                - Essentially, this line tells the Go server to handle all HTTP requests by serving files from the `public_html` directory.
-            - `http.ListenAndServe(":3000", nil)`
-                - `http.ListenAndServe(addr string, handler http.Handler)` listens on the TCP network address `addr` and then calls Serve with a handler to handle requests on incoming connections.
-                - `":3000"` specifies that the server should listen on port 3000 of all network interfaces of the machine. We can access the server by visiting `http://localhost:3000` in our web browser.
-                - Passing `nil` as the handler tells `ListenAndServe` to use the default handler (DefaultServeMux), which we have configured with `http.Handle("/", fs)` to serve our static files.
-    - Port: A port is a numerical identifier in networking used to specify a specific process or service on a host (computer or server) within the TCP/IP networking protocol. Ports allow multiple services to run on a single host, with each service listening for connections on its designated port. Ports are numbered, with the range extending from 0 to 65535.
-    - Listening: When we say a program is "listening" on a port, it means that the program is running in a state where it is waiting for incoming connections on that port. This is a common setup for servers that need to accept connections from clients. When a client attempts to connect to the server using the server's IP address and the specified port number, the server can accept the connection, establishing a communication channel.
-    - Being able to easily create web services makes it easy to completely drop the monolithic web server concept and just build web services right into our web application.
-    - With our simple `Go` example, we can add a function that responds with the current time when the `/api/time` resource is requested.
-        - `package main`
+    - `import (`
+      - `"net/http"`
+    - `)`
 
-        - `import (`
-            - `"fmt"`
-            - `"io"`
-            - `"net/http"`
-            - `"time"`
-        - `)`
+    - `func main() {`
 
-        - `func getTime(w http.ResponseWriter, r *http.Request) {`
-            - `io.WriteString(w, time.Now().String())`
-        - `}`
+      - // Serve up files found in the public_html directory
+      - `fs := http.FileServer(http.Dir("./public_html"))`
+      - `http.Handle("/", fs)`
 
-        - ` func main() {`
-            - // Serve up files found in the public_html directory
-            - `fs := http.FileServer(http.Dir("./public_html"))`
-            - `http.Handle("/", fs)`
+      - // Listen for HTTP requests
+      - `http.ListenAndServe(":3000", nil)`
 
-            - // Dynamically provide data
-            - `http.HandleFunc("/api/time", getTime)`
+    - `}`
+      - Package Declaration: Every Go file starts with a package declaration, which helps in organizing the code. Packages are Go's way of grouping related code together into a single unit. This makes the code modular, reusable, and maintainable.
+      - `package main`: Indicates that the package should compile as an executable program, not as a shared library. The compiler expects to find a `main` function within this package as the starting point of execution.
+      - `import ("net/http")`: This imports the `net/http` package, which contains functions and types for building HTTP servers and clients in Go.
+      - `func main() { ... }`: Every executable Go program starts with a main function. This is the entry point of our application.
+      - `fs := http.FileServer(http.Dir("./public_html"))`
+        - `http.Dir("./public_html")` specifies the directory from which to serve files. In this case, it is the `public_html` directory located in the same directory as our program.
+        - `http.FileServer(...)` takes a `http.FileSystem` (which `http.Dir` returns) and returns a handler that serves HTTP requests with the contents of the file system.
+      - `http.Handle("/", fs)`
+        - `http.Handle(pattern string, handler http.Handler)` registers the handler for the given pattern in the DefaultServeMux. Here, the pattern is `/`, meaning it will match all URLs. The handler `fs` is what we defined earlier to serve static files.
+        - Essentially, this line tells the Go server to handle all HTTP requests by serving files from the `public_html` directory.
+      - `http.ListenAndServe(":3000", nil)`
+        - `http.ListenAndServe(addr string, handler http.Handler)` listens on the TCP network address `addr` and then calls Serve with a handler to handle requests on incoming connections.
+        - `":3000"` specifies that the server should listen on port 3000 of all network interfaces of the machine. We can access the server by visiting `http://localhost:3000` in our web browser.
+        - Passing `nil` as the handler tells `ListenAndServe` to use the default handler (DefaultServeMux), which we have configured with `http.Handle("/", fs)` to serve our static files.
 
-            - // Listen for HTTP requests
-            - `fmt.Println(http.ListenAndServe(":3000", nil))`
-        - `}`
-            - `fmt` for formatted I/O with functions analogous to C's printf and scanf.
-            - `io` to provide basic interfaces to I/O primitives.
-            - `net/http` to provide HTTP client and server implementations.
-            - `time` for working with dates and times.
-            - `func getTime( ... )`
-                - It takes two parameters: `w` (an `http.ResponseWriter`) used to write the HTTP response, and `r` (an `*http.Request`) containing all the details of the HTTP request.
-                - `io.WriteString(w, time.Now().String())` writes the current time (converted to a string) to the response writer, effectively sending the current time back to the client.
-            - `fs := http.FileServer(http.Dir("./public_html"))`
-            - `http.Handle("/", fs)`
-                - These lines create a file server that serves static files from the `public_html` directory. Any request to the root path (`/`) or subpaths will serve files from this directory.
-            - `http.HandleFunc("/api/time", getTime)`
-                - This registers a new handler for the path `/api/time`. When a request is made to this path, the `getTime` function is called. This allows the server to dynamically respond with the current time, rather than serving a static file.
-            - `fmt.Println(http.ListenAndServe(":3000", nil))`
-                - `http.ListenAndServe(":3000", nil)` starts an HTTP server listening on port 3000. The `nil` argument tells it to use the default ServeMux, which has been configured with routes (`/` for static files and `/api/time` for the current time).
-                - `fmt.Println(...)` is used here to print any error returned by `ListenAndServe`. Typically, this call blocks indefinitely unless an error occurs (e.g., if the port is already in use).
-    - We can run that web service code, and use the console application `curl` to make an HTTP request and see the time response.
-        - `curl localhost:3000/api/time`
+  - Port: A port is a numerical identifier in networking used to specify a specific process or service on a host (computer or server) within the TCP/IP networking protocol. Ports allow multiple services to run on a single host, with each service listening for connections on its designated port. Ports are numbered, with the range extending from 0 to 65535.
+  - Listening: When we say a program is "listening" on a port, it means that the program is running in a state where it is waiting for incoming connections on that port. This is a common setup for servers that need to accept connections from clients. When a client attempts to connect to the server using the server's IP address and the specified port number, the server can accept the connection, establishing a communication channel.
+  - Being able to easily create web services makes it easy to completely drop the monolithic web server concept and just build web services right into our web application.
+  - With our simple `Go` example, we can add a function that responds with the current time when the `/api/time` resource is requested.
 
-        - `2022-12-03 09:50:37.391983 -0700`
+    - `package main`
+
+    - `import (`
+      - `"fmt"`
+      - `"io"`
+      - `"net/http"`
+      - `"time"`
+    - `)`
+
+    - `func getTime(w http.ResponseWriter, r *http.Request) {`
+      - `io.WriteString(w, time.Now().String())`
+    - `}`
+
+    - ` func main() {`
+
+      - // Serve up files found in the public_html directory
+      - `fs := http.FileServer(http.Dir("./public_html"))`
+      - `http.Handle("/", fs)`
+
+      - // Dynamically provide data
+      - `http.HandleFunc("/api/time", getTime)`
+
+      - // Listen for HTTP requests
+      - `fmt.Println(http.ListenAndServe(":3000", nil))`
+
+    - `}`
+      - `fmt` for formatted I/O with functions analogous to C's printf and scanf.
+      - `io` to provide basic interfaces to I/O primitives.
+      - `net/http` to provide HTTP client and server implementations.
+      - `time` for working with dates and times.
+      - `func getTime( ... )`
+        - It takes two parameters: `w` (an `http.ResponseWriter`) used to write the HTTP response, and `r` (an `*http.Request`) containing all the details of the HTTP request.
+        - `io.WriteString(w, time.Now().String())` writes the current time (converted to a string) to the response writer, effectively sending the current time back to the client.
+      - `fs := http.FileServer(http.Dir("./public_html"))`
+      - `http.Handle("/", fs)`
+        - These lines create a file server that serves static files from the `public_html` directory. Any request to the root path (`/`) or subpaths will serve files from this directory.
+      - `http.HandleFunc("/api/time", getTime)`
+        - This registers a new handler for the path `/api/time`. When a request is made to this path, the `getTime` function is called. This allows the server to dynamically respond with the current time, rather than serving a static file.
+      - `fmt.Println(http.ListenAndServe(":3000", nil))`
+        - `http.ListenAndServe(":3000", nil)` starts an HTTP server listening on port 3000. The `nil` argument tells it to use the default ServeMux, which has been configured with routes (`/` for static files and `/api/time` for the current time).
+        - `fmt.Println(...)` is used here to print any error returned by `ListenAndServe`. Typically, this call blocks indefinitely unless an error occurs (e.g., if the port is already in use).
+
+  - We can run that web service code, and use the console application `curl` to make an HTTP request and see the time response.
+
+    - `curl localhost:3000/api/time`
+
+    - `2022-12-03 09:50:37.391983 -0700`
+
 - Web Service Gateways
-    - Since it is so easy to build web services, it is common to find multiple web services running on the same computing device.
-    - The trick is exposing the multiple services in a way that a connection can be made to each of them.
-    - Every network device allows for separate network connection by referring to a unique port number.
-    - Each service on the device starts up on a different port.
-    - In the example above, the `Go` web service was using port 80.
-    - So we could just have a user access each service by referring to the port it was launched on.
-    - However, this makes it difficult for the user of the services to remember what port matches to which service.
-    - To resolve this, we introduce a service gateway, sometimes called a reverse proxy, that is itself a simple web service that listens on the common HTTPS port 443.
-    - The gateway then looks at the request and maps it to the other services running on different ports.
-    - Our web server will use the application `Caddy` as the gateway to our services.
+  - Since it is so easy to build web services, it is common to find multiple web services running on the same computing device.
+  - The trick is exposing the multiple services in a way that a connection can be made to each of them.
+  - Every network device allows for separate network connection by referring to a unique port number.
+  - Each service on the device starts up on a different port.
+  - In the example above, the `Go` web service was using port 80.
+  - So we could just have a user access each service by referring to the port it was launched on.
+  - However, this makes it difficult for the user of the services to remember what port matches to which service.
+  - To resolve this, we introduce a service gateway, sometimes called a reverse proxy, that is itself a simple web service that listens on the common HTTPS port 443.
+  - The gateway then looks at the request and maps it to the other services running on different ports.
+  - Our web server will use the application `Caddy` as the gateway to our services.
 - Microservices
-    - Web services that provide a single functional purpose are referred to as microservices.
-    - By partitioning functionality into small logical chunks, we can develop and manage them independently from other functionality in a larger system.
-    - They can also handle large fluctuations in user demand by simply running more and more stateless copies of the microservice from multiple virtual servers hosted in a dynamic cloud environment.
-    - For example, one microservice for generating a genealogical family tree might be able to handle 1,000 users concurrently.
-    - So in order to support 1 million users, we just deploy 1,000 instances of the service running on scalable virtual hardware.
+  - Web services that provide a single functional purpose are referred to as microservices.
+  - By partitioning functionality into small logical chunks, we can develop and manage them independently from other functionality in a larger system.
+  - They can also handle large fluctuations in user demand by simply running more and more stateless copies of the microservice from multiple virtual servers hosted in a dynamic cloud environment.
+  - For example, one microservice for generating a genealogical family tree might be able to handle 1,000 users concurrently.
+  - So in order to support 1 million users, we just deploy 1,000 instances of the service running on scalable virtual hardware.
 - Serverless
-    - The idea of microservices naturally evolved into the world of serverless functionality where the server is conceptually removed from the architecture and we just write a function that speaks HTTP.
-    - That function is loaded through a gateway that maps a web request to the function.
-    
+  - The idea of microservices naturally evolved into the world of serverless functionality where the server is conceptually removed from the architecture and we just write a function that speaks HTTP.
+  - That function is loaded through a gateway that maps a web request to the function.
+
 # Domain Names
+
 - In the instruction about the internet, we showed how an IP address can be referenced by a domain name.
 - We can get the IP address for any domain using the `dig` console utility.
 - Notice that in the following example, there are actually multiple IP addresses associated with the domain name `amazon.com`.
 - This allows for redundancy in case one of the IP addresses fails to successfully resolve to a valid connection because the server listening at that IP address is not responding.
-    - `dig amazon.com`
 
-    - `amazon.com.		126	IN	A	205.251.242.103`
-    - `amazon.com.		126	IN	A	52.94.236.248`
-    - `amazon.com.		126	IN	A	54.239.28.85`
+  - `dig amazon.com`
+
+  - `amazon.com.		126	IN	A	205.251.242.103`
+  - `amazon.com.		126	IN	A	52.94.236.248`
+  - `amazon.com.		126	IN	A	54.239.28.85`
+
 - A domain name is simply a text string that follows a specific naming convention and is listed in a special database called the domain name registry.
 - Domain names are broken up into a root domain, with one or more possible subdomain prefixes.
 - The root domain is represented by a secondary-level domain and a top-level domain.
@@ -1818,40 +1952,41 @@
 - The owner of a root domain can create any number of subdomains of the root domain.
 - Each subdomain may resolve to a different IP address.
 - We can get information about a domain name from the domain name registry using the `whois` console utility.
-    - `whois byu.edu`
+  - `whois byu.edu`
 - This provides information such as a technical contact to talk to if there is a problem with the domain, and an administrative contact to talk to if we want to buy the domain.
 - DNS
-    - Once a domain name is in the registry, it can be listed with a domain name system (DNS) server and associated with an IP address.
-    - We must also lease the IP address before we can use it to uniquely identify a device on the internet.
-    - Every DNS server in the world references a few special DNS servers that are considered the `authoritative name servers` for associating a domain name with an IP address.
-    - The DNS database records that facilitate the mapping of domain names to IP addresses come in several flavors.
-    - The main ones we are concerned with are the `address` (`A`) and the `canonical name` (`CNAME`).
-    - An `A` record is a straight mapping from a domain name to an IP address.
-    - A `CNAME` record maps one domain name to another domain name, which acts as a domain name alias.
-    - When we enter a domain name into a browser, the browser first checks to see if it has the name already in its cache of names.
-    - If it does not, it contacts a DNS server and gets the IP address.
-    - The DNS server also keeps a cache of names.
-    - If the domain name is not in the cache, it will request the name from an `authoritative name server`.
-    - If the authority does not know the name, then we get an unknown domain name error.
-    - If the process does resolve, then the browser makes the HTTP connection to the associated IP address.
-    - There are a lot of levels of name caching.
-    - This is done for performance reasons, but it also can be frustrating when we are trying to update the information associated with our domain name.
-    - This is where the `time to live` (`TTL`) setting for a domain record comes into play.
-    - We can set this to be something short like 5 minutes or as long as several days.
-    - The different caching layers should then honor the TTL and clear their cache after the requested period has passed.
+  - Once a domain name is in the registry, it can be listed with a domain name system (DNS) server and associated with an IP address.
+  - We must also lease the IP address before we can use it to uniquely identify a device on the internet.
+  - Every DNS server in the world references a few special DNS servers that are considered the `authoritative name servers` for associating a domain name with an IP address.
+  - The DNS database records that facilitate the mapping of domain names to IP addresses come in several flavors.
+  - The main ones we are concerned with are the `address` (`A`) and the `canonical name` (`CNAME`).
+  - An `A` record is a straight mapping from a domain name to an IP address.
+  - A `CNAME` record maps one domain name to another domain name, which acts as a domain name alias.
+  - When we enter a domain name into a browser, the browser first checks to see if it has the name already in its cache of names.
+  - If it does not, it contacts a DNS server and gets the IP address.
+  - The DNS server also keeps a cache of names.
+  - If the domain name is not in the cache, it will request the name from an `authoritative name server`.
+  - If the authority does not know the name, then we get an unknown domain name error.
+  - If the process does resolve, then the browser makes the HTTP connection to the associated IP address.
+  - There are a lot of levels of name caching.
+  - This is done for performance reasons, but it also can be frustrating when we are trying to update the information associated with our domain name.
+  - This is where the `time to live` (`TTL`) setting for a domain record comes into play.
+  - We can set this to be something short like 5 minutes or as long as several days.
+  - The different caching layers should then honor the TTL and clear their cache after the requested period has passed.
 - Leasing A Domain Name
-    - We can pay to lease an unused domain name for a specific period of time.
-    - Before the lease expires, we have the right to extend the lease for an additional amount of time.
-    - The cost to buy the domain varies from something like $3 to $200 a year.
-    - Buying, or sub-leasing, an existing domain name from a private party can be very expensive, and so we are better off buying something obscure like `idigfor.gold` (currently available for only $101).
-    - This is one reason why companies have such strange names these days.
+  - We can pay to lease an unused domain name for a specific period of time.
+  - Before the lease expires, we have the right to extend the lease for an additional amount of time.
+  - The cost to buy the domain varies from something like $3 to $200 a year.
+  - Buying, or sub-leasing, an existing domain name from a private party can be very expensive, and so we are better off buying something obscure like `idigfor.gold` (currently available for only $101).
+  - This is one reason why companies have such strange names these days.
 - Acronyms and Terms
-    - TLD = Top Level Domain
-    - ICANN = Internet Corporation for Assigned Names and Numbers
-    - CNAME = Canonical Name
-    - TTL = Time to Live
+  - TLD = Top Level Domain
+  - ICANN = Internet Corporation for Assigned Names and Numbers
+  - CNAME = Canonical Name
+  - TTL = Time to Live
 
 # Web Services Introduction
+
 - Up to this point, our entire application is loaded from our web server and runs on the user's browser.
 - It starts when the browser requests the `index.html` file from the web server.
 - The `index.html`, in turn, references other HTML, CSS, JavaScript, or image files.
@@ -1874,51 +2009,53 @@
 - With all of this in place, our application will be a full stack application comprised of both a frontend and a backend.
 
 # URL
+
 - The Uniform Resource Locator (URL) represents the location of a web source.
 - A web source can be anything, such as a web page, font, image, video stream, database record, or JSON object.
 - It can also be completely ephemeral, such as visitation counter, or gaming session.
 - Looking at the different parts of a URL is a good way to understand what it represents.
 - Below is an example URL that represents the summary of accepted CS 260 BYU students that is accessible using secure HTTP.
-    - `https://byu.edu:443/cs/260/student?filter=accepted#summary`
+  - `https://byu.edu:443/cs/260/student?filter=accepted#summary`
 - The URL syntax uses the following convention.
 - Notice the delimiting punctuation between parts of the URL.
 - Most parts of the URL are optional.
 - The only ones that are required are the scheme and the domain name.
-    - `<scheme>://<domain name>:<port>/<path>?<parameters>#<anchor>`
-        - Part: Scheme
-            - Example: https
-            - Meaning: The protocol required to ask for the resource. For web applications, this is usually HTTPS. But it could be any internet protocol such as FTP or MAILTO.
-        - Part: Domain name
-            - Example: byu.edu
-            - Meaning: The domain name that owns the resource represented by the URL.
-        - Part: Port
-            - Example: 3000
-            - Meaning: The port specifies the numbered network port used to connect to the domain server. Lower-number ports are reserved for common internet protocols. Higher-number ports can be used for any purpose. The default port is 80 if the scheme is HTTP, or 443 if the scheme is HTTPS.
-        - Part: Path
-            - Example: /school/byu/user/8014
-            - Meaning: The path to the resource on the domain. The resource does not have to physically be located on the file system with this path. It can be a logical path representing endpoint parameters, a database table, or an object schema.
-                - An object schema refers to a formal definition that describes the structure, constraints, and rules of data objects within a database, application, or information system. It essentially outlines how data is organized and how it can be accessed and manipulated. An object schema can include various components such as the types of data (e.g., integers, strings, dates), the relationships between different data types, constraints (e.g., required/optional fields, unique keys), and other rules that data must adhere to.
-        - Part: Parameters
-            - Example: filter=names&highlight=intro,summary
-            - Meaning: The parameters represent a list of key-value pairs. Usually, it provides additional qualifiers on the resource represented by the path. This might be a filter on the returned resource or how to highlight the resource. The parameters are also sometimes called the query string.
-        - Part: Anchor
-            - Example: summary
-            - Meaning: The anchor usually represents a sub-location in the resource. For HTML pages, this represents a request for the browser to automatically scroll to the element with an ID that matches the anchor. The anchor is also sometimes called the hash, or fragment ID.
+  - `<scheme>://<domain name>:<port>/<path>?<parameters>#<anchor>`
+    - Part: Scheme
+      - Example: https
+      - Meaning: The protocol required to ask for the resource. For web applications, this is usually HTTPS. But it could be any internet protocol such as FTP or MAILTO.
+    - Part: Domain name
+      - Example: byu.edu
+      - Meaning: The domain name that owns the resource represented by the URL.
+    - Part: Port
+      - Example: 3000
+      - Meaning: The port specifies the numbered network port used to connect to the domain server. Lower-number ports are reserved for common internet protocols. Higher-number ports can be used for any purpose. The default port is 80 if the scheme is HTTP, or 443 if the scheme is HTTPS.
+    - Part: Path
+      - Example: /school/byu/user/8014
+      - Meaning: The path to the resource on the domain. The resource does not have to physically be located on the file system with this path. It can be a logical path representing endpoint parameters, a database table, or an object schema.
+        - An object schema refers to a formal definition that describes the structure, constraints, and rules of data objects within a database, application, or information system. It essentially outlines how data is organized and how it can be accessed and manipulated. An object schema can include various components such as the types of data (e.g., integers, strings, dates), the relationships between different data types, constraints (e.g., required/optional fields, unique keys), and other rules that data must adhere to.
+    - Part: Parameters
+      - Example: filter=names&highlight=intro,summary
+      - Meaning: The parameters represent a list of key-value pairs. Usually, it provides additional qualifiers on the resource represented by the path. This might be a filter on the returned resource or how to highlight the resource. The parameters are also sometimes called the query string.
+    - Part: Anchor
+      - Example: summary
+      - Meaning: The anchor usually represents a sub-location in the resource. For HTML pages, this represents a request for the browser to automatically scroll to the element with an ID that matches the anchor. The anchor is also sometimes called the hash, or fragment ID.
 - Technically, we can also provide a username and password before the domain name.
 - This was used historically to authenticate access, but for security reasons, this is deprecated.
 - However, we will still see this convention for URLs that represent database connection strings.
 - URL, URN, and URI
-    - We will sometimes hear the use of URN or URI when talking about web resources.
-    - A Uniform Resource Name (URN) is a unique resource name that does not specify location information.
-    - For example, a book URN might be `urn:isbn:10,0765350386`.
-    - A Uniform Resource Identifier (URI) is a general resource identifier that could refer to either a URL or a URN.
-    - With web programming, we are almost always talking about URLs and therefore we should not use the more general URI.
+  - We will sometimes hear the use of URN or URI when talking about web resources.
+  - A Uniform Resource Name (URN) is a unique resource name that does not specify location information.
+  - For example, a book URN might be `urn:isbn:10,0765350386`.
+  - A Uniform Resource Identifier (URI) is a general resource identifier that could refer to either a URL or a URN.
+  - With web programming, we are almost always talking about URLs and therefore we should not use the more general URI.
 - Acronyms and Terms
-    - URL = Uniform Resource Locator
-    - URN = Uniform Resource Name
-    - URI = Uniform Resource Identifier
+  - URL = Uniform Resource Locator
+  - URN = Uniform Resource Name
+  - URI = Uniform Resource Identifier
 
 # Ports
+
 - When we connect to a device on the internet, we need both an IP address and a numbered port.
 - Port numbers allow a single device to support multiple protocols (e.g. HTTP, HTTPS, FTP, or SSH) as well as different types of services (e.g. search, document, or authentication).
 - The ports may be exposed externally, or they may only be used internally on the device.
@@ -1927,272 +2064,283 @@
 - Ports from 0 to 1023 represent standard protocols.
 - Generally, a web service should avoid these ports unless it is providing the protocol represented by the standard.
 - Ports from 1024 to 49151 represent ports that have been assigned to requesting entities.
-    - "Requesting entities" in the context of internet ports (specifically, the range from 1024 to 49151 known as Registered Ports) refer to organizations, individuals, or services that have requested and been assigned a specific port number for their application or service by the Internet Assigned Numbers Authority (IANA) or other relevant authority.
+  - "Requesting entities" in the context of internet ports (specifically, the range from 1024 to 49151 known as Registered Ports) refer to organizations, individuals, or services that have requested and been assigned a specific port number for their application or service by the Internet Assigned Numbers Authority (IANA) or other relevant authority.
 - However, it is very common for these ports to be used by services running internally on a device.
 - Ports from 49152 to 65535 are considered dynamic and are used to create dynamic connections to a device.
-    - Ports 0 to 1023 - Well-Known Ports
-        - These ports are reserved for standard, well-known services and protocols. For example, HTTP typically uses port 80, HTTPS uses port 443, FTP uses port 21, and SSH uses port 22.
-        - Services running on these ports are usually fundamental networking services or applications that are widely used.
-        - A web service or application should only use these ports if it offers the standard service associated with that port. Because these ports are below 1024, administrative privileges are generally required to bind a service to these ports on Unix-like operating systems, which adds a layer of security.
-    - Ports 1024 to 49151 - Registered Ports
-        - These ports can be registered with IANA for specific services, although the process is less strict than for well-known ports. Many applications and services use these ports, and while some are officially registered, others are used informally.
-        - It is common for internal, custom, or proprietary services to use ports in this range. For instance, certain database services, application-specific servers, or development servers might run on these ports.
-        - Even though ports in this range can be used without administrative privileges, it is good practice to be aware of officially registered ports to avoid conflicts.
-    - Ports 49152 to 65535 - Dynamic/Private Ports
-        - This range is intended for temporary communications, often used for client-side communications or ephemeral ports that are selected automatically for the client side of a connection.
-        - Services generally do not bind to these ports explicitly; instead, they are allocated dynamically as needed for client-side connections or temporary purposes.
-        - The dynamic nature of these ports makes them suitable for peer-to-peer applications, temporary service endpoints, or for supporting high volumes of outbound connections without interfering with predefined service ports.
+  - Ports 0 to 1023 - Well-Known Ports
+    - These ports are reserved for standard, well-known services and protocols. For example, HTTP typically uses port 80, HTTPS uses port 443, FTP uses port 21, and SSH uses port 22.
+    - Services running on these ports are usually fundamental networking services or applications that are widely used.
+    - A web service or application should only use these ports if it offers the standard service associated with that port. Because these ports are below 1024, administrative privileges are generally required to bind a service to these ports on Unix-like operating systems, which adds a layer of security.
+  - Ports 1024 to 49151 - Registered Ports
+    - These ports can be registered with IANA for specific services, although the process is less strict than for well-known ports. Many applications and services use these ports, and while some are officially registered, others are used informally.
+    - It is common for internal, custom, or proprietary services to use ports in this range. For instance, certain database services, application-specific servers, or development servers might run on these ports.
+    - Even though ports in this range can be used without administrative privileges, it is good practice to be aware of officially registered ports to avoid conflicts.
+  - Ports 49152 to 65535 - Dynamic/Private Ports
+    - This range is intended for temporary communications, often used for client-side communications or ephemeral ports that are selected automatically for the client side of a connection.
+    - Services generally do not bind to these ports explicitly; instead, they are allocated dynamically as needed for client-side connections or temporary purposes.
+    - The dynamic nature of these ports makes them suitable for peer-to-peer applications, temporary service endpoints, or for supporting high volumes of outbound connections without interfering with predefined service ports.
 - Below is a list of common port numbers that we might come across.
-    - Port: 20
-        - Protocol: File Transfer Protocol (FTP) for data transfer
-    - Port: 22
-        Protocol: Secure Shell (SSH) for connecting to remote devices
-    - Port: 25
-        - Protocol: Simple Mail Transfer Protocol (SMTP) for sending email
-    - Port: 53
-        - Protocol: Domain Name System (DNS) for looking up IP addresses
-    - Port: 80
-        - Protocol: Hypertext Transfer Protocol (HTTP) for web requests
-    - Port: 110
-        - Protocol: Post Office Protocol (POP3) for retrieving email
-    - Port: 123
-        - Protocol: Network Time Protocol (NTP) for managing time
-    - Port: 161
-        - Protocol: Simple Network Management Protocol (SNMP) for managing network devices such as routers or printers
-    - Port: 194
-        - Protocol: Internet Relay Chat (IRC) for chatting
-    - Port: 443
-        - Protocol: HTTP Secure (HTTPS) for secure web requests
+  - Port: 20
+    - Protocol: File Transfer Protocol (FTP) for data transfer
+  - Port: 22
+    Protocol: Secure Shell (SSH) for connecting to remote devices
+  - Port: 25
+    - Protocol: Simple Mail Transfer Protocol (SMTP) for sending email
+  - Port: 53
+    - Protocol: Domain Name System (DNS) for looking up IP addresses
+  - Port: 80
+    - Protocol: Hypertext Transfer Protocol (HTTP) for web requests
+  - Port: 110
+    - Protocol: Post Office Protocol (POP3) for retrieving email
+  - Port: 123
+    - Protocol: Network Time Protocol (NTP) for managing time
+  - Port: 161
+    - Protocol: Simple Network Management Protocol (SNMP) for managing network devices such as routers or printers
+  - Port: 194
+    - Protocol: Internet Relay Chat (IRC) for chatting
+  - Port: 443
+    - Protocol: HTTP Secure (HTTPS) for secure web requests
 - Our Ports
-    - As an example of how ports are used, we can look at our web server.
-    - When we built our web server, we externally exposed port 22 so that we could use SSH to open a remote console on the server, port 443 for secure HTTP communication, and port 80 for unsecured HTTP communication.
-    - Our web service, Caddy, is listening on ports 80 and 443.
-    - When Caddy gets a request on port 80, it automatically redirects the request to port 443 so that a secure connection is used.
-    - When Caddy gets a request on port 443, it examines the path provided in the HTTP request (as defined by the URL) and if the path matches a static file, it reads the file off disk and returns it.
-    - If the HTTP path matches one of the definitions it has for a gateway service, Caddy makes a connection on that service's port (e.g. 3000 or 4000) and passes the request to the service.
-    - Internally on our web server, we can have as many web services running as we would like.
-    - However, we must make sure that each one uses a different port to communicate.
-    - We run our Simon service on port 3000 and therefore cannot use port 3000 for our startup service.
-    - Instead, we use port 4000 for our startup service.
-    - It does not matter what high-range port we use.
-    - It only matters that we are consistent and that they are only used by one service.
+  - As an example of how ports are used, we can look at our web server.
+  - When we built our web server, we externally exposed port 22 so that we could use SSH to open a remote console on the server, port 443 for secure HTTP communication, and port 80 for unsecured HTTP communication.
+  - Our web service, Caddy, is listening on ports 80 and 443.
+  - When Caddy gets a request on port 80, it automatically redirects the request to port 443 so that a secure connection is used.
+  - When Caddy gets a request on port 443, it examines the path provided in the HTTP request (as defined by the URL) and if the path matches a static file, it reads the file off disk and returns it.
+  - If the HTTP path matches one of the definitions it has for a gateway service, Caddy makes a connection on that service's port (e.g. 3000 or 4000) and passes the request to the service.
+  - Internally on our web server, we can have as many web services running as we would like.
+  - However, we must make sure that each one uses a different port to communicate.
+  - We run our Simon service on port 3000 and therefore cannot use port 3000 for our startup service.
+  - Instead, we use port 4000 for our startup service.
+  - It does not matter what high-range port we use.
+  - It only matters that we are consistent and that they are only used by one service.
 - Acronyms and Terms
-    - IANA = Internet Assigned Numbers Authority
-    - POP3 = Post Office Protocol
-    - NTP = Network Time Protocol
-    - SNMP = Simple Network Management Protocol
-    - IRC = Internet Relay Chat
+  - IANA = Internet Assigned Numbers Authority
+  - POP3 = Post Office Protocol
+  - NTP = Network Time Protocol
+  - SNMP = Simple Network Management Protocol
+  - IRC = Internet Relay Chat
 
 # HTTP
+
 - Hypertext Transfer Protocol (`HTTP`) is how the web talks.
 - When a web browser makes a request to a web server, it does it using the HTTP protocol.
 - When a web client (e.g. a web browser) and a web server talk, they exchange HTTP requests and responses.
 - The browser will make an HTTP request and the server will generate an HTTP response.
 - We can see the HTTP exchange by using the browser's debugger or by using a console tool like `curl`.
 - For example, in our console, we can use `curl` to make the following request.
-    - `curl -v -s http://info.cern.ch/hypertext/WWW/Helping.html`
-        - `curl`: The command to initiate the curl utility, which will perform the data transfer/A command-line tool for transferring data using various network protocols.
-        - `-v`: Stands for "verbose". This option tells curl to provide detailed information about the transaction, including request and response headers. This is useful for debugging or understanding the communication between the client (curl) and the server.
-        - `-s`: Stands for "silent" or "quiet" mode. This option tells curl to not show progress or error messages. This makes the output cleaner, especially when we are only interested in the content of the response or want to suppress unnecessary output in scripts.
-        - `http://info.cern.ch/hypertext/WWW/Helping.html`: The URL of the web page curl will request. In this case, it is a specific page on the CERN website, historically significant as CERN is where the World Wide Web was invented.
+  - `curl -v -s http://info.cern.ch/hypertext/WWW/Helping.html`
+    - `curl`: The command to initiate the curl utility, which will perform the data transfer/A command-line tool for transferring data using various network protocols.
+    - `-v`: Stands for "verbose". This option tells curl to provide detailed information about the transaction, including request and response headers. This is useful for debugging or understanding the communication between the client (curl) and the server.
+    - `-s`: Stands for "silent" or "quiet" mode. This option tells curl to not show progress or error messages. This makes the output cleaner, especially when we are only interested in the content of the response or want to suppress unnecessary output in scripts.
+    - `http://info.cern.ch/hypertext/WWW/Helping.html`: The URL of the web page curl will request. In this case, it is a specific page on the CERN website, historically significant as CERN is where the World Wide Web was invented.
 - Request
-    - The HTTP request for the above command would look like the following.
-        - `GET /hypertext/WWW/Helping.html HTTP/1.1`
-        -` Host: info.cern.ch`
-        - `Accept: text/html`
-    - An HTTP request has this general syntax.
-        - `<verb> <url path, parameters, anchor> <version>`
-        - `[<header key: value>]*`
-        - `[`
 
-        - `<body>`
-        - `]`
-    -  The first line of the HTTP request contains the `verb` of the request, followed by the path, parameters, and anchor of the URL, and finally the version of HTTP being used.
-    - The following lines are optional headers that are defined by key-value pairs.
-    - After the headers, we have an optional body.
-    - The body start is delimited from the headers with two new lines.
-    - In the above example, we are asking to `GET` a resource found at the path `/hypertext/WWW/Helping.html`.
-    - The version used by the request is `HTTP/1.1`.
-    - This is followed by two headers.
-    - The first specifies the requested host (i.e. domain name).
-    - The second specifies what type of resources the client will accept.
-    - The resource type is always a MIME type as defined by the Internet governing body, IANA.
-        - A MIME type (Multipurpose Internet Mail Extensions type) is a standard way of indicating the type of data that a file contains. MIME types are used on the Internet to specify the nature of the content being transmitted, enabling browsers and other software to understand how to process or display that content. Originally designed for email, MIME types have become integral to the World Wide Web, allowing servers to tell clients about the types of data files are in, and how they should be handled.
-        - A MIME type is composed of two main parts: a type and a subtype, separated by a slash (`/`). For example, `text/html` for HTML documents, `image/jpeg` for JPEG images, and `application/json` for JSON data. The type represents the general category of the data (such as `text`, `image`, or `application`), while the subtype specifies the specific kind of data within that category.
-    - In this case, we are asking for HTML.
+  - The HTTP request for the above command would look like the following.
+    - `GET /hypertext/WWW/Helping.html HTTP/1.1` -` Host: info.cern.ch`
+    - `Accept: text/html`
+  - An HTTP request has this general syntax.
+
+    - `<verb> <url path, parameters, anchor> <version>`
+    - `[<header key: value>]*`
+    - `[`
+
+    - `<body>`
+    - `]`
+
+  - The first line of the HTTP request contains the `verb` of the request, followed by the path, parameters, and anchor of the URL, and finally the version of HTTP being used.
+  - The following lines are optional headers that are defined by key-value pairs.
+  - After the headers, we have an optional body.
+  - The body start is delimited from the headers with two new lines.
+  - In the above example, we are asking to `GET` a resource found at the path `/hypertext/WWW/Helping.html`.
+  - The version used by the request is `HTTP/1.1`.
+  - This is followed by two headers.
+  - The first specifies the requested host (i.e. domain name).
+  - The second specifies what type of resources the client will accept.
+  - The resource type is always a MIME type as defined by the Internet governing body, IANA.
+    - A MIME type (Multipurpose Internet Mail Extensions type) is a standard way of indicating the type of data that a file contains. MIME types are used on the Internet to specify the nature of the content being transmitted, enabling browsers and other software to understand how to process or display that content. Originally designed for email, MIME types have become integral to the World Wide Web, allowing servers to tell clients about the types of data files are in, and how they should be handled.
+    - A MIME type is composed of two main parts: a type and a subtype, separated by a slash (`/`). For example, `text/html` for HTML documents, `image/jpeg` for JPEG images, and `application/json` for JSON data. The type represents the general category of the data (such as `text`, `image`, or `application`), while the subtype specifies the specific kind of data within that category.
+  - In this case, we are asking for HTML.
+
 - Response
-    - The response to the above request looks like this.
-        - `HTTP/1.1 200 OK`
-        - `Date: Tue, 06 Dec 2022 21:54:42 GMT`
-        - `Server: Apache`
-        - `Last-Modified: Thu, 29 Oct 1992 11:15:20 GMT`
-        - `ETag: "5f0-28f29422b8200"`
-        - `Accept-Ranges: bytes`
-        - `Content-Length: 1520`
-        - `Connection: close`
-        - `Content-Type: text/html`
 
-        - `<TITLE>Helping -- /WWW</TITLE>`
-        - `<NEXTID 7>`
-        - `<H1>How can I help?</H1>There are lots of ways you can help if you are interested in seeing`
-        - `the <A NAME=4 HREF=TheProject.html>web</A> grow and be even more useful...`
-    - An HTTP response has the following syntax.
-        - `<version> <status code> <status string>`
-        - `[<header key: value>]*`
-        - `[`
+  - The response to the above request looks like this.
 
-        - `<body>`
-        - `]`
-    - We can see that the response syntax is similar to the request syntax.
-    - The major difference is that the first line represents the version and the status of the response.
+    - `HTTP/1.1 200 OK`
+    - `Date: Tue, 06 Dec 2022 21:54:42 GMT`
+    - `Server: Apache`
+    - `Last-Modified: Thu, 29 Oct 1992 11:15:20 GMT`
+    - `ETag: "5f0-28f29422b8200"`
+    - `Accept-Ranges: bytes`
+    - `Content-Length: 1520`
+    - `Connection: close`
+    - `Content-Type: text/html`
+
+    - `<TITLE>Helping -- /WWW</TITLE>`
+    - `<NEXTID 7>`
+    - `<H1>How can I help?</H1>There are lots of ways you can help if you are interested in seeing`
+    - `the <A NAME=4 HREF=TheProject.html>web</A> grow and be even more useful...`
+
+  - An HTTP response has the following syntax.
+
+    - `<version> <status code> <status string>`
+    - `[<header key: value>]*`
+    - `[`
+
+    - `<body>`
+    - `]`
+
+  - We can see that the response syntax is similar to the request syntax.
+  - The major difference is that the first line represents the version and the status of the response.
+
 - Verbs
-    - There are several verbs that describe what the HTTP request is asking for.
-        - Verb: GET
-            - Meaning: Get the requested resource. This can represent a request to get a single resource or a resource representing a list of resources.
-        - Verb: POST
-            - Meaning: Create a new resource. The body of the request contains the resource. The response should include a unique ID of the newly created resource.
-        - Verb: PUT
-            - Meaning: Update a resource. Either the URL path, HTTP header, or body must contain the unique ID of the resource being updated. The body of the request should contain the updated resource. The body of the response may contain the resulting updated resource.
-        - Verb: DELETE
-            - Meaning: Delete a resource. Either the URL path or HTTP header must contain the unique ID of the resource to delete.
-        - Verb: OPTIONS
-            - Meaning: Get metadata about a resource. Usually, only HTTP headers are returned. The resource itself is not returned.
+  - There are several verbs that describe what the HTTP request is asking for.
+    - Verb: GET
+      - Meaning: Get the requested resource. This can represent a request to get a single resource or a resource representing a list of resources.
+    - Verb: POST
+      - Meaning: Create a new resource. The body of the request contains the resource. The response should include a unique ID of the newly created resource.
+    - Verb: PUT
+      - Meaning: Update a resource. Either the URL path, HTTP header, or body must contain the unique ID of the resource being updated. The body of the request should contain the updated resource. The body of the response may contain the resulting updated resource.
+    - Verb: DELETE
+      - Meaning: Delete a resource. Either the URL path or HTTP header must contain the unique ID of the resource to delete.
+    - Verb: OPTIONS
+      - Meaning: Get metadata about a resource. Usually, only HTTP headers are returned. The resource itself is not returned.
 - Status Codes
-    - The codes are partitioned into five blocks.
-        - 1xx - Informational.
-        - 2xx - Success
-        - 3xx - Redirect to some other location, or that the previously cached resource is still valid.
-        - 4xx - Client errors. The request is invalid.
-        - 5xx - Server errors. The request cannot be satisfied due to an error on the server.
-    - Code: 100
-        - Text: Continue
-        - Meaning: The service is working on the request.
-    - Code: 200
-        - Text: Success
-        - Meaning: The requested resource was found and returned as appropriate.
-    - Code: 201
-        - Text: Created
-        - Meaning: The request was successful and a new resource was created.
-    - Code: 204
-        - Text: No Content
-        - Meaning: The request was successful but no resource is returned.
-    - Code: 304
-        - Text: Not Modified
-        - Meaning: The cached version of the resource is still valid.
-    - Code: 307
-        - Text: Permanent Redirect
-        - Meaning: The resource is no longer at the requested location. The new location is specified in the response location header.
-    - Code: 308
-        - Text: Temporary Redirect
-        - Meaning: The resource is temporarily located at a different location. The temporary location is specified in the response location header.
-    - Code: 400
-        - Text: Bad Request
-        - Meaning: The request was malformed or invalid.
-    - Code: 401
-        - Text: Unauthorized
-        - Meaning: The request did not provide a valid authorization token.
-    - Code: 403
-        - Tex: Forbidden
-        - Meaning: The provided authentication token is not authorized for the resource.
-    - Code: 404
-        - Text: Not found
-        - Meaning: An unknown resource was requested.
-    - Code: 408
-        - Text: Request Timeout
-        - Meaning: The request takes too long.
-    - Code: 409
-        - Text: Conflict
-        - Meaning: The provided resource represents an out-of-date version of the resource.
-    - Code: 418
-        - Text: I'm a teapot
-        - Meaning: The service refuses to brew coffee in a teapot.
-    - Code: 429
-        - Text: Too Many Requests
-        - Meaning: The client is making too many requests in too short of a time period.
-    - Code: 500
-        - Text: Internal Server Error
-        - Meaning: The server failed to properly process the request.
-    - Code: 503
-        - Text: Service Unavailable
-        - Meaning: The server is temporarily down. The client should try again with an exponential back-off.
-            - Exponential back-off is a strategy used in computer networks and applications to manage retry attempts for failed operations, such as network requests or transactions. The core idea is to gradually increase the delay between retry attempts to reduce the load on the network or system and increase the likelihood of successful future attempts. This approach is particularly useful in scenarios where repeated immediate retries may lead to further congestion or exacerbate the problem that caused the initial failure.
+  - The codes are partitioned into five blocks.
+    - 1xx - Informational.
+    - 2xx - Success
+    - 3xx - Redirect to some other location, or that the previously cached resource is still valid.
+    - 4xx - Client errors. The request is invalid.
+    - 5xx - Server errors. The request cannot be satisfied due to an error on the server.
+  - Code: 100
+    - Text: Continue
+    - Meaning: The service is working on the request.
+  - Code: 200
+    - Text: Success
+    - Meaning: The requested resource was found and returned as appropriate.
+  - Code: 201
+    - Text: Created
+    - Meaning: The request was successful and a new resource was created.
+  - Code: 204
+    - Text: No Content
+    - Meaning: The request was successful but no resource is returned.
+  - Code: 304
+    - Text: Not Modified
+    - Meaning: The cached version of the resource is still valid.
+  - Code: 307
+    - Text: Permanent Redirect
+    - Meaning: The resource is no longer at the requested location. The new location is specified in the response location header.
+  - Code: 308
+    - Text: Temporary Redirect
+    - Meaning: The resource is temporarily located at a different location. The temporary location is specified in the response location header.
+  - Code: 400
+    - Text: Bad Request
+    - Meaning: The request was malformed or invalid.
+  - Code: 401
+    - Text: Unauthorized
+    - Meaning: The request did not provide a valid authorization token.
+  - Code: 403
+    - Tex: Forbidden
+    - Meaning: The provided authentication token is not authorized for the resource.
+  - Code: 404
+    - Text: Not found
+    - Meaning: An unknown resource was requested.
+  - Code: 408
+    - Text: Request Timeout
+    - Meaning: The request takes too long.
+  - Code: 409
+    - Text: Conflict
+    - Meaning: The provided resource represents an out-of-date version of the resource.
+  - Code: 418
+    - Text: I'm a teapot
+    - Meaning: The service refuses to brew coffee in a teapot.
+  - Code: 429
+    - Text: Too Many Requests
+    - Meaning: The client is making too many requests in too short of a time period.
+  - Code: 500
+    - Text: Internal Server Error
+    - Meaning: The server failed to properly process the request.
+  - Code: 503
+    - Text: Service Unavailable
+    - Meaning: The server is temporarily down. The client should try again with an exponential back-off.
+      - Exponential back-off is a strategy used in computer networks and applications to manage retry attempts for failed operations, such as network requests or transactions. The core idea is to gradually increase the delay between retry attempts to reduce the load on the network or system and increase the likelihood of successful future attempts. This approach is particularly useful in scenarios where repeated immediate retries may lead to further congestion or exacerbate the problem that caused the initial failure.
 - Headers
-    - HTTP headers specify metadata about a request or response, like how to handle security, caching, data formats, and cookies.
-    - Header: Authorization
-        - Example: Bearer bGciOiJIUzI1NiIsI
-        - Meaning: A token that authorizes the user to make the request.
-    - Header: Accept
-        - Example: Image/*
-        - Meaning: The format the client accepts. This may include wildcards.
-    - Header: Content-Type
-        - Example: text/html; charset=utf-8
-        - Meaning: The format of the content being sent. These are described using standard MIME types.
-    - Header: Cookie
-        - Example: SessionID=39s8cgj34; csrftoken=9dck2
-        - Meaning: Key-value pairs that are generated by the server and stored on the client
-    - Header: Host
-        - Example: info.cern.ch
-        - Meaning: The domain name of the server. This is required in all requests.
-    - Header: Origin
-        - Example: cs260.click
-        - Meaning: Identifies the origin that caused the request. A host may only allow requests from specific origins.
-    - Header: Access-Control-Allow-Origin
-        - Example: https://cs260.click
-        - Meaning: Server response of what origins can make a request. This may include a wildcard.
-    - Header: Content-Length
-        - Example: 368
-        - Meaning: The number of bytes contained in the response
-    - Header: Cache-Control
-        - Example: public, max-age=604800
-        - Meaning: Tells the client how it can cache the response
-    - Header: User-Agent
-        - Example: Mozilla/5.0 (Macintosh)
-        - Meaning: The client application making the request.
+  - HTTP headers specify metadata about a request or response, like how to handle security, caching, data formats, and cookies.
+  - Header: Authorization
+    - Example: Bearer bGciOiJIUzI1NiIsI
+    - Meaning: A token that authorizes the user to make the request.
+  - Header: Accept
+    - Example: Image/\*
+    - Meaning: The format the client accepts. This may include wildcards.
+  - Header: Content-Type
+    - Example: text/html; charset=utf-8
+    - Meaning: The format of the content being sent. These are described using standard MIME types.
+  - Header: Cookie
+    - Example: SessionID=39s8cgj34; csrftoken=9dck2
+    - Meaning: Key-value pairs that are generated by the server and stored on the client
+  - Header: Host
+    - Example: info.cern.ch
+    - Meaning: The domain name of the server. This is required in all requests.
+  - Header: Origin
+    - Example: cs260.click
+    - Meaning: Identifies the origin that caused the request. A host may only allow requests from specific origins.
+  - Header: Access-Control-Allow-Origin
+    - Example: https://cs260.click
+    - Meaning: Server response of what origins can make a request. This may include a wildcard.
+  - Header: Content-Length
+    - Example: 368
+    - Meaning: The number of bytes contained in the response
+  - Header: Cache-Control
+    - Example: public, max-age=604800
+    - Meaning: Tells the client how it can cache the response
+  - Header: User-Agent
+    - Example: Mozilla/5.0 (Macintosh)
+    - Meaning: The client application making the request.
 - Body
-    - The format of the body of an HTTP request or response is defined by the `Content-Type` header.
-    - For example, it may be HTML text (`text/html`), a binary image format (`image/png`), JSON (`application/json`), or JavaScript (`text/javascript`).
-    - A client may specify what formats it accepts using the `accept` header.
+  - The format of the body of an HTTP request or response is defined by the `Content-Type` header.
+  - For example, it may be HTML text (`text/html`), a binary image format (`image/png`), JSON (`application/json`), or JavaScript (`text/javascript`).
+  - A client may specify what formats it accepts using the `accept` header.
 - Cookies
-    - HTTP itself is stateless.
-    - This means that one HTTP request does not know anything about a previous or future request.
-    - However, that does not mean that a server or client cannot track state across requests.
-    - One common method for tracking state is the `cookie`.
-    - Cookies are generated by a server and passed to the client as an HTTP header.
-        - `HTTP/2 200`
-        - `Set-Cookie: myAppCookie=tasty; SameSite=Strict; Secure; HttpOnly`
-    - The client then caches the cookie and returns it as an HTTP header back to the server on subsequent requests.
-        - `HTTP/2 200`
-        - `Cookie: myAppCookie=tasty`
-    - This allows the server to remember things like the language preference of the user or the user's authentication credentials.
-    - A server can also use cookies to track, and share, everything that a user does.
-    - However, there is nothing inherently evil about cookies; the problem comes from web applications that use them as a means to violate a user's privacy or inappropriately monetize their data.
+  - HTTP itself is stateless.
+  - This means that one HTTP request does not know anything about a previous or future request.
+  - However, that does not mean that a server or client cannot track state across requests.
+  - One common method for tracking state is the `cookie`.
+  - Cookies are generated by a server and passed to the client as an HTTP header.
+    - `HTTP/2 200`
+    - `Set-Cookie: myAppCookie=tasty; SameSite=Strict; Secure; HttpOnly`
+  - The client then caches the cookie and returns it as an HTTP header back to the server on subsequent requests.
+    - `HTTP/2 200`
+    - `Cookie: myAppCookie=tasty`
+  - This allows the server to remember things like the language preference of the user or the user's authentication credentials.
+  - A server can also use cookies to track, and share, everything that a user does.
+  - However, there is nothing inherently evil about cookies; the problem comes from web applications that use them as a means to violate a user's privacy or inappropriately monetize their data.
 - HTTP Versions
-    - HTTP continually evolves in order to increase performance and support new types of applications.
-        - Version: HTTP0.9
-            - Year: 1990
-            - Features: one line, no versions, only get
-        - Version: HTTP1
-            - Year: 1996
-            - Features: get/post, header, status codes, content-type
-        - Version: HTTP1.1
-            - Year: 1997
-            - Features: put/patch/delete/options, persistent connection
-        - Version: HTTP2
-            - Year: 2015
-            - Features: multiplex, server push, binary representation
-                - Multiplexing (often abbreviated as multiplex or muxing) is a method used in telecommunications and computer networks to combine multiple signals or data streams into one signal over a shared medium. The goal of multiplexing is to efficiently utilize the available bandwidth or transmission capacity, allowing several transmissions to occur simultaneously without interference.
-                - Server push is a feature in web technologies that allows a server to send information to a client (usually a web browser) proactively, without waiting for the client to make a request for that specific information. This capability is especially useful for delivering updates in real-time to web applications, such as new email notifications, instant messages, live sports scores, or any other dynamic content updates.
-        - Version: HTTP3
-            - Year: 2022
-            - Features: QUIC for transport protocol, always encrypted
-                - QUIC (Quick UDP Internet Connections) is a modern transport layer network protocol designed by Google to make the web faster, more secure, and more efficient. It was initially developed to address the performance limitations of traditional protocols like TCP (Transmission Control Protocol) and TLS (Transport Layer Security) over the internet, particularly to reduce connection establishment time, minimize latency, and improve the overall user experience for web applications. Over time, QUIC has evolved and is being standardized by the Internet Engineering Task Force (IETF) with its version known as IETF QUIC.
+  - HTTP continually evolves in order to increase performance and support new types of applications.
+    - Version: HTTP0.9
+      - Year: 1990
+      - Features: one line, no versions, only get
+    - Version: HTTP1
+      - Year: 1996
+      - Features: get/post, header, status codes, content-type
+    - Version: HTTP1.1
+      - Year: 1997
+      - Features: put/patch/delete/options, persistent connection
+    - Version: HTTP2
+      - Year: 2015
+      - Features: multiplex, server push, binary representation
+        - Multiplexing (often abbreviated as multiplex or muxing) is a method used in telecommunications and computer networks to combine multiple signals or data streams into one signal over a shared medium. The goal of multiplexing is to efficiently utilize the available bandwidth or transmission capacity, allowing several transmissions to occur simultaneously without interference.
+        - Server push is a feature in web technologies that allows a server to send information to a client (usually a web browser) proactively, without waiting for the client to make a request for that specific information. This capability is especially useful for delivering updates in real-time to web applications, such as new email notifications, instant messages, live sports scores, or any other dynamic content updates.
+    - Version: HTTP3
+      - Year: 2022
+      - Features: QUIC for transport protocol, always encrypted
+        - QUIC (Quick UDP Internet Connections) is a modern transport layer network protocol designed by Google to make the web faster, more secure, and more efficient. It was initially developed to address the performance limitations of traditional protocols like TCP (Transmission Control Protocol) and TLS (Transport Layer Security) over the internet, particularly to reduce connection establishment time, minimize latency, and improve the overall user experience for web applications. Over time, QUIC has evolved and is being standardized by the Internet Engineering Task Force (IETF) with its version known as IETF QUIC.
 - Acronyms and Terms
-    - CERN = European Council/Organization for Nuclear Research
-    - MIME = Multipurpose Internet Mail Extensions
-    - QUIC = Quick UDP Internet Connections
-    - UDP = User Datagram Protocol
+  - CERN = European Council/Organization for Nuclear Research
+  - MIME = Multipurpose Internet Mail Extensions
+  - QUIC = Quick UDP Internet Connections
+  - UDP = User Datagram Protocol
 
 # Fetch
+
 - The ability to make HTTP requests from JavaScript is one of the main technologies that changed the web from static content pages (Web 1.0) to one of web applications (Web 2.0) that fully interact with the user.
 - Microsoft introduced the first API for making HTTP requests from JavaScript with the XMLHttpRequest API.
 - Today, the fetch API is the preferred way to make HTTP requests.
@@ -2201,94 +2349,95 @@
 - The promise `then` function takes a callback function that is asynchronously called when the request URL content is obtained.
 - If the returned content is of type `application/json`, we can use the `json` function on the response object to convert it to a JavaScript object.
 - The following example makes a fetch request to get and display an inspirational quote.
-    - `fetch('https://api.quotable.io/random')`
-        - `.then((response) => response.json())`
-        - `.then((jsonResponse) => {`
-            - `console.log(jsonResponse);`
-        - `});`
-        - `fetch('https://api.quotable.io/random')`:
-            - This line initiates a network request to the URL `'https://api.quotable.io/random'`. The `fetch` function returns a `Promise` that resolves to the response to this request. The response is an object that represents the HTTP response. If the request fails due to network issues, the promise is rejected.
-        - `.then((response) => response.json())`:
-            - This line is a method that takes the first `Promise` (from the `fetch` call) and uses `.then()` to handle the response once it is available. The response object has several methods to handle the body of the response, and `.json()` is one of them. It reads the response stream to completion and parses the body text as JSON. This method also returns a `Promise` that resolves with the result of parsing the body text as JSON.
-        - `.then((jsonResponse) => { console.log(jsonResponse); })`:
-            - This line is another `.then()` method that takes the second `Promise` (from the `response.json()` call) and uses it to handle the JSON response once it is parsed. The `jsonResponse` parameter holds the parsed JSON data (in this case, a random quote). The code inside the function `{ console.log(jsonResponse); }` logs this data to the console. This allows us to see the structured data, which typically includes the quote and the author, among other possible fields provided by the API.
-    - Response
-        - `{`
-            - `content: 'Never put off till tomorrow what you can do today.',`
-            - `author: 'Thomas Jefferson',`
-        - `};`
-    - To do a POST request, we populate the options parameter with the HTTP method and headers
-        - POST requests are often used to submit form data or upload a file. In contrast to GET requests, which append data to the URL, POST requests include the data in the body of the request. This allows for larger amounts of data to be transmitted.
-        - `fetch('https://jsonplaceholder.typicode.com/posts', {`
-            - `method: 'POST',`
-            - `body: JSON.stringify({`
-                - `title: 'test title',`
-                - `body: 'test body',`
-                - `userId: 1,`
-            - `}),`
-            - `headers: {`
-                - `'Content-type': 'application/json; charset=UTF-8',`
-            - `},`
-        -  `})`
-            - `.then((response) => response.json())`
-            - `.then((jsonResponse) => {`
-                - `console.log(jsonResponse);`
-            - `});`
-        - Request Configuration
-            - `method: 'POST'`: Specifies the HTTP method to use, indicating that this is a POST request.
-            - `body: JSON.stringify({...})`: Contains the data to be sent with the request. `JSON.stringify` converts a JavaScript object into a JSON string. The object includes three fields: `title`, `body`, and `userId`, with sample values provided for each.
-            - `headers: { 'Content-type': 'application/json; charset=UTF-8' }`: Sets the request headers. Here, `Content-type` is set to `application/json; charset=UTF-8`, indicating that the request body format is JSON.
-        - Knowing that the server simulates the creation of a new post upon receiving a POST request, especially when using `https://jsonplaceholder.typicode.com/posts`, comes from understanding the purpose and behavior of the JSONPlaceholder API.
-        - JSONPlaceholder is a fake online REST API designed for testing and prototyping. It is publicly known and documented to mimic real server responses without actually creating, updating, or deleting any persistent data. When we send a POST request to the `/posts` endpoint, JSONPlaceholder is designed to respond as if a new post has been created successfully, following typical REST API conventions.
-            - REST API stands for Representational State Transfer Application Programming Interface. It is an architectural style and approach to communications often used in web services development. REST uses HTTP requests to access and use data, with operations such as read (`GET`), create (`POST`), update (`PUT`), and delete (`DELETE`) corresponding to CRUD (Create, Read, Update, Delete) operations.
-        - When the options parameter is not specified, it results in a default fetch operation, which is a GET request.
-            - Purpose and Usage
-                - GET Request:
-                    - Intended for retrieving data from a server.
-                    - Data is sent in the URL, typically as query parameters.
-                    - Ideal for requests where the data does not change server state (idempotent).
-                    - Used for searching, fetching data, and navigation where the URL can be bookmarked or shared.
-                - POST Request:
-                    - Used for submitting data to the server to create or update a resource.
-                    - Data is sent in the body of the request, allowing more data to be sent in different formats (e.g., JSON, FormData).
-                    - Can change the server state, so it is not idempotent.
-                    - Used for form submissions, file uploads, and any time-sensitive data that needs to be sent to the server.
-            - Data Transmission
-                - GET Request:
-                    - Appends data to the URL as query strings, which has a length limit and is visible to users, making it less secure.
-                    - Because the data is in the URL, it is limited in type and amount. Complex data structures are hard to transmit this way.
-                - POST Request:
-                    - Encloses data in the request body, allowing for larger amounts of data to be securely transmitted without being exposed in the URL.
-                    - Supports various content types like `application/json`, `multipart/form-data`, making it versatile for different types of data.
+  - `fetch('https://api.quotable.io/random')`
+    - `.then((response) => response.json())`
+    - `.then((jsonResponse) => {`
+      - `console.log(jsonResponse);`
+    - `});`
+    - `fetch('https://api.quotable.io/random')`:
+      - This line initiates a network request to the URL `'https://api.quotable.io/random'`. The `fetch` function returns a `Promise` that resolves to the response to this request. The response is an object that represents the HTTP response. If the request fails due to network issues, the promise is rejected.
+    - `.then((response) => response.json())`:
+      - This line is a method that takes the first `Promise` (from the `fetch` call) and uses `.then()` to handle the response once it is available. The response object has several methods to handle the body of the response, and `.json()` is one of them. It reads the response stream to completion and parses the body text as JSON. This method also returns a `Promise` that resolves with the result of parsing the body text as JSON.
+    - `.then((jsonResponse) => { console.log(jsonResponse); })`:
+      - This line is another `.then()` method that takes the second `Promise` (from the `response.json()` call) and uses it to handle the JSON response once it is parsed. The `jsonResponse` parameter holds the parsed JSON data (in this case, a random quote). The code inside the function `{ console.log(jsonResponse); }` logs this data to the console. This allows us to see the structured data, which typically includes the quote and the author, among other possible fields provided by the API.
+  - Response
+    - `{`
+      - `content: 'Never put off till tomorrow what you can do today.',`
+      - `author: 'Thomas Jefferson',`
+    - `};`
+  - To do a POST request, we populate the options parameter with the HTTP method and headers
+    - POST requests are often used to submit form data or upload a file. In contrast to GET requests, which append data to the URL, POST requests include the data in the body of the request. This allows for larger amounts of data to be transmitted.
+    - `fetch('https://jsonplaceholder.typicode.com/posts', {`
+      - `method: 'POST',`
+      - `body: JSON.stringify({`
+        - `title: 'test title',`
+        - `body: 'test body',`
+        - `userId: 1,`
+      - `}),`
+      - `headers: {`
+        - `'Content-type': 'application/json; charset=UTF-8',`
+      - `},`
+    - `})`
+      - `.then((response) => response.json())`
+      - `.then((jsonResponse) => {`
+        - `console.log(jsonResponse);`
+      - `});`
+    - Request Configuration
+      - `method: 'POST'`: Specifies the HTTP method to use, indicating that this is a POST request.
+      - `body: JSON.stringify({...})`: Contains the data to be sent with the request. `JSON.stringify` converts a JavaScript object into a JSON string. The object includes three fields: `title`, `body`, and `userId`, with sample values provided for each.
+      - `headers: { 'Content-type': 'application/json; charset=UTF-8' }`: Sets the request headers. Here, `Content-type` is set to `application/json; charset=UTF-8`, indicating that the request body format is JSON.
+    - Knowing that the server simulates the creation of a new post upon receiving a POST request, especially when using `https://jsonplaceholder.typicode.com/posts`, comes from understanding the purpose and behavior of the JSONPlaceholder API.
+    - JSONPlaceholder is a fake online REST API designed for testing and prototyping. It is publicly known and documented to mimic real server responses without actually creating, updating, or deleting any persistent data. When we send a POST request to the `/posts` endpoint, JSONPlaceholder is designed to respond as if a new post has been created successfully, following typical REST API conventions.
+      - REST API stands for Representational State Transfer Application Programming Interface. It is an architectural style and approach to communications often used in web services development. REST uses HTTP requests to access and use data, with operations such as read (`GET`), create (`POST`), update (`PUT`), and delete (`DELETE`) corresponding to CRUD (Create, Read, Update, Delete) operations.
+    - When the options parameter is not specified, it results in a default fetch operation, which is a GET request.
+      - Purpose and Usage
+        - GET Request:
+          - Intended for retrieving data from a server.
+          - Data is sent in the URL, typically as query parameters.
+          - Ideal for requests where the data does not change server state (idempotent).
+          - Used for searching, fetching data, and navigation where the URL can be bookmarked or shared.
+        - POST Request:
+          - Used for submitting data to the server to create or update a resource.
+          - Data is sent in the body of the request, allowing more data to be sent in different formats (e.g., JSON, FormData).
+          - Can change the server state, so it is not idempotent.
+          - Used for form submissions, file uploads, and any time-sensitive data that needs to be sent to the server.
+      - Data Transmission
+        - GET Request:
+          - Appends data to the URL as query strings, which has a length limit and is visible to users, making it less secure.
+          - Because the data is in the URL, it is limited in type and amount. Complex data structures are hard to transmit this way.
+        - POST Request:
+          - Encloses data in the request body, allowing for larger amounts of data to be securely transmitted without being exposed in the URL.
+          - Supports various content types like `application/json`, `multipart/form-data`, making it versatile for different types of data.
 - CodePen
-    - HTML
-        - `<pre></pre>`
-    - CSS
-        - `pre {`
-            - `font-size: 2em;`
-        - `}`
-    - JavaScript
-        - `const url = "https://api.quotable.io/random";`
-        - `fetch(url)`
-            - `.then((x) => x.json())`
-            - `.then((response) => {`
-                - `document.querySelector("pre").textContent = JSON.stringify(`
-                    - `response,`
-                    - `null,`
-                    - `"  "`
-                - `);`
-            - `});`
-    - The `<pre>` tag is used in HTML (HyperText Markup Language) to define preformatted text. The content inside a `<pre>` tag is displayed in a fixed-width font (usually Courier), and it preserves both spaces and line breaks. This makes the `<pre>` tag particularly useful for displaying code or text where the formatting is important.
-    - The first argument (`response`): This is the object that we want to convert into a JSON string.
-    - The second argument (`null`): This is a replacer function or array that allows for filtering or altering the values in the object before converting it to a JSON string. When `null` is passed, it means that no filtering or transformation is applied, and every property of the object is included in the JSON string as is.
-    - The third argument (`" "`): This is the space argument that controls the indentation of the formatted JSON string. By passing `" "` (two spaces), we are specifying that each level in the JSON structure should be indented with two spaces. This makes the JSON string more readable to humans by adding white space to the resulting string in a structured format.
-    - `json()` is a method available on the `Response` object in the Fetch API, which is used to make HTTP requests in modern web development. When a Fetch request is made and a response is received from the server, the `json()` method can be called on the response object to parse the JSON-formatted response body and convert it into a JavaScript object or array. It is an asynchronous method that returns a promise, which resolves with the result of parsing the body text as JSON.
-    - `JSON.stringify()` is a method that converts a JavaScript object or value to a JSON-formatted string. It is part of the `JSON` global object in JavaScript. This method is useful for serializing data so that it can be transmitted over a network or saved in a format that is easy to share or store.
+  - HTML
+    - `<pre></pre>`
+  - CSS
+    - `pre {`
+      - `font-size: 2em;`
+    - `}`
+  - JavaScript
+    - `const url = "https://api.quotable.io/random";`
+    - `fetch(url)`
+      - `.then((x) => x.json())`
+      - `.then((response) => {`
+        - `document.querySelector("pre").textContent = JSON.stringify(`
+          - `response,`
+          - `null,`
+          - `"  "`
+        - `);`
+      - `});`
+  - The `<pre>` tag is used in HTML (HyperText Markup Language) to define preformatted text. The content inside a `<pre>` tag is displayed in a fixed-width font (usually Courier), and it preserves both spaces and line breaks. This makes the `<pre>` tag particularly useful for displaying code or text where the formatting is important.
+  - The first argument (`response`): This is the object that we want to convert into a JSON string.
+  - The second argument (`null`): This is a replacer function or array that allows for filtering or altering the values in the object before converting it to a JSON string. When `null` is passed, it means that no filtering or transformation is applied, and every property of the object is included in the JSON string as is.
+  - The third argument (`" "`): This is the space argument that controls the indentation of the formatted JSON string. By passing `" "` (two spaces), we are specifying that each level in the JSON structure should be indented with two spaces. This makes the JSON string more readable to humans by adding white space to the resulting string in a structured format.
+  - `json()` is a method available on the `Response` object in the Fetch API, which is used to make HTTP requests in modern web development. When a Fetch request is made and a response is received from the server, the `json()` method can be called on the response object to parse the JSON-formatted response body and convert it into a JavaScript object or array. It is an asynchronous method that returns a promise, which resolves with the result of parsing the body text as JSON.
+  - `JSON.stringify()` is a method that converts a JavaScript object or value to a JSON-formatted string. It is part of the `JSON` global object in JavaScript. This method is useful for serializing data so that it can be transmitted over a network or saved in a format that is easy to share or store.
 - Acronyms and Terms
-    - REST = Representational State Transfer
-    - API = Application Programming Interface
+  - REST = Representational State Transfer
+  - API = Application Programming Interface
 
 # Node.js
+
 - Node.js was the first successful application for deploying JavaScript outside of a browser.
 - This changed the JavaScript mindset from a browser technology to one that could run on the server as well.
 - This means that JavaScript can power our entire technology stack.
@@ -2299,467 +2448,1120 @@
 - When we run a JavaScript program in Chrome or Node.js, it is V8 that reads our code and executes it.
 - With either program wrapping V8, the result is the same.
 - Installing NVM and Node.js
-    - Our production environment web server comes with Node.js already installed.
-    - However, we will need to install Node.js in our development environment.
-    - The easiest way to install Node.js is to first install the `Node Version Manager` (NVM) and use it to install, and manage, Node.js.
+  - Our production environment web server comes with Node.js already installed.
+  - However, we will need to install Node.js in our development environment.
+  - The easiest way to install Node.js is to first install the `Node Version Manager` (NVM) and use it to install, and manage, Node.js.
 - Checking that Node is installed
-    - The Node.js console application is simply called `node`.
+  - The Node.js console application is simply called `node`.
 - Running Programs
-    - We can execute a line of JavaScript with Node.js from our console with the `-e` parameter.
-        -  `node -e "console.log(1+1)"`
-    - However, to do real work we need to execute an entire project composed of dozens or even hundreds of JavaScript files.
-    - We do this by creating a single starting JavaScript file, named something like `index.js`, that references the code found in the rest of our project.
-    - We then execute our code by running `node` with `index.js` as a parameter.
-    - For example, with the following JavaScript saved to a file named `index.js`,
-        - `function countdown() {`
-            - `let i = 0;`
-            - `while (i++ < 5) {`
-                - `console.log(`Counting ... ${i}`);`
-            - `}`
-        - `}`
 
-        - `countdown();`
-    - We can execute the JavaScript by passing the file to `node`, and receive the following result.
-        - `node index.js`
-        - `Counting ... 1`
-        - `Counting ... 2`
-        - `Counting ... 3`
-        - `Counting ... 4`
-        - `Counting ... 5`
-    - We can also run `node` in interpretive mode by executing it without any parameters and then typing our JavaScript code directly into the interpreter.
-        - `node`
-        - `Welcome to Node.js v16.15.1.`
-        - `> 1+1`
-        - `2`
-        - `> console.log('hello')`
-        - `hello`
+  - We can execute a line of JavaScript with Node.js from our console with the `-e` parameter.
+    - `node -e "console.log(1+1)"`
+  - However, to do real work we need to execute an entire project composed of dozens or even hundreds of JavaScript files.
+  - We do this by creating a single starting JavaScript file, named something like `index.js`, that references the code found in the rest of our project.
+  - We then execute our code by running `node` with `index.js` as a parameter.
+  - For example, with the following JavaScript saved to a file named `index.js`,
+
+    - `function countdown() {`
+      - `let i = 0;`
+      - `while (i++ < 5) {`
+        - `console.log(`Counting ... ${i}`);`
+      - `}`
+    - `}`
+
+    - `countdown();`
+
+  - We can execute the JavaScript by passing the file to `node`, and receive the following result.
+    - `node index.js`
+    - `Counting ... 1`
+    - `Counting ... 2`
+    - `Counting ... 3`
+    - `Counting ... 4`
+    - `Counting ... 5`
+  - We can also run `node` in interpretive mode by executing it without any parameters and then typing our JavaScript code directly into the interpreter.
+    - `node`
+    - `Welcome to Node.js v16.15.1.`
+    - `> 1+1`
+    - `2`
+    - `> console.log('hello')`
+    - `hello`
+
 - Node Package Manager
-    - While we could write all of the JavaScript for everything we need, it is always helpful to use preexisting packages of JavaScript for implementing common tasks.
-    - To load a package using Node.js, we must take two steps.
-    - First, install the package locally on our machine using the Node Package Manager (NPM), and then include a `require` statement in our code that references the package name.
-    - NPM is automatically installed when we install Node.js.
-    - NPM knows how to access a massive repository of preexisting packages.
-    - We can search for packages on the NPM website.
-    - However, before we start using NPM to install packages, we need to initialize our code to use NPM.
-    - This is done by creating a directory that will contain our JavaScript and then running `npm init`.
-        - `mkdir npmtest`
-        - `cd npmtest`
-        - `npm init -y`
+  - While we could write all of the JavaScript for everything we need, it is always helpful to use preexisting packages of JavaScript for implementing common tasks.
+  - To load a package using Node.js, we must take two steps.
+  - First, install the package locally on our machine using the Node Package Manager (NPM), and then include a `require` statement in our code that references the package name.
+  - NPM is automatically installed when we install Node.js.
+  - NPM knows how to access a massive repository of preexisting packages.
+  - We can search for packages on the NPM website.
+  - However, before we start using NPM to install packages, we need to initialize our code to use NPM.
+  - This is done by creating a directory that will contain our JavaScript and then running `npm init`.
+    - `mkdir npmtest`
+    - `cd npmtest`
+    - `npm init -y`
 - Package.json
-    - If we list the files in the directory, we will notice that it has created a file named `package.json`.
-    - This file contains three main things: (1) Metadata about our project such as its name and the default entry JavaScript file, (2) commands (scripts) that we can execute to do things like run, test, or distribute our code, and (3) packages that this project depends upon.
-    - The following shows what our `package.json` looks like currently.
-    - It has some default metadata and a simple placeholder script that just runs the echo command when we execute `npm run test` from the console.
-        - `{`
-            - `"name": "npmtest",`
-            - `"version": "1.0.0",`
-            - `"description": "",`
-            - `"main": "index.js",`
-            - `"keywords": [],`
-            - `"author": "",`
-            - `"license": "ISC",`
-            - `"scripts": {`
-                - `"test": "echo \"Error: no test specified\" && exit 1"`
-            - `}`
-        - `}`
-    - With NPM initialized to work with our project, we can now use it to install a node package.
-    - As a simple example, we will install a package that knows how to tell jokes.
-    - This package is called `give-me-a-joke`.
-    - We install the package using `npm install` followed by the name of the package.
-        - `npm install give-me-a-joke`
-    - If we again examine the contents of the `package.json` file, we will see a reference to the newly installed package dependency.
-    - If we decide we no longer want a package dependency, we can always remove it with the `npm uninstall <package name here>` console command.
-    - With the dependency added, the unnecessary metadata removed, the addition of a useful script to run the program, and also adding a description, the `package.json` file should look like this:
-        - `{`
-            - `"name": "npmtest",`
-            - `"version": "1.0.0",`
-            - `"description": "Simple Node.js demo",`
-            - `"main": "index.js",`
-            - `"license": "MIT",`
-            - `"scripts": {`
-                - `"dev": "node index.js"`
-            - `},`
-            - `"dependencies": {`
-                - `"give-me-a-joke": "^0.5.1"`
-            - `}`
-        - `}`
-    - Note that when we start installing package dependencies, NPM will create an additional file named `package-lock.json` and a directory named `node_modules` in our project directory.
-    - The `node_modules` directory contains the actual JavaScript files for the package and all of its dependent packages.
-    - As we install several packages, this directory will start to get very large.
-    - We do not want to check this into our source control system since it can be very large and can be rebuilt using the information contained in the `package.json` and `package-lock.json` files.
-    - So make sure we include `node_modules` in our `.gitignore` file.
-    - When we clone our source code from GitHub to a new location, the first thing we should do is run `npm install` in the project directory.
-    - This will cause NPM to download all of the previously installed packages and recreate the `node_modules` directory.
-    - The `package-lock.json` file tracks the version of the package that we installed.
-    - That way if we rebuild our `node_modules` directory, we will have the version of the package we initially installed and not the latest available version, which might not be compatible with our code.
-    - With NPM and the joke package installed, we can now use the joke package in a JavaScript file by referring to the package name as a parameter to the `require` function.
-    - This is then followed by a call to the joke object's `getRandomDadJoke` function to actually generate a joke.
-    - Create a file named `index.js` and paste the following into it.
-        - `const giveMeAJoke = require('give-me-a-joke');`
-        - `giveMeAJoke.getRandomDadJoke((joke) => {`
-            - `console.log(joke);`
-        - `});`
-    - If we run this code using Node.js, we should get a result similar to the following.
-        - `node index.js`
-        - `What do you call a fish with no eyes? A fsh.`
-    - Main Steps:
-        1. Create our project directory.
-        2. Initialize it for use with NPM by running `npm init -y`.
-        3. Make sure `.gitignore` file contains `node_modules`.
-        4. Install any desired packages with `npm install <package name here>`.
-        5. Add `require('<package name here>')` to our application's JavaScript.
-        6. Use the code the package provides in our JavaScript.
-        7. Run our code with `node index.js`.
+  - If we list the files in the directory, we will notice that it has created a file named `package.json`.
+  - This file contains three main things: (1) Metadata about our project such as its name and the default entry JavaScript file, (2) commands (scripts) that we can execute to do things like run, test, or distribute our code, and (3) packages that this project depends upon.
+  - The following shows what our `package.json` looks like currently.
+  - It has some default metadata and a simple placeholder script that just runs the echo command when we execute `npm run test` from the console.
+    - `{`
+      - `"name": "npmtest",`
+      - `"version": "1.0.0",`
+      - `"description": "",`
+      - `"main": "index.js",`
+      - `"keywords": [],`
+      - `"author": "",`
+      - `"license": "ISC",`
+      - `"scripts": {`
+        - `"test": "echo \"Error: no test specified\" && exit 1"`
+      - `}`
+    - `}`
+  - With NPM initialized to work with our project, we can now use it to install a node package.
+  - As a simple example, we will install a package that knows how to tell jokes.
+  - This package is called `give-me-a-joke`.
+  - We install the package using `npm install` followed by the name of the package.
+    - `npm install give-me-a-joke`
+  - If we again examine the contents of the `package.json` file, we will see a reference to the newly installed package dependency.
+  - If we decide we no longer want a package dependency, we can always remove it with the `npm uninstall <package name here>` console command.
+  - With the dependency added, the unnecessary metadata removed, the addition of a useful script to run the program, and also adding a description, the `package.json` file should look like this:
+    - `{`
+      - `"name": "npmtest",`
+      - `"version": "1.0.0",`
+      - `"description": "Simple Node.js demo",`
+      - `"main": "index.js",`
+      - `"license": "MIT",`
+      - `"scripts": {`
+        - `"dev": "node index.js"`
+      - `},`
+      - `"dependencies": {`
+        - `"give-me-a-joke": "^0.5.1"`
+      - `}`
+    - `}`
+  - Note that when we start installing package dependencies, NPM will create an additional file named `package-lock.json` and a directory named `node_modules` in our project directory.
+  - The `node_modules` directory contains the actual JavaScript files for the package and all of its dependent packages.
+  - As we install several packages, this directory will start to get very large.
+  - We do not want to check this into our source control system since it can be very large and can be rebuilt using the information contained in the `package.json` and `package-lock.json` files.
+  - So make sure we include `node_modules` in our `.gitignore` file.
+  - When we clone our source code from GitHub to a new location, the first thing we should do is run `npm install` in the project directory.
+  - This will cause NPM to download all of the previously installed packages and recreate the `node_modules` directory.
+  - The `package-lock.json` file tracks the version of the package that we installed.
+  - That way if we rebuild our `node_modules` directory, we will have the version of the package we initially installed and not the latest available version, which might not be compatible with our code.
+  - With NPM and the joke package installed, we can now use the joke package in a JavaScript file by referring to the package name as a parameter to the `require` function.
+  - This is then followed by a call to the joke object's `getRandomDadJoke` function to actually generate a joke.
+  - Create a file named `index.js` and paste the following into it.
+    - `const giveMeAJoke = require('give-me-a-joke');`
+    - `giveMeAJoke.getRandomDadJoke((joke) => {`
+      - `console.log(joke);`
+    - `});`
+  - If we run this code using Node.js, we should get a result similar to the following.
+    - `node index.js`
+    - `What do you call a fish with no eyes? A fsh.`
+  - Main Steps:
+    1. Create our project directory.
+    2. Initialize it for use with NPM by running `npm init -y`.
+    3. Make sure `.gitignore` file contains `node_modules`.
+    4. Install any desired packages with `npm install <package name here>`.
+    5. Add `require('<package name here>')` to our application's JavaScript.
+    6. Use the code the package provides in our JavaScript.
+    7. Run our code with `node index.js`.
 - Creating A Web Service
-    - With JavaScript, we can write code that listens on a network port (e.g., 80, 443, 3000, or 8080), receives HTTP requests, processes them, and then responds.
-    - We can use this to create a simple web service that we then execute using Node.js.
-    - First, create our project.
-        - `mkdir webservicetest`
-        - `cd webservicetest`
-        - `npm init -y`
-    - Now, open VS Code and create a file named `index.js`.
-    - Paste the following code into the file and save.
-        - `const http = require('http');`
-        - `const server = http.createServer(function (req, res) {`
-            - `res.writeHead(200, { 'Content-Type': 'text/html' });`
-            - ``res.write(`<h1>Hello Node.js! [${req.method}] ${req.url}</h1>`);``
-            - `res.end();`
-        - `});`
 
-        - `server.listen(8080, () => {`
-            - ``console.log(`Web service listening on port 8080`);``
-        - `});`
-            - `const http = require('http');`: This line imports Node.js's built-in `http` module and assigns it to the variable `http`. The `http` module allows us to create HTTP servers and clients, which is essential for web development with Node.js.
-            - `const server = http.createServer(function (req, res) {...});`: Here, we use the `createServer` method of the `http` module to create a new HTTP server. The method takes a request listener function as an argument, which is executed each time the server receives a request. The request listener function has two parameters: `req` (request) and `res` (response).
-            - `res.writeHead(200, { 'Content-Type': 'text/html' })`: This line starts a response to the request with a status code of 200 (OK) and sets the `Content-Type` header to `text/html`. This tells the client that the response will be HTML content.
-            - `res.write(...)`: This sends a chunk of the response body. In this case, it sends an HTML `<h1>` tag with a message that includes the request method (`req.method`) and the URL path (`req.url`). For example, if we navigate to `http://localhost:8080/test`, it will display "Hello Node.js! [GET] /test".
-            - `res.end()`: This method signals to the server that all of the response headers and body have been sent; thus, the server should consider this message complete. The method, `res.end()`, must be called on each response.
-            - `server.listen(8080, () => {...});`: This line tells our server to listen on port 8080. When the server starts listening, the callback function is called, logging a message to the console that our web service is listening on port 8080.
-    - This code uses the Node.js's built-in `http` package to create our HTTP server using the `http.createServer` function along with a callback function that takes a request (`req`) and response (`res`) object.
-    - That function is called whenever the server receives an HTTP request.
-    - In our example, the callback always returns the same HTML snippet, with a status code of `200`, and a `Content-Type` header, no matter what request is made.
-    - Basically, this is just a simple dynamically generated HTML page.
-    - A real web service would examine the HTTP path and return meaningful content based on the purpose of the endpoint.
-    - The `server.listen` call starts listening on port 8080 and blocks until the program is terminated.
-    - We execute the program by going back to our console window and running Node.js to execute our `index.js` file.
-    - If the service starts up correctly, then it should look like the following.
-        - `node index.js`
-        - `Web service listening on port 8080`
-    - We can now open our browser point it to `localhost: 8080` and view the result.
-    - Use different URL paths in the browser and note that it will echo the HTTP method and path back in the document.
-    - We can kill the process by pressing `CTRL-C` in the console.
-    - Note that we can also start up Node and execute the `index.js` code directly in VS Code.
-    - To do this, open `index.js` in VS Code and press the `F5` key.
-    - This should ask us what program we want to run.
-    - Select Node.js.
-    - This starts up Node.js with the `index.js` file, but also attaches a debugger so that we can set breakpoints in the code and step through each line of code.
+  - With JavaScript, we can write code that listens on a network port (e.g., 80, 443, 3000, or 8080), receives HTTP requests, processes them, and then responds.
+  - We can use this to create a simple web service that we then execute using Node.js.
+  - First, create our project.
+    - `mkdir webservicetest`
+    - `cd webservicetest`
+    - `npm init -y`
+  - Now, open VS Code and create a file named `index.js`.
+  - Paste the following code into the file and save.
+
+    - `const http = require('http');`
+    - `const server = http.createServer(function (req, res) {`
+      - `res.writeHead(200, { 'Content-Type': 'text/html' });`
+      - `` res.write(`<h1>Hello Node.js! [${req.method}] ${req.url}</h1>`); ``
+      - `res.end();`
+    - `});`
+
+    - `server.listen(8080, () => {`
+      - `` console.log(`Web service listening on port 8080`); ``
+    - `});`
+      - `const http = require('http');`: This line imports Node.js's built-in `http` module and assigns it to the variable `http`. The `http` module allows us to create HTTP servers and clients, which is essential for web development with Node.js.
+      - `const server = http.createServer(function (req, res) {...});`: Here, we use the `createServer` method of the `http` module to create a new HTTP server. The method takes a request listener function as an argument, which is executed each time the server receives a request. The request listener function has two parameters: `req` (request) and `res` (response).
+      - `res.writeHead(200, { 'Content-Type': 'text/html' })`: This line starts a response to the request with a status code of 200 (OK) and sets the `Content-Type` header to `text/html`. This tells the client that the response will be HTML content.
+      - `res.write(...)`: This sends a chunk of the response body. In this case, it sends an HTML `<h1>` tag with a message that includes the request method (`req.method`) and the URL path (`req.url`). For example, if we navigate to `http://localhost:8080/test`, it will display "Hello Node.js! [GET] /test".
+      - `res.end()`: This method signals to the server that all of the response headers and body have been sent; thus, the server should consider this message complete. The method, `res.end()`, must be called on each response.
+      - `server.listen(8080, () => {...});`: This line tells our server to listen on port 8080. When the server starts listening, the callback function is called, logging a message to the console that our web service is listening on port 8080.
+
+  - This code uses the Node.js's built-in `http` package to create our HTTP server using the `http.createServer` function along with a callback function that takes a request (`req`) and response (`res`) object.
+  - That function is called whenever the server receives an HTTP request.
+  - In our example, the callback always returns the same HTML snippet, with a status code of `200`, and a `Content-Type` header, no matter what request is made.
+  - Basically, this is just a simple dynamically generated HTML page.
+  - A real web service would examine the HTTP path and return meaningful content based on the purpose of the endpoint.
+  - The `server.listen` call starts listening on port 8080 and blocks until the program is terminated.
+  - We execute the program by going back to our console window and running Node.js to execute our `index.js` file.
+  - If the service starts up correctly, then it should look like the following.
+    - `node index.js`
+    - `Web service listening on port 8080`
+  - We can now open our browser point it to `localhost: 8080` and view the result.
+  - Use different URL paths in the browser and note that it will echo the HTTP method and path back in the document.
+  - We can kill the process by pressing `CTRL-C` in the console.
+  - Note that we can also start up Node and execute the `index.js` code directly in VS Code.
+  - To do this, open `index.js` in VS Code and press the `F5` key.
+  - This should ask us what program we want to run.
+  - Select Node.js.
+  - This starts up Node.js with the `index.js` file, but also attaches a debugger so that we can set breakpoints in the code and step through each line of code.
+
 - Acronyms and Terms
-    - NVM = Node Version Manager
-    - NPM = Node Package Manager
+  - NVM = Node Version Manager
+  - NPM = Node Package Manager
 
 # Express
+
 - Using Node-js to create a simple web server works great for little projects where we are trying to quickly serve up some web content but to build a production-ready application, we need a framework with a bit more functionality for easily implementing a full web service.
 - This is where the Node package `Express` comes in.
 - Express provides support for:
-    1. Routing requests for service endpoints
-    2. Manipulating HTTP requests with JSON body content
-    3. Generating HTTP responses
-    4. Using `middleware` to add functionality
+  1. Routing requests for service endpoints
+  2. Manipulating HTTP requests with JSON body content
+  3. Generating HTTP responses
+  4. Using `middleware` to add functionality
 - Everything in Express revolves around creating and using HTTP routing and middleware functions.
 - We create an Express application by using NPM to install the Express package and then calling the `express` constructor to create the Express application and listen for HTTP requests on a desired port.
+
+  - `const express = require('express');`
+  - `const app = express();`
+
+  - `app.listen(8080);`
+
+- With the `app` object, we can now add HTTP routing and middleware functions to the application.
+- Defining Routes
+
+  - HTTP endpoints are implemented in Express by defining routes that call a function based upon an HTTP path.
+  - The Express `app` object supports all of the HTTP verbs as functions on the object.
+  - For example, if we want to have a route function that handles an HTTP GET request for the URL path `/store/provo`, we would call the `get` method on the `app`.
+    - `app.get('/store/provo', (req, res, next) => {`
+      - `res.send({name: 'provo'});`
+    - `});`
+  - The `get` function takes two parameters, a URL path-matching pattern, and a callback function that is invoked when the pattern matches.
+  - The path matching parameter is used to match against the URL path of an incoming HTTP request.
+  - The callback function has three parameters that represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` routing function that Express expects to be called if this routing function wants another function to generate a response.
+  - The Express `app` compares the routing function patterns in the order that they are added to the Express `app` object.
+  - So if we have two routing functions with patterns that both match, the first one that was added will be called and given the next matching function in the `next` parameter.
+  - In our example above, we hard-coded the store name to be `provo`.
+  - A real store endpoint would allow any store name to be provided as a parameter in the path.
+  - Express supports path parameters by prefixing the parameter name with a colon (`:`).
+  - Express creates a map of path parameters and populates it with the matching values found in the URL path.
+  - We then reference the parameters using the `req.params` object.
+  - Using this pattern, we can rewrite our getScore endpoint as follows.
+    - `app.get('/store/:storeName', (req, res, next) => {`
+      - `res.send({name: req.params.storeName});`
+    - `});`
+  - If we run our JavaScript using `node`, we can see the result when we make an HTTP request using `curl`.
+    - `curl localhost:8080/store/orem`
+    - `{"name":"orem"}`
+  - If we wanted an endpoint that used the POST or DELETE HTTP verb, then we just use the `post` or `delete` function on the Express `app` object.
+  - The route path can also include a limited wildcard syntax or even full regular expressions in the path pattern.
+  - Here are a couple of route functions using different pattern syntax.
+
+    - // Wildcard - matches /store/x and /star/y
+    - `app.put('/st*/:storeName', (req, res) => res.send({update: req.params.storeName}));`
+
+    - // Pure regular expression
+    - `app.delete(/\/store\/(.+)/, (req, res) => res.send({delete: req.params[0]}));`
+
+  - Notice that in these examples, the `next` parameter was omitted.
+  - Since we are not calling `next`, we do not need to include it as a parameter.
+  - However, if we do not call `next`, then no following middleware functions will be invoked for the request.
+
+- Using Middleware
+  - The standard Mediator/Middleware design pattern has two pieces: a mediator and middleware.
+  - Middleware represents componentized pieces of functionality.
+  - The mediator loads the middleware components and determines their order of execution.
+  - When a request comes to the mediator, it then passes the request around to the middleware components.
+  - Following this pattern, Express is the mediator, and middleware functions are the middleware components.
+  - Express comes with a standard set of middleware functions.
+  - These provide functionality like routing, authentication, CORS, sessions, serving static web files, cookies, and logging.
+  - Some middleware functions are provided by default, and other ones must be installed using NPM before we can use them.
+  - We can also write our own middleware functions and use them with Express.
+  - A middleware function looks very similar to a routing function.
+  - That is because routing functions are also middleware functions.
+  - The only difference is that routing functions are only called if the associated pattern matches.
+  - Middleware functions are always called for every HTTP request unless a preceding middleware function does not call `next`.
+  - A middleware function has the following pattern:
+    - `function middlewareName(req, res, next)`
+  - The middleware function parameters represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` middleware function to pass processing to.
+  - We should usually call the `next` function after completing processing so that the next middleware function can execute.
+- Create Our Own Middleware
+  - As an example of writing our own middleware, we can create a function that logs out the URL of the request and then passes on processing to the next middleware function.
+    - `app.use((req, res, next) => {`
+      - `console.log(req.originalUrl);`
+      - `next();`
+    - `});`
+  - Remember that the order in which we add our middleware to the Express app object controls the order in which the middleware functions are called.
+  - Any middleware that does not call the `next` function after doing its processing, stops the middleware chain from continuing.
+- Builtin Middleware
+  - In addition to creating our own middleware functions, we can use a built-in middleware function.
+  - Here is an example of using the `static` middleware function.
+  - This middleware responds with static files, found in a given directory, that match the request URL.
+    - `app.use(express.static('public'));`
+  - Now if we create a subdirectory in our project directory and name it `public`, we can serve up any static content that we would like.
+  - For example, we could create an `index.html` file that is the default content for our web service.
+  - Then when we call our web service without any path, the `index.html` file will be returned.
+- Third-Party Middleware
+
+  - We can also use third-party middleware functions by using NPM to install the package and including the package in our JavaScript with the `require` function.
+  - The following uses the `cookie-parser` package to simplify the generation and access of cookies.
+
+    - `npm install cookie-parser`
+    - `const cookieParser = require('cookie-parser');`
+
+    - `app.use(cookieParser());`
+
+    - `app.post('/cookie/:name/:value', (req, res, next) => {`
+      - `res.cookie(req.params.name, req.params.value);`
+      - `` res.send({cookie: `${req.params.name}:${req.params.value}`}); ``
+    - `});`
+
+    - `app.get('/cookie', (req, res, next) => {`
+      - `res.send({cookie: req.cookies});`
+    - `});`
+
+  - It is common for middleware functions to add fields and functions to the `req` and `res` objects so that other middleware can access the functionality they provide.
+  - We see this happening when the `cookie-parser` middleware adds the `req.cookies` object for reading cookies and also adds the `res.cookie` function in order to make it easy to add a cookie to a response.
+
+- Error Handling Middleware
+  - We can also add middleware for handling errors that occur.
+  - Error middleware looks similar to other middleware functions, but it takes an additional `err` parameter that contains the error.
+    - `function errorMiddlewareName(err, req, res, next)`
+  - If we wanted to add a simple error handler for anything that might go wrong while processing HTTP requests, we could add the following.
+    - `app.use(function (err, req, res, next) {`
+      - `res.status(500).send({type: err.name, message: err.message});`
+    - `});`
+  - We can test that our error middleware is getting used by adding a new endpoint that generates an error.
+    - `app.get('/error', (req, res, next) => {`
+      - `throw new Error('Trouble in river city');`
+    - `});`
+  - Now if we use `curl` to call our error endpoint, we can see that the response comes from the error middleware.
+    - `curl localhost:8080/error`
+    - `{"type":"Error","message":"Trouble in river city"}`
+- Putting It All Together
+
+  - Here is a full example of our web service built using Express.
+
+    - `const express = require('express');`
+    - `const cookieParser = require('cookie-parser');`
+    - `const app = express();`
+
+    - // Third-party middleware - Cookies
+    - `app.use(cookieParser());`
+
+    - `app.post('/cookie/:name/:value', (req, res, next) => {`
+      - `res.cookie(req.params.name, req.params.value);`
+      - `` res.send({cookie: `${req.params.name}:${req.params.value}`}); ``
+    - `});`
+
+    - `app.get('/cookie', (req, res, next) => {`
+      `- `res.send({cookie: req.cookies});`
+    - `});`
+
+    - // Creating our own middleware - logging
+    - `app.use((req, res, next) => {`
+      - `console.log(req.originalUrl);`
+      - `next();`
+    - `});`
+
+    - // Built-in middleware - Static file hosting
+    - `app.use(express.static('public'));`
+
+    - // Routing middleware
+    - `app.get('/store/:storeName', (req, res) => {`
+      - `res.send({name: req.params.storeName});`
+    - `});`
+
+    - `app.put('/st*/:storeName', (req, res) => res.send({update: req.params.storeName}));`
+
+    - `app.delete(/\/store\/(.+)/, (req, res) => res.send({delete: req.params[0]}));`
+
+    - // Error middleware
+    - `app.get('/error', (req, res, next) => {`
+      - `throw new Error('Trouble in river city');`
+    - `});`
+
+    - `app.use(function (err, req, res, next) {`
+      - `res.status(500).send({type: err.name, message: err.message});`
+    - `});`
+
+    - // Listening to a network port
+    - `const port = 8080;`
+    - `app.listen(port, function () {`
+      - `console.log(`Listening on port ${port}`);`
+    - `});`
+
+- Acronyms and Terms
+  - CORS = Cross-Origin Resource Sharing
+    - It is a security feature in web browsers that restricts web pages from making requests to a domain other than the one that served the web page. This is known as the same-origin policy. CORS is a protocol that allows for exceptions to this rule; it lets web applications make requests to different domains by using specific HTTP headers that permit resources to be requested from another domain, enabling a more open web while still maintaining security.
+
+# Simon Service
+
+- This deliverable demonstrates converting the JavaScript application into a web application by implementing a web service that listens on a network port for HTTP requests.
+- The web service provides endpoints for getting and updating the scores.
+- The application also uses a couple of third-party endpoints to display inspirational quotes on the About page and show a random header image.
+- We will use Node.js and Express to create our HTTP service.
+- Service Endpoint Definitions
+
+  - Here is our design, documented using `curl` commands, for the two endpoints that the Simon web service provides.
+
+    - GetScores - Get the latest high scores.
+
+      - `curl -X GET /api/scores`
+
+      - #Response
+      - `{ "scores":[`
+        - `{"name":"Harvey", "score":"337", "date":"2022/11/20"},`
+        - `{"name":"도윤 이", "score":"95", "date":"2019/05/20"}`
+      - `]}`
+
+    - SubmitScore - Submit a score for consideration in the list of high scores.
+
+      - `curl -X POST /api/score -d '{"name":"Harvey", "score":"337", "date":"2022/11/20"}'`
+
+      - #Response
+      - `{ "scores":[`
+        - `{"name":"Harvey", "score":"337", "date":"2022/11/20"},`
+        - `{"name":"도윤 이", "score":"95", "date":"2019/05/20"}`
+      - `]}`
+
+- Third-Party Endpoints
+
+  - The `about.js` file contains code for making calls to third-party endpoints using `fetch`.
+  - We make one call to `picsum.photos` to get a random picture and another to `quotable.io` to get a random quote.
+  - Once the endpoint asynchronously returns, the DOM is updated with the requested data.
+  - Here is an example of the quote endpoint call.
+
+    - `function displayQuote(data) {`
+
+      - `fetch('https://api.quotable.io/random')`
+
+        - `.then((response) => response.json())`
+        - `.then((data) => {`
+
+          - `const containerEl = document.querySelector('#quote');`
+
+          - `const quoteEl = document.createElement('p');`
+          - `quoteEl.classList.add('quote');`
+          - `const authorEl = document.createElement('p');`
+          - `authorEl.classList.add('author');`
+
+          - `quoteEl.textContent = data.content;`
+          - `authorEl.textContent = data.author;`
+
+          - `containerEl.appendChild(quoteEl);`
+          - `containerEl.appendChild(authorEl);`
+
+        - `});`
+
+      - `}`
+        - Initiate a Fetch Request: The function begins by making a fetch request to `https://api.quotable.io/random`. This is an asynchronous operation to retrieve a random quote from the API.
+        - Process the Response: `.then((response) => response.json())`: Once the fetch operation completes and returns a response, this line is executed. It takes the response object, which represents the entire HTTP response, and uses the .json() method to read the response body to completion. The `.json()` method returns a promise that resolves with the result of parsing the body text as JSON.
+        - Use the Data:
+          - `.then((data) => { ... })`: After the previous promise resolves, this part of the code handles the actual data (now a JavaScript object thanks to `.json()`) returned from the API. The `data` object contains the quote and its author, among other potential fields.
+          - Inside this callback function, several things happen:
+            - Select the Container Element: It selects the HTML element with the id `#quote` to use as the container for displaying the quote and author. This is done using `document.querySelector('#quote')`.
+            - Create Elements for Quote and Author: It creates two new `<p>` elements to hold the quote and the author's name. These elements are assigned class names 'quote' and 'author', respectively, for styling purposes.
+            - Set the Text Content: The `textContent` of the created elements is set to the content of the quote (`data.content`) and the name of the author (`data.author`).
+            - Append the Elements: Finally, it appends these newly created elements (`quoteEl` and `authorEl`) to the container element (`containerEl`). This action inserts the quote and the author's name into the DOM, making them visible on the page.
+
+- Steps to Convert Simon to A Service
+
+  - Converting Simon to a service involved the following steps.
+
+    1. Move all the previous deliverable code files(**.html, **.js, \*.css, favicon.ico, and assets) into a sub-directory named `public`.
+    1. We will use the HTTP Node.js-based service to host the frontend application files.
+    1. This is done with the static file middleware that we will add to our service `index.js`.
+       - `app.use(express.static('public'));`
+    1. When running our service, the static file middleware takes care of reading the frontend code from the `public` directory and returning it to the browser.
+    1. The service only directly handles the endpoint requests.
+    1. Within the project directory, run `npm init -y`.
+    1. This configures the directory to work with Node.js.
+    1. Modify or create `.gitignore` to ignore `node_modules`.
+    1. Install the Express package by running `npm install express`.
+    1. This will write the Express package dependency in the `package.json` file and install all the Express code to the `node_modules` directory.
+    1. Create a file named `index.js` in the root of the project.
+    1. This is the entry point that Node.js will call when we run our web service.
+    1. Add the basic Express JavaScript code needed to host the application's static content and the desired endpoints.
+
+       - `const express = require('express');`
+       - `const app = express();`
+
+       - // The service port. In production, the frontend code is statically hosted by the service on the same port.
+       - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
+
+       - // JSON body parsing using built-in middleware
+       - `app.use(express.json());`
+
+       - // Serve up the frontend static content hosting
+       - `app.use(express.static('public'));`
+
+       - // Router for service endpoints
+       - `const apiRouter = express.Router();`
+       - `` app.use(`/api`, apiRouter); ``
+
+       - // GetScores
+       - `apiRouter.get('/scores', (_req, res) => {`
+         - `res.send(scores);`
+       - `});`
+
+       - // SubmitScore
+       - `apiRouter.post('/score', (req, res) => {`
+         `scores = updateScores(req.body, scores);`
+         `res.send(scores);`
+       - `});`
+
+       - // Return the application's default page if the path is unknown
+       - `app.use((_req, res) => {`
+         - `res.sendFile('index.html', { root: 'public' });`
+       - `});`
+
+       - `app.listen(port, () => {`
+         - `console.log(`Listening on port ${port}`);`
+       - `});`
+         - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
+           - `process.argv` is an array containing the command-line arguments passed when the Node.js process was launched. The first element (`process.argv[0]`) is the path to the node executable, and the second element (`process.argv[1]`) is the path to the JavaScript file being executed. Any additional arguments are found from the third element onwards (`process.argv[2]`, `process.argv[3]`, etc.).
+           - `process.argv.length > 2` checks if there are more than two elements in the `process.argv` array. This essentially checks if any additional command-line arguments were provided beyond the default two (the node executable and the script path).
+           - The ternary operator (`? :`) is used here as a shortcut for an if-else statement. It checks the condition before the `?`, and if that condition is true, it returns the value before the `:`, otherwise, it returns the value after the `:`.
+           - If there are additional command-line arguments (`process.argv.length > 2 is true`), it assigns `process.argv[2]` to `port`. This means the first argument provided by the user (beyond the default two) is used as the port number. For example, if we start our application with `node app.js 5000`, `process.argv[2]` would be `5000`, and thus, `port` would be set to `5000`.
+           - If there are no additional command-line arguments, it defaults to `3000`, meaning if no port is specified by the user, the server will listen on port `3000`.
+         - `const apiRouter = express.Router();`
+         - `` app.use(`/api`, apiRouter); ``
+           - Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the next middleware function in the application’s request-response cycle. These functions can execute any code, make changes to the request and the response objects, end the request-response cycle, and call the next middleware function in the stack.
+           - `app.use` is a method used to mount middleware functions to the application. Any middleware registered with `app.use` will be executed for every incoming request to the application.
+           - `express.json()` is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body parser.
+           - Essentially, `express.json()` returns a middleware function that reads a request’s body and, if the `Content-Type` header of the request is set to `application/json`, it parses the body of the request into a JavaScript object. After parsing, this object is available on `req.body` within our route handlers or downstream middleware, making it easier to work with JSON input.
+         - `const apiRouter = express.Router();`
+           - This line creates a new router object. Think of it as a mini-application capable only of performing middleware and routing functions. We have not defined any routes yet at this point; we have simply created an instance of a router that we will define routes on.
+         - `` app.use(`/api`, apiRouter); ``
+           - Here, we are telling our main Express application (`app`) to use the router (`apiRouter`) for any requests that start with `/api`. This is a way of modularizing your routes and can be particularly useful for separating different API versions (e.g., `/api/v1`, `/api/v2`) or categorizing routes (e.g., `/api/users`, `/api/posts`).
+           - `app.use()` is a method to configure middleware in our Express application. When we pass `/api` as the first argument, we are specifying a path prefix. Therefore, the router `apiRouter` becomes active only for paths that start with `/api`.
+           - After this line, any routes we define on `apiRouter` will be prefixed with `/api`. For example, if we define a route like `apiRouter.get('/users', callback)`, it will be accessible at `/api/users` in our application.
+         - `apiRouter.get('/scores', (_req, res) => {`
+           - `res.send(scores);`
+         - `});`
+           - The underscore (`_`) prefix before req in the callback function `(_req, res) => {}` is a naming convention used by some developers to indicate that the variable will not be used within the function. In the context of this `apiRouter.get('/scores', (_req, res) => {})` example, the underscore signifies that the request object (`req`) is not being utilized to process this specific endpoint's logic, which only needs to send back the `scores` response.
+
+    1. Modify the Simon application code to make service endpoint requests to our newly created HTTP service code.
+
+       - `async function loadScores() {`
+
+         - `const response = await fetch("/api/scores")`
+         - `const scores = await response.json()`
+
+         - // Modify the DOM to display the scores
+
+       - `}`
+
+# Uploading Files
+
+- Web applications often need to upload one or more files from the frontend application running in the browser to the backend service.
+- We can accomplish this by using the HTML `input` element of type `file` on the frontend, and the `Multer` NPM package on the backend.
+- Frontend Code
+
+  - The following frontend code registers an event handler for when the selected file changes and only accepts files of type `.png`, `.jpeg`, or `.jpg`.
+  - We also create an `img` placeholder element that will display the uploaded image once it has been stored on the server.
+    - `<html lang="en">`
+      - `<body>`
+        - `<h1>Upload an image</h1>`
+        - `<input`
+          - `type="file"`
+          - `id="fileInput"`
+          - `name="file"`
+          - `accept=".png, .jpeg, .jpg"`
+          - `onchange="uploadFile(this)"`
+        - `/>`
+        - `<div>`
+          - `<img style="padding: 2em 0" id="upload" />`
+        - `</div>`
+        - `<script defer src="frontend.js"></script>`
+      - `</body>`
+    - `</html>`
+      - `onchange="uploadFile(this)"`
+        - `onchange="..."`: This is an attribute that sets up an event listener directly within the HTML markup. The event it listens for is the `change` event.
+        - `uploadFile(this)`: This specifies the JavaScript function to be called when the `change` event occurs. The function `uploadFile` is invoked with `this` as its argument.
+        - `this`: In the context of an event handler attribute like `onchange`, `this` refers to the HTML element that the event handler is attached to. So, `this` is the `<input>` element itself. When uploadFile(this) is called, it passes the `<input>` element to the `uploadFile` function as its argument.
+      - `<script defer src="frontend.js"></script>`
+        - Deferred Loading: Scripts with the `defer` attribute are executed only after the HTML document has been fully parsed. This means that the script loading is deferred until the page’s HTML is completely loaded and parsed, but before the `DOMContentLoaded` event is triggered.
+        - Maintains Script Execution Order: If multiple scripts are marked with `defer`, they are executed in the order they appear in the document. This is particularly useful for scripts that depend on each other.
+        - Does Not Block HTML Parsing: Unlike traditional script tags without `defer` or `async`, which can block the HTML parser while the script is being downloaded and executed, scripts with `defer` allow the browser to continue parsing the HTML document. This can improve page load times since the script loading process does not interfere with the initial rendering of the page.
+  - The frontend JavaScript handles the uploading of the file to the server and then uses the filename returned from the server to set the `src` attribute of the image element in the DOM.
+  - If an error happens then an alert is displayed to the user.
+
+    - async function uploadFile(fileInput) {
+
+      - `const file = fileInput.files[0];`
+      - `if (file) {`
+
+        - `const formData = new FormData();`
+        - `formData.append('file', file);`
+
+        - `const response = await fetch('/upload', {`
+          - `method: 'POST',`
+          - `body: formData,`
+        - `});`
+
+        - `const data = await response.json();`
+        - `if (response.ok) {`
+          - `` document.querySelector('#upload').src = `/file/${data.file}`; ``
+        - `} else {`
+          - `alert(data.message);`
+        - `}`
+
+      - `}`
+
+    - `}`
+      - `async function uploadFile(fileInput) {...}`: This defines an asynchronous function named `uploadFile`. The keyword `async` indicates that the function can perform asynchronous operations using `await`. It takes one argument, `fileInput`, which is expected to be an HTML file input element.
+      - `const file = fileInput.files[0];`: This line retrieves the first file from the `fileInput` element. HTML file inputs can accept multiple files, so they store the files in an array-like object under `files`. By accessing `[0]`, the code is working with the first (or only) file selected by the user.
+      - `const formData = new FormData();`: A `FormData` object is instantiated. FormData is used to construct a set of key/value pairs representing form fields and their values, which can be sent using the `fetch` API.
+      - `formData.append('file', file);`: The selected file is appended to `formData` under the key `'file'`. This effectively simulates a form submission with the file as one of its fields.
+      - The `fetch` function is used to asynchronously send a `POST` request to the server at the endpoint `/upload`. The body of the request is the `formData` object, which includes the file to be uploaded.
+        - `method: 'POST'`: Specifies the HTTP method for the request.
+        - `body: formData`: Sets the request body to the formData object, containing the file.
+      - `const response = await fetch(...);`: The `await` keyword pauses execution until the `fetch` request is completed, and then stores the response in the response variable.
+      - `const data = await response.json();`: This line extracts the JSON body from the response. It assumes that the server will respond with JSON data. The `await` keyword is used again because `response.json()` returns a Promise.
+      - `if (response.ok) {...} else {...}`: The `ok` property of the response object is a boolean indicating whether the response's status code is in the successful range (200–299). If the request was successful, the code inside the `if` block is executed; otherwise, the code in the `else` block runs.
+        - On success, the `src` attribute of an image element with the ID `upload` is set to a URL path that presumably points to the uploaded file, allowing it to be displayed on the page.
+        - On failure, an alert is shown to the user with a message extracted from the response data, indicating something went wrong with the upload.
+
+- Backend Code
+
+  - In order to build storage support into our server, we first install the `Multer` NPM package to our project.
+  - There are other NPM packages that we can choose from, but `Multer` is commonly used.
+  - From our project directory, run the following console command.
+    - `npm install multer`
+  - `Multer` handles reading the file from the HTTP request, enforcing the size limit of the upload, and storing the file in the `uploads` directory.
+  - Additionally, our service code does the following:
+
+    - Handles requests for static files so that we can serve up our frontend code.
+    - Handles errors such as when the 64k file limit is violated.
+    - Provides a `GET` endpoint to serve up a file from the uploads directory.
+
+      - `const express = require('express');`
+      - `const multer = require('multer');`
+
+      - `const app = express();`
+
+      - `app.use(express.static('public'));`
+
+      - `const upload = multer({`
+        - `storage: multer.diskStorage({`
+          - `destination: 'uploads/',`
+          - `filename: (req, file, cb) => {`
+            - `const filetype = file.originalname.split('.').pop();`
+            - `const id = Math.round(Math.random() * 1e9);`
+            - `const filename = `${id}.${filetype}`;`
+            - `cb(null, filename);`
+          - `},`
+        - `}),`
+        - `limits: { fileSize: 64000 },`
+      - `});`
+
+      - `app.post('/upload', upload.single('file'), (req, res) => {`
+        - `if (req.file) {`
+          - `res.send({`
+          - `message: 'Uploaded succeeded',`
+          - `file: req.file.filename,`
+        - `});`
+        - `} else {`
+          - `res.status(400).send({ message: 'Upload failed' });`
+        - `}`
+      - `});`
+
+      - `app.get('/file/:filename', (req, res) => {`
+        - `` res.sendFile(__dirname + `/uploads/${req.params.filename}`); ``
+      - `});`
+
+      - `app.use((err, req, res, next) => {`
+        - `if (err instanceof multer.MulterError) {`
+          - `res.status(413).send({ message: err.message });`
+        - `} else {`
+          - `res.status(500).send({ message: err.message });`
+        - `}`
+      - `});`
+
+      - `app.listen(3000, () => {`
+        - `console.log('Server is running on port 3000');`
+      - `});`
+        - `const upload = multer({...})`: This initializes `multer` with a specific configuration provided in the object. The resulting `upload` object is a middleware that can be used in your Express routes to handle file uploads.
+        - `storage: multer.diskStorage({...})`: This specifies that the uploaded files should be stored on the server's disk. The `diskStorage` engine gives you full control over storing files to disk.
+        - `destination: 'uploads/'`: This is a property of `diskStorage` that defines the folder where the files will be stored. In this case, files are saved in a folder named `uploads` at the root of your project directory.
+        - `filename: (req, file, cb) => {...}`: This function determines the name of the file on disk. It receives the request (`req`), the file object (`file`), and a callback function (`cb`) as arguments.
+          - Inside the filename function:
+            - `const filetype = file.originalname.split('.').pop();`: This extracts the file extension from the original filename by splitting the name at the period character and taking the last element of the resulting array (i.e., the file extension).
+            - `const id = Math.round(Math.random() * 1e9);`: This generates a pseudo-random number to use as part of the new filename, ensuring each uploaded file has a unique name.
+            - `` const filename = \`${id}.${filetype}`; ``: The new filename is constructed by combining the generated `id` with the original file's extension.
+            - `cb(null, filename);`: The callback function is called with two arguments: `null` (indicating no error occurred) and the `filename`. This effectively assigns the new filename to the uploaded file.
+              - The `cb` function in the `multer` configuration is a callback function provided by `multer` itself. It is not defined in the code directly; rather, it is a part of the `multer` library's API. When we configure `multer` with a custom filename function, `multer` expects this function to call `cb` to proceed with the file upload process.
+              - `cb` stands for callback. In JavaScript, callback functions are used to continue execution after an asynchronous operation has been completed. In the context of our `multer` configuration, `cb` is used to signal the completion of the filename determination process.
+              - `cb(null, filename);`: Here, `cb` is called with two arguments. The first argument is used for errors. By passing `null` as the first argument, we are indicating that no error occurred during the filename determination. The second argument is the filename we have constructed (`${id}.${filetype}`), which `multer` will use to save the file to disk.
+              - Error Handling: If there were an issue that prevented the file from being saved (for example, if we could not determine a suitable filename for some reason), we could call `cb` with an error object as the first argument to indicate an error occurred.
+              - Flow Control: By calling `cb` with `null` and the `filename`, we are telling `multer` that it can proceed with the file-saving process using the filename we have provided.
+        - `upload.single('file')`: This is a middleware function provided by `multer`, a library for handling `multipart/form-data` (a format used for uploading files from forms). The `single('file')` part means that it expects a single file upload with the form field name `file`. This middleware processes the incoming file, saves it according to the configuration provided earlier (in our `multer` setup), and attaches the file information to `req.file`.
+        - `(req, res) => {...}`: This function is the route handler that gets executed after the `multer` middleware has processed the file. It receives two arguments:
+          - `req`: The request object, which contains information about the HTTP request. After being processed by `multer`, it also includes `req.file`, which contains details about the uploaded file (if the upload was successful).
+          - `res`: The response object, which is used to send a response back to the client.
+        - `if (req.file) {...} else {...}`: This checks if `req.file` is present. `req.file` will be `populated` by multer if a file was successfully uploaded.
+          - If `req.file` exists (meaning the upload was successful), the server responds with a status code of 200 (OK by default) and sends back a JSON object containing a message (`'Uploaded succeeded'`) and the filename of the uploaded file (`req.file.filename`).
+          - If `req.file` does not exist, it means no file was uploaded (either the client did not include a file in the request, or `multer` rejected the file for some reason, like size limits). In this case, the server responds with a status code of 400 (Bad Request) and sends back a JSON object with an error message (`'Upload failed'`).
+        - `'/file/:filename'`: This string specifies the path or endpoint. The `:filename` part is a route parameter, meaning it can match any value in that part of the URL. For example, if a client requests `/file/somefile.txt`, the value of `:filename` will be `somefile.txt`.
+        - `(req, res) => {...}`: This is the route handler function that gets executed when the route is matched. It receives two arguments:
+          - `req`: The request object, which contains information about the HTTP request. This includes the params property, which in this case will have a `filename` property representing the dynamic part of the URL matched by `:filename`.
+          - `res`: The response object, which is used to send a response back to the client.
+        - `res.sendFile(__dirname + /uploads/${req.params.filename});`:
+          - `res.sendFile(...)`: This method is used to send a file as a response. It sets the appropriate headers (like `Content-Type`) based on the file extension and sends the file content to the client
+          - `__dirname`: This is a Node.js global variable that represents the directory name of the current module (i.e., the folder where the currently executing script resides). It is used here to construct an absolute path to the file.
+          - `/uploads/${req.params.filename}`: This template literal constructs the path to the file within the uploads directory using the `filename` captured from the URL. For example, if the requested URL was `/file/document.pdf`, it constructs the path to `/uploads/document.pdf`.
+
+- Where We Store Our Files
+  - We should take serious thought about where we store our files.
+  - Putting files on our server is not a very good production-level solution for the following reasons.
+    1. We may have so much available space.
+    1. Our server only has 8GB by default.
+    1. Once we use up all our space, then our server will fail to operate correctly and we may need to rebuild our server.
+    1. In a production system, servers are transient and are often replaced as new versions are released, or capacity requirements change.
+    1. That means we will lose any state that we store on our server.
+    1. The server storage is not usually backed up.
+    1. If the server fails for any reason, we will lose our customer's data.
+    1. If we have multiple application servers, then we cannot assume that the server we uploaded the data to is going to be the one we request a download from.
+  - Instead, we want to use a dedicated storage service that has durability guarantees, is not tied to our compute capacity, and can be accessed by multiple application servers.
+
+# Storage Services
+
+- Web applications commonly need to store files associated with the application or the users of the application.
+- This includes files such as images, user uploads, documents, and movies.
+- Files usually have an ID, some metadata, and the bytes representing the file itself.
+- These can be stored using a database service, but usually, that is overkill and a simpler solution will be cheaper.
+- It might be tempting to store files directly on our server.
+- This is usually a bad idea for several reasons.
+  1. Our server has limited drive space.
+  1. If our server runs out of drive space, our entire application will fail.
+  1. We should consider our server as being ephemeral, or temporary.
+  1. It can be thrown away and replaced by a copy at any time.
+  1. If we start storing files on the server, then our server has a state that cannot be easily replaced.
+  1. We need backup copies of our application and use files.
+  1. If we only have one copy of our files on our server, then they will disappear when our server disappears, and we must always assume that our server will disappear.
+- Instead, we want to use a storage service that is specifically designed to support production storage and delivery of files.
+- AWS S3
+  - There are many such solutions out there, but one of the most popular ones is AWS S3.
+  - S3 provides the following advantages:
+    1. It has unlimited capacity.
+    2. We only pay for the storage that we use.
+    3. It is optimized for global access.
+    4. It keeps multiple redundant copies of every file.
+    5. We can version the files.
+    6. It is performant.
+    7. It supports metadata tags.
+    8. We can make our files publicly available directly from S3.
+    9. We can keep our files private and only accessible to our application.
+  - In this course, we will not be using any storage services for the Simon project.
+  - If, however, we want to use S3 as the storage service for our Startup application, then we need to learn how to use the AWS SDK.
+  - We can find detailed information about using AWS S3 with Node.js on the AWS website.
+  - Generally, the steps we need take include:
+    1. Creating a S3 bucket to store our data in.
+    2. Getting credentials so that our application can access the bucket.
+    3. Using the credentials in our application.
+    4. Using the SDK to write, list, read, and delete files from the bucket.
+  - Make sure that we do not include our credentials in our code.
+  - If we check our credentials into our GitHub repository, they will immediately be stolen and used by hackers to take over our AWS account.
+  - This may result in significant monetary damage to us.
+- Acronyms and Terms
+  - SDK = Software Development Kit
+
+# Data Services
+
+- Web applications commonly need to store application and user data persistently.
+- The data can be many things, but it is usually a representation of complex interrelated objects.
+- This includes things like a user profile, organizational structure, gameplay information, usage history, billing information, peer relationship, library catalog, and so forth.
+- Historically, SQL databases have served as the general-purpose data service solution, but starting around 2010, specialty data services that better support document, graph, JSON, time, sequence, and key-value pair data began to take significant roles in applications from major companies.
+- These data services are often called NoSQL solutions because they do not use the general-purpose relational database paradigms popularized by SQL databases.
+- However, they all have very different underlying data structures, strengths, and weaknesses.
+- That means that we should not simply split all of the possible data services into two narrowly defined boxes, SQL and NoSQL, when we are considering the right data service for our application.
+- Here is a list of some of the popular data services that are available.
+  - Service: MuSQL
+    - Specialty: Relational queries
+  - Service: Redis
+    - Specialty: Memory cached objects
+  - Service: ElasticSearch
+    - Specialty: Ranked free text
+  - Service: MongoDB
+    - Specialty: JSON objects
+  - Service: DynamoDB
+    - Specialty: Key-value pairs
+  - Service: Neo4J
+    - Specialty: Graph-based data
+  - Service: InfluxDB
+    - Specialty: Time series data
+- MongoDB
+
+  - For the projects in this course that require data services, we will use `MongoDB`.
+  - Mondo increases developer productivity by using JSON objects as its core data model.
+  - This makes it easy to have an application that uses JSON from the top to the bottom of the technology stack.
+  - A Mongo database is made up of one or more collections that each contain JSON documents.
+  - We can think of a collection as a large array of JavaScript objects, each with a unique ID.
+  - the following is a sample of a collection of houses that are for rent.
+    - `[`
+      - `{`
+        - `_id: '62300f5316f7f58839c811de',`
+        - `name: 'Lovely Loft',`
+        - `summary: 'A charming loft in Paris',`
+        - `beds: 1,`
+        - `last_review: {`
+          - `$date: '2022-03-15T04:06:17.766Z',`
+        - `},`
+        - `price: 3000,`
+      - `},`
+      - `{`
+        - `_id: '623010b97f1fed0a2df311f8',`
+        - `name: 'Infinite Views',`
+        - `summary: 'Modern home with infinite views from the infinity pool',`
+        - `property_type: 'House',`
+        - `beds: 5,`
+        - `price: 250,`
+      - `},`
+    - `];`
+  - Unlike relational databases that require a rigid table definition where each column must be strictly typed and defined beforehand, Mongo has no strict schema requirements.
+  - Each document in the collection usually follows a similar schema, but each document may have specialized fields that are present, and common fields that are missing.
+  - This allows the schema of a collection to morph organically as the data model of the application evolves.
+  - To add a new field to a Mongo collection, we just insert the field into the documents as desired.
+  - If the field is not present, or has a different type in some documents, then the document simply does not match the query criteria when the field is referenced.
+  - The query syntax for Mongo also follows a JavaScript-inspired flavor.
+  - Consider the following queries on the houses for rent collection that was shown above.
+
+    - // find all houses
+    - `db.house.find();`
+
+    - // find houses with two or more bedrooms
+    - `db.house.find({ beds: { $gte: 2 } });`
+
+    - // find houses that are available with less than three beds
+    - `db.house.find({ status: 'available', beds: { $lt: 3 } });`
+
+    - // find houses with either less than three beds or less than $1000 a night
+    - `db.house.find({ $or: [(beds: { $lt: 3 }), (price: { $lt: 1000 })] });`
+
+    - // find houses with the text 'modern' or 'beach' in the summary
+    - `db.house.find({ summary: /(modern|beach)/i });`
+      - `$gte` = greater than or equal to (>=)
+      - `$lt` = less than (<)
+      - `/i` = case-sensitive
+
+  - Using MongoDB in Our Application
+
+    - The first step to using MongoDB in our application is to install the `mongodb` package using NPM.
+      - `npm install mongodb`
+    - With that done, we then use the `MongoClient` object to make a client connection to the database server.
+    - This requires a username, password, and the hostname of the database server.
+
+      - `const { MongoClient } = require('mongodb');`
+
+      - `const username = 'holowaychuk';`
+      - `const password = 'express';`
+      - `const hostname = 'mongodb.com';`
+
+      - `` const url = `mongodb+srv://${userName}:${password}@${hostname}`; ``
+
+      - `const client = new MongoClient(url);`
+
+    - With the client connection, we can then get a database object and from that a collection object.
+    - The collection object allows us to insert, and query for, documents.
+    - We do not have to do anything special to insert a JavaScript object as a Mongo document.
+    - We just call the `insertOne` function on the collection object and pass it the JavaScript object.
+    - When we insert a document, if the database or collection does not exist, Mongo will automatically create them for us.
+    - When the document is inserted into the collection, it will automatically be assigned a unique ID.
+
+      - `const collection = client.db('rental').collection('house');`
+
+      - `const house = {`
+        - `name: 'Beachfront views',`
+        - `summary: 'From your bedroom to the beach, no shoes required',`
+        - `property_type: 'Condo',`
+        - `beds: 1,`
+      - `};`
+      - `await collection.insertOne(house);`
+
+    - To query for documents, we use the `find` function on the collection object. Note that the `find` function is asynchronous and so we use the `await` keyword to wait for the promise to resolve before we write them out to the console.
+      - `const cursor = collection.find();`
+      - `const rentals = await cursor.toArray();`
+      - `rentals.forEach((i) => console.log(i));`
+        - `collection.find()`: This method is used to query documents from the MongoDB collection referred to by the `collection` variable. Without any arguments, `find()` retrieves all documents in the collection.
+        - The result of `find()` is not the documents themselves but a cursor. A cursor is a MongoDB concept that allows you to iterate over the results of a query. This is efficient for handling large datasets because it does not load all documents into memory at once.
+        - `await cursor.toArray()`: This line converts the cursor into an array of documents. The `await` keyword is used because `toArray()` returns a Promise. This operation fetches all documents the cursor points to and stores them in the `rentals` array. This step is where the actual database operation to retrieve documents occurs.
+        - Note: Converting a cursor to an array is practical for relatively small datasets. For handling large collections, it is more efficient to use the cursor to iterate over documents one by one to avoid high memory usage.
+        - `rentals.forEach(...)`: This iterates over each document in the `rentals` array. The `forEach` method takes a callback function as an argument, which is executed once for each document in the array.
+        - `(i) => console.log(i)`: For each document (`i`), the callback function logs the document to the console. The variable `i` here represents an individual document from the `rentals` array.
+    - If we do not supply any parameters to the `find` function, then it will return all documents in the collection.
+    - In this case, we only get back the single document that we previously inserted.
+    - Notice that the automatically generated ID is returned with the document.
+      - `[`
+        - `{`
+          - `_id: new ObjectId('639a96398f8de594e198fc13'),`
+          - `name: 'Beachfront views',`
+          - `summary: 'From your bedroom to the beach, no shoes required',`
+          - `property_type: 'Condo',`
+          - `beds: 1,`
+        - `},`
+      - `];`
+    - We can provide a query and options to the `find` function.
+    - In the example below, we query for a `property-type` of Condo that has less than two bedrooms.
+    - We also specify the options to sort by descending price and limit our results to the first 10 documents.
+
+      - `const query = { property_type: 'Condo', beds: { $lt: 2 } };`
+
+      - `const options = {`
+        - `sort: { price: -1 },`
+        - `limit: 10,`
+      - `};`
+
+      - `const cursor = collection.find(query, options);`
+      - `const rentals = await cursor.toArray();`
+      - `rentals.forEach((i) => console.log(i));`
+
+    - The query matches the document that we previously inserted and so we get the same result as before.
+
+- Managed Services
+  - Historically, each application development team would have developers that managed the data service.
+  - Those developers would acquire hardware, install the database software, monitor the memory, CPU, and disk space, control the data schema, and handle migrations and upgrades.
+  - Much of this work has now moved to services that are hosted and managed by a 3rd party.
+  - This relieves the development team from much of the day-to-day maintenance.
+  - The team can instead focus more on the application and less on the infrastructure.
+  - With a managed data service, we simply supply the data and the service grows, or shrinks, to support the desired capacity and performance criteria.
+  - MongoDB Atlas
+    - All of the major cloud providers offer multiple data services.
+    - For this class, we will use the data service provided by MongoDB called Atlas.
+    - The main steps we need to take are:
+      1. Create our account.
+      2. Create a database cluster.
+      3. Create our root database user credentials.
+      4. Remember these for later use.
+      5. Set network access to our database to be available from anywhere.
+      6. Copy the connection string and use the information in our code.
+      7. Save the connection and credential information in our production and development environments as instructed below.
+    - We can always find the connection string in our Altas cluster by pressing the `Connect` button from our Database > DataServices view.
+- Keeping Our Keys out of Our Code
+
+  - We need to protect our credentials for connecting to our Mongo database.
+  - One common mistake is to check them into our code and then post it to a public GitHub repository.
+  - Instead, we can load our credentials when the application executes.
+  - One common way to do that is to have a JSON configuration file that contains the credentials that we dynamically load into the JavaScript that makes the database connection.
+  - We then use the configuration file in our development environment and deploy it to our production environment, but we never commit it to GitHub.
+  - In order to accomplish this, do the following:
+    1. Create a file named `dbCongif.json` in the same directory as the database JavaScript (e.g. `database.js`) that we use to make database requests.
+    2. Insert our Mongo DB credentials into the `dbConfig.json` file in JSON format using the following example.
+       - `{`
+         - `"hostname": "cs260.abcdefg.mongodb.net",`
+         - `"userName": "myMongoUserName",`
+         - `"password": "toomanysecrets"`
+       - `}`
+    3. Import the `dbConfig.json` content into our `database.js` file using a Node.js require statement and use the data that it represents to create the connection URL.
+       - `const config = require('./dbConfig.json');`
+       - `` const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`; ``
+  - Make sure we include `dbConfig.json` in our `.gitignore` file so that it does not get pushed up to GitHub.
+  - Testing the Connection on Startup
+
+    - It is nice to know that our connection string is correct before our application attempts to access any data.
+    - We can do that when the application starts by making an asynchronous request to ping the database.
+    - If that fails, then either the connection string is incorrect, the credentials are invalid, or the network is not working.
+    - The following is an example of testing the connection.
+
+      - `const config = require('./dbConfig.json');`
+
+      - `` const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`; ``
+      - `const client = new MongoClient(url);`
+      - `const db = client.db('rental');`
+
+      - `(async function testConnection() {`
+        - `await client.connect();`
+        - `await db.command({ ping: 1 });`
+      - `})().catch((ex) => {`
+        - `` console.log(`Unable to connect to database with ${url} because ${ex.message}`); ``
+        - `process.exit(1);`
+      - `});`
+
+- Using Mongo from Our Code
+
+  - `const { MongoClient } = require('mongodb');`
+  - `const config = require('./dbConfig.json');`
+
+  - `async function main() {`
+
+    - // Connect to the database cluster
+    - `` const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`; ``
+    - `const client = new MongoClient(url);`
+    - `const db = client.db('rental');`
+    - `const collection = db.collection('house');`
+
+    - // Test that you can connect to the database
+    - `(async function testConnection() {`
+      - `await client.connect();`
+      - `await db.command({ ping: 1 });`
+    - `})().catch((ex) => {`
+      - `` console.log(`Unable to connect to database with ${url} - because ${ex.message}`); ``
+      - `process.exit(1);`
+    - `});`
+
+    - // Insert a document
+    - `const house = {`
+      - `name: 'Beachfront views',`
+      - `summary: 'From your bedroom to the beach, no shoes - required',`
+      - `property_type: 'Condo',`
+      - `beds: 1,`
+    - `};`
+    - `await collection.insertOne(house);`
+
+    - // Query the documents
+    - `const query = { property_type: 'Condo', beds: { $lt: 2 } };`
+    - `const options = {`
+      - `sort: { score: -1 },`
+      - `limit: 10,`
+    - `};`
+
+    - `const cursor = collection.find(query, options);`
+    - `const rentals = await cursor.toArray();`
+    - `rentals.forEach((i) => console.log(i));`
+
+  - `}`
+
+  - `main().catch(console.error);`
+  - To execute the above example: do the following
+    1. Create a directory called `mongoTest`.
+    2. Save the above content to a file named `index.js`.
+    3. Create a file named `dbConfig.json` that contains our database credentials.
+    4. Run `npm init -y`.
+    5. Run `npm install mongodb`.
+    6. Run `node index.js`.
+  - This should output something like the following if everything is working correcly.
+    - `{`
+      - `_id: new ObjectId("639b51b74ef1e953b884ca5b"),`
+      - `name: 'Beachfront views',`
+      - `summary: 'From your bedroom to the beach, no shoes required',`
+      - `property_type: 'Condo',`
+      - `beds: 1`
+    - `}`
+
+- Acronyms and Terms
+  - CPU = Central Processing Unit
+
+# Authorization Services
+
+-
+
+# Account Creation and Login
+
+- The first step towards supporting authentication in our web application is providing a way for users to uniquely identify themselves.
+- This usually requires two service endpoints.
+- One to initially `create` an authentication credential, and a second to authenticate, or `login`, on future visits.
+- Once a user is authenticated, we can control access to other endpoints.
+- For example, web services often have a `getMe` endpoint that gives information about the currently authenticated user.
+- We will implement this endpoint to demonstrate that authentication is actually working correctly.
+- Endpoint Design
+
+  - Using HTTP, we can map out the design of each of our endpoints.
+  - Create Authentication Endpoint
+
+    - This takes an email and password and returns a cookie containing the authentication token and user ID.
+    - If the email already exists, it returns a 409 (conflict) status code.
+
+      - `POST /auth/create HTTP/2`
+      - `Content-Type: application/json`
+
+      - `{`
+        `"email":"marta@id.com",`
+        `"password":"toomanysecrets"`
+      - `}`
+
+      - `HTTP/2 200 OK`
+      - `Content-Type: application/json`
+      - `Set-Cookie: auth=tokenHere`
+
+      - `{`
+        - `"id":"337"`
+      - `}`
+        - The `HTTP/2` part specifies that this request is using version 2 of the HTTP protocol, which offers improvements over HTTP/1.x such as reduced latency and better multiplexing.
+        - `Set-Cookie: auth=tokenHere`: This response header instructs the client to store a cookie named auth with the value tokenHere. Cookies are used to store stateful information (in this case, likely an authentication token) on the client side and are sent with subsequent requests to the server. This particular cookie might be used for maintaining the user's logged-in state.
+        - `"id":"337"`: Indicates the unique identifier assigned to the newly created account. This ID could be used for referencing the user in future operations.
+
+  - Login Authentication Endpoint
+
+    - This takes an email and password and returns a cookie containing the authentication token and user ID.
+    - If the email does not exist or the password is bad, it returns a 401 (unauthorized) status code.
+
+      - - `POST /auth/login HTTP/2`
+      - `Content-Type: application/json`
+
+      - `{`
+        `"email":"marta@id.com",`
+        `"password":"toomanysecrets"`
+      - `}`
+
+      - `HTTP/2 200 OK`
+      - `Content-Type: application/json`
+      - `Set-Cookie: auth=tokenHere`
+
+      - `{`
+        - `"id":"337"`
+      - `}`
+
+  - GetMe Endpoint
+
+    - This uses the authentication token stored in the cookie to look up and return information about the authenticated user.
+    - If the token or user does not exist, it returns a 401 (unauthorized) status code.
+
+      - `GET /user/me HTTP/2`
+      - `Cookie: auth=tokenHere`
+
+      - `HTTP/2 200 OK`
+      - `Content-Type: application/json`
+
+      - `{`
+        - `"email":"marta@id.com"`
+      - `}`
+
+- Web Service
+
+  - With our service endpoints designed, we can now build our web service using Express.
+
     - `const express = require('express');`
     - `const app = express();`
 
-    - `app.listen(8080);`
-- With the `app` object, we can now add HTTP routing and middleware functions to the application.
-- Defining Routes
-    - HTTP endpoints are implemented in Express by defining routes that call a function based upon an HTTP path.
-    - The Express `app` object supports all of the HTTP verbs as functions on the object.
-    - For example, if we want to have a route function that handles an HTTP GET request for the URL path `/store/provo`, we would call the `get` method on the `app`.
-        - `app.get('/store/provo', (req, res, next) => {`
-            - `res.send({name: 'provo'});`
-        - `});`
-    - The `get` function takes two parameters, a URL path-matching pattern, and a callback function that is invoked when the pattern matches.
-    - The path matching parameter is used to match against the URL path of an incoming HTTP request.
-    - The callback function has three parameters that represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` routing function that Express expects to be called if this routing function wants another function to generate a response.
-    - The Express `app` compares the routing function patterns in the order that they are added to the Express `app` object.
-    - So if we have two routing functions with patterns that both match, the first one that was added will be called and given the next matching function in the `next` parameter.
-    - In our example above, we hard-coded the store name to be `provo`.
-    - A real store endpoint would allow any store name to be provided as a parameter in the path.
-    - Express supports path parameters by prefixing the parameter name with a colon (`:`).
-    - Express creates a map of path parameters and populates it with the matching values found in the URL path.
-    - We then reference the parameters using the `req.params` object.
-    - Using this pattern, we can rewrite our getScore endpoint as follows.
-        - `app.get('/store/:storeName', (req, res, next) => {`
-            - `res.send({name: req.params.storeName});`
-        - `});`
-    - If we run our JavaScript using `node`, we can see the result when we make an HTTP request using `curl`.
-        - `curl localhost:8080/store/orem`
-        - `{"name":"orem"}`
-    - If we wanted an endpoint that used the POST or DELETE HTTP verb, then we just use the `post` or `delete` function on the Express `app` object.
-    - The route path can also include a limited wildcard syntax or even full regular expressions in the path pattern.
-    - Here are a couple of route functions using different pattern syntax.
-        - // Wildcard - matches /store/x and /star/y
-        - `app.put('/st*/:storeName', (req, res) => res.send({update: req.params.storeName}));`
+    - `app.post('/auth/create', async (req, res) => {`
+      - `res.send({ id: 'user@id.com' });`
+    - `});`
 
-        - // Pure regular expression
-        - `app.delete(/\/store\/(.+)/, (req, res) => res.send({delete: req.params[0]}));`
-    - Notice that in these examples, the `next` parameter was omitted.
-    - Since we are not calling `next`, we do not need to include it as a parameter.
-    - However, if we do not call `next`, then no following middleware functions will be invoked for the request.
--  Using Middleware
-    - The standard Mediator/Middleware design pattern has two pieces: a mediator and middleware.
-    - Middleware represents componentized pieces of functionality.
-    - The mediator loads the middleware components and determines their order of execution.
-    - When a request comes to the mediator, it then passes the request around to the middleware components.
-    - Following this pattern, Express is the mediator, and middleware functions are the middleware components.
-    - Express comes with a standard set of middleware functions.
-    - These provide functionality like routing, authentication, CORS, sessions, serving static web files, cookies, and logging.
-    - Some middleware functions are provided by default, and other ones must be installed using NPM before we can use them.
-    - We can also write our own middleware functions and use them with Express.
-    - A middleware function looks very similar to a routing function.
-    - That is because routing functions are also middleware functions.
-    - The only difference is that routing functions are only called if the associated pattern matches.
-    - Middleware functions are always called for every HTTP request unless a preceding middleware function does not call `next`.
-    - A middleware function has the following pattern:
-        - `function middlewareName(req, res, next)`
-    - The middleware function parameters represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` middleware function to pass processing to.
-    - We should usually call the `next` function after completing processing so that the next middleware function can execute.
-- Create Our Own Middleware
-    - As an example of writing our own middleware, we can create a function that logs out the URL of the request and then passes on processing to the next middleware function.
-        - `app.use((req, res, next) => {`
-            - `console.log(req.originalUrl);`
-            - `next();`
-        - `});`
-    - Remember that the order which we add our middleware to the Express app object controls the order in the middleware functions are called.
-    - Any middleware that does not call the `next` function after doing its processing, stops the middleware chain from continuing.
-- Builtin Middleware
-    - In addition to creating our own middleware functions, we can use a built-in middleware function.
-    - Here is an example of using the `static` middleware function.
-    - This middleware responds with static files, found in a given directory, that match the request URL.
-        - `app.use(express.static('public'));`
-    - Now if we create a subdirectory in our project directory and name it `public`, we can serve up any static content that we would like.
-    - For example, we could create an `index.html` file that is the default content for our web service.
-    - Then when we call our web service without any path, the `index.html` file will be returned.
-- Third-Party Middleware
-    - We can also use third-party middleware functions by using NPM to install the package and including the package in our JavaScript with the `require` function.
-    - The following uses the `cookie-parser` package to simplify the generation and access of cookies.
-        - `npm install cookie-parser`
-        - `const cookieParser = require('cookie-parser');`
+    - `app.post('/auth/login', async (req, res) => {`
+      - `res.send({ id: 'user@id.com' });`
+    - `});`
 
-        - `app.use(cookieParser());`
+    - `const port = 8080;`
+    - `app.listen(port, function () {`
+      - `` console.log(`Listening on port ${port}`); ``
+    - `});`
+      - Even though the current implementations of the route handlers do not perform any asynchronous operations (since they immediately send a response using `res.send()` without waiting on any promises), the use of `async` suggests that the developer intends to include asynchronous operations within these functions in the future. For instance, user creation or login processes typically involve database calls or other I/O operations that are asynchronous. These might include:
+        - Verifying credentials
+        - Querying a database for a user record
+        - Creating a new user in the database
+        - Generating an authentication token
+      - By marking these functions as async, it is made clear that they are prepared to include await expressions for such asynchronous tasks.
 
-        - `app.post('/cookie/:name/:value', (req, res, next) => {`
-            - `res.cookie(req.params.name, req.params.value);`
-            - ``res.send({cookie: `${req.params.name}:${req.params.value}`});``
-        - `});`
+  1. Create a directory called `authTest` that we will work in.
+  2. Save the above content to a file named `main.js`.
+  3. This is our starting web service.
+  4. Run `npm init -y` to initialize the project to work with Node.js
+  5. Run `npm install express cookie-parser mongodb uuid bcrypt` to install all of the packages we are going to use.
+  6. Run `node main.js` or press `F5` in VS Code to start up the web service.
+  7. We can now open a console window and use `curl` to try out one of the endpoints.
+     - `curl -X POST localhost:8080/auth/create`
+     - `{"id":"user@id.com"}`
 
-        - `app.get('/cookie', (req, res, next) => {`
-            - `res.send({cookie: req.cookies});`
-        - `});`
-    - It is common for middleware functions to add fields and functions to the `req` and `res` objects so that other middleware can access the functionality they provide.
-    - We see this happening when the `cookie-parser` middleware adds the `req.cookies` object for reading cookies and also adds the `res.cookie` function in order to make it easy to add a cookie to a response.
-- Error Handling Middleware
-    - We can also add middleware for handling errors that occur.
-    - Error middleware looks similar to other middleware functions, but it takes an additional `err` parameter that contains the error.
-        - `function errorMiddlewareName(err, req, res, next)`
-    - If we wanted to add a simple error handler for anything that might go wrong while processing HTTP requests, we could add the following.
-        - `app.use(function (err, req, res, next) {`
-            - `res.status(500).send({type: err.name, message: err.message});`
-        - `});`
-    - We can test that our error middleware is getting used by adding a new endpoint that generates an error.
-        - `app.get('/error', (req, res, next) => {`
-            - `throw new Error('Trouble in river city');`
-        - `});`
-    - Now if we use `curl` to call our error endpoint, we can see that the response comes from the error middleware.
-        - `curl localhost:8080/error`
-        - `{"type":"Error","message":"Trouble in river city"}`
-- Putting It All Together
-    - Here is a full example of our web service built using Express.
-        - `const express = require('express');`
-        - `const cookieParser = require('cookie-parser');`
-        - `const app = express();`
-
-        - // Third-party middleware - Cookies
-        - `app.use(cookieParser());`
-
-        - `app.post('/cookie/:name/:value', (req, res, next) => {`
-            - `res.cookie(req.params.name, req.params.value);`
-            - ``res.send({cookie: `${req.params.name}:${req.params.value}`});``
-        - `});`
-
-        - `app.get('/cookie', (req, res, next) => {`
-        `- `res.send({cookie: req.cookies});`
-        - `});`
-
-        - // Creating our own middleware - logging
-        - `app.use((req, res, next) => {`
-            - `console.log(req.originalUrl);`
-            - `next();`
-        - `});`
-
-        - // Built-in middleware - Static file hosting
-        - `app.use(express.static('public'));`
-
-        - // Routing middleware
-        - `app.get('/store/:storeName', (req, res) => {`
-            - `res.send({name: req.params.storeName});`
-        - `});`
-
-        - `app.put('/st*/:storeName', (req, res) => res.send({update: req.params.storeName}));`
-
-        - `app.delete(/\/store\/(.+)/, (req, res) => res.send({delete: req.params[0]}));`
-
-        - // Error middleware
-        - `app.get('/error', (req, res, next) => {`
-            - `throw new Error('Trouble in river city');`
-        - `});`
-
-        - `app.use(function (err, req, res, next) {`
-            - `res.status(500).send({type: err.name, message: err.message});`
-        - `});`
-
-        - // Listening to a network port
-        - `const port = 8080;`
-        - `app.listen(port, function () {`
-            - `console.log(`Listening on port ${port}`);`
-        - `});`
-- Acronyms and Terms
-    - CORS = Cross-Origin Resource Sharing
-        - It is a security feature in web browsers that restricts web pages from making requests to a domain other than the one that served the web page. This is known as the same-origin policy. CORS is a protocol that allows for exceptions to this rule; it lets web applications make requests to different domains by using specific HTTP headers that permit resources to be requested from another domain, enabling a more open web while still maintaining security.
-
-# Simon Service
-- This deliverable demonstrates converting the JavaScript application into a web application by implementing a web service that listens on a network port for HTTP requests.
-- The web service provides endpoints for getting and updating the scores.
-- The application also uses a couple of third-party endpoints to display inspirational quotes on the about page and show a random header image.
-- We will use Node.js and Express to create our HTTP service.
-- Service Endpoint Definitions
-    - Here is our design, documented using `curl` commands, for the two endpoints that the Simon web service provides.
-        - GetScores - Get the latest high scores.
-            - `curl -X GET /api/scores`
-
-            - #Response
-            - `{ "scores":[`
-                - `{"name":"Harvey", "score":"337", "date":"2022/11/20"},`
-                - `{"name":"도윤 이", "score":"95", "date":"2019/05/20"}`
-            - `]}`
-        - SubmitScore - Submit a score for consideration in the list of high scores.
-            - `curl -X POST /api/score -d '{"name":"Harvey", "score":"337", "date":"2022/11/20"}'`
-
-            - #Response
-            - `{ "scores":[`
-                - `{"name":"Harvey", "score":"337", "date":"2022/11/20"},`
-                - `{"name":"도윤 이", "score":"95", "date":"2019/05/20"}`
-            - `]}`
-- Third-Party Endpoints
-    - The `about.js` file contains code for making calls to third-party endpoints using `fetch`.
-    - We make one call to `picsum.photos` to get a random picture and another to `quotable.io` to get a random quote.
-    - Once the endpoint asynchronously returns, the DOM is updated with the requested data.
-    - Here is an example of the quote endpoint call.
-        - `function displayQuote(data) {`
-            - `fetch('https://api.quotable.io/random')`
-                - `.then((response) => response.json())`
-                - `.then((data) => {`
-                    - `const containerEl = document.querySelector('#quote');`
-
-                    - `const quoteEl = document.createElement('p');`
-                    - `quoteEl.classList.add('quote');`
-                    - `const authorEl = document.createElement('p');`
-                    - `authorEl.classList.add('author');`
-
-                    - `quoteEl.textContent = data.content;`
-                    - `authorEl.textContent = data.author;`
-
-                    - `containerEl.appendChild(quoteEl);`
-                    - `containerEl.appendChild(authorEl);`
-                - `});`
-            - `}`
-                - Initiate a Fetch Request: The function begins by making a fetch request to `https://api.quotable.io/random`. This is an asynchronous operation to retrieve a random quote from the API.
-                - Process the Response: `.then((response) => response.json())`: Once the fetch operation completes and returns a response, this line is executed. It takes the response object, which represents the entire HTTP response, and uses the .json() method to read the response body to completion. The `.json()` method returns a promise that resolves with the result of parsing the body text as JSON.
-                - Use the Data:
-                    - `.then((data) => { ... })`: After the previous promise resolves, this part of the code handles the actual data (now a JavaScript object thanks to `.json()`) returned from the API. The `data` object contains the quote and its author, among other potential fields.
-                    - Inside this callback function, several things happen:
-                        - Select the Container Element: It selects the HTML element with the id `#quote` to use as the container for displaying the quote and author. This is done using `document.querySelector('#quote')`.
-                        - Create Elements for Quote and Author: It creates two new `<p>` elements to hold the quote and the author's name. These elements are assigned class names 'quote' and 'author', respectively, for styling purposes.
-                        - Set the Text Content: The `textContent` of the created elements is set to the content of the quote (`data.content`) and the name of the author (`data.author`).
-                        - Append the Elements: Finally, it appends these newly created elements (`quoteEl` and `authorEl`) to the container element (`containerEl`). This action inserts the quote and the author's name into the DOM, making them visible on the page.
-- Steps to Convert Simon to A Service
-    - Converting Simon to a service involved the following steps.
-        1. Move all the previous deliverable code files(__.html, __.js, *.css, favicon.ico, and assets) into a sub-directory named `public`. 
-        1. We will use the HTTP Node.js based service to host the frontend application files. 
-        1. This is done with the static file middleware that we will add to our service `index.js`.
-            - `app.use(express.static('public'));`
-        1. When running our service, the static file middleware takes care of reading the frontend code from the `public` directory and returning it to the browser.
-        1. The service only directly handles the endpoint requests.
-        2. Within the project directory, run `npm init -y`.
-        2. This configures the directory to work with Node.js.
-        3. Modify or create `.gitignore` to ignore `node_modules`.
-        4. Install the Express package by running `npm install express`.
-        4. This will write the Express package dependency in the `package.json` file and install all the Express code to the `node_modules` directory.
-        5. Create a file named `index.js` in the root of the project.
-        5. This is the entry point that Node.js will call when we run our web service.
-        6. Add the basic Express JavaScript code needed to host the application static content and the desired enpoints.
-            - `const express = require('express');`
-            - `const app = express();`
-
-            - // The service port. In production, the frontend code is statically hosted by the service on the same port.
-            - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
-
-            - // JSON body parsing using built-in middleware
-            - `app.use(express.json());`
-
-            - // Serve up the frontend static content hosting
-            - `app.use(express.static('public'));`
-
-            - // Router for service endpoints
-            - `const apiRouter = express.Router();`
-            - ``app.use(`/api`, apiRouter);``
-
-            - // GetScores
-            - `apiRouter.get('/scores', (_req, res) => {`
-                - `res.send(scores);`
-            - `});`
-
-            - // SubmitScore
-            - `apiRouter.post('/score', (req, res) => {`
-                `scores = updateScores(req.body, scores);`
-                `res.send(scores);`
-            - `});`
-
-            - // Return the application's default page if the path is unknown
-            - `app.use((_req, res) => {`
-                - `res.sendFile('index.html', { root: 'public' });`
-            - `});`
-
-            - `app.listen(port, () => {`
-                - `console.log(`Listening on port ${port}`);`
-            - `});`
-                - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
-                    - `process.argv` is an array containing the command-line arguments passed when the Node.js process was launched. The first element (`process.argv[0]`) is the path to the node executable, and the second element (`process.argv[1]`) is the path to the JavaScript file being executed. Any additional arguments are found from the third element onwards (`process.argv[2]`, `process.argv[3]`, etc.).
-                    - `process.argv.length > 2` checks if there are more than two elements in the `process.argv` array. This essentially checks if any additional command-line arguments were provided beyond the default two (the node executable and the script path).
-                    - The ternary operator (`? :`) is used here as a shortcut for an if-else statement. It checks the condition before the `?`, and if that condition is true, it returns the value before the `:`, otherwise, it returns the value after the `:`.
-                    - If there are additional command-line arguments (`process.argv.length > 2 is true`), it assigns `process.argv[2]` to `port`. This means the first argument provided by the user (beyond the default two) is used as the port number. For example, if we start our application with `node app.js 5000`, `process.argv[2]` would be `5000`, and thus, `port` would be set to `5000`.
-                    - If there are no additional command-line arguments, it defaults to `3000`, meaning if no port is specified by the user, the server will listen on port `3000`.
-                - `const apiRouter = express.Router();`
-                - ``app.use(`/api`, apiRouter);``
-                    - Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the next middleware function in the application’s request-response cycle. These functions can execute any code, make changes to the request and the response objects, end the request-response cycle, and call the next middleware function in the stack.
-                    - `app.use` is a method used to mount middleware functions to the application. Any middleware registered with `app.use` will be executed for every incoming request to the application.
-                    - `express.json()` is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser
-                    - Essentially, `express.json()` returns a middleware function that reads a request’s body and, if the `Content-Type` header of the request is set to `application/json`, it parses the body of the request into a JavaScript object. After parsing, this object is available on `req.body` within our route handlers or downstream middleware, making it easier to work with JSON input.
-                - `const apiRouter = express.Router();`
-                    - This line creates a new router object. Think of it as a mini-application capable only of performing middleware and routing functions. We have not defined any routes yet at this point; we have simply created an instance of a router that we will define routes on.
-                - ``app.use(`/api`, apiRouter);``
-                    - Here, we are telling our main Express application (`app`) to use the router (`apiRouter`) for any requests that start with `/api`. This is a way of modularizing your routes and can be particularly useful for separating different API versions (e.g., `/api/v1`, `/api/v2`) or categorizing routes (e.g., `/api/users`, `/api/posts`).
-                    - `app.use()` is a method to configure middleware in our Express application. When we pass `/api` as the first argument, we are specifying a path prefix. Therefore, the router `apiRouter` becomes active only for paths that start with `/api`.
-                    - After this line, any routes we define on `apiRouter` will be prefixed with `/api`. For example, if yoweu define a route like `apiRouter.get('/users', callback)`, it will be accessible at `/api/users` in our application.
-                - `apiRouter.get('/scores', (_req, res) => {`
-                    - `res.send(scores);`
-                - `});`
-                    - The underscore (`_`) prefix before req in the callback function `(_req, res) => {}` is a naming convention used by some developers to indicate that the variable will not be used within the function. In the context of this `apiRouter.get('/scores', (_req, res) => {})` example, the underscore signifies that the request object (`req`) is not being utilized to process this specific endpoint's logic, which only needs to send back the `scores` response.
-        7. Modify the Simon application code to make service endpoint requests to our newly created HTTP service code.
-            - `async function loadScores() {`
-                - `const response = await fetch("/api/scores")`
-                - `const scores = await response.json()`
-
-                - // Modify the DOM to display the scores
-            - `}`
+- Handling Requests
+  - With our basic service created, we can now implement the create authentication endpoint.
+  - The first step is to read the credentials from the body of the HTTP request.
+  - Since the body is designed to contain JSON, we need to tell Express that it should parse HTTP requests, with a content type of `application/json`, automatically into a JavaScript object.
+  - We do this by using the `express.json` middleware.
+  - We can then read the email and password directly out of the `req.body` object.
+  - We can test that this is working by temporarily including them in the response.
+    -
