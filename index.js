@@ -112,8 +112,8 @@ apiRouter
     res.status(200).send({ message: "Score updated" });
   });
 
-// Endpoint to delete scores
-apiRouter.post("/resetScore", (req, res) => {
+// Endpoint to rest scores to zero
+apiRouter.post("/reset", (req, res) => {
   const { username } = req.body;
   if (scores[username]) {
     scores[username].score = 0;
