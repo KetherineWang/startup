@@ -3,24 +3,23 @@ async function loginUser() {
 }
 
 async function createUser(event) {
-  event.preventDefault();
   loginOrCreate(`/api/auth/create`);
 }
 
 async function loginOrCreate(endpoint) {
-  const newUsernameEl = document.querySelector("#newUsername")?.value;
-  const newPasswordEl = document.querySelector("#newPassword")?.value;
+  const newUsername = document.querySelector("#newUsername")?.value;
+  const newPassword = document.querySelector("#newPassword")?.value;
   const response = await fetch(endpoint, {
     method: "post",
-    body: JSON.stringify({ email: newUsernameEl, password: newPasswordEl }),
+    body: JSON.stringify({ email: newUsername, password: newPassword }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
   });
 
   if (response.ok) {
-    localStorage.setItem("newUsername", newUsernameEl.value);
-    window.location.href = "play.html";
+    localStorage.setItem("newUsername", newUsername);
+    window.location.href = "login.html";
   } else {
     const body = await response.json();
     const modalEl = document.querySelector("#msgModal");

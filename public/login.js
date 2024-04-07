@@ -31,7 +31,7 @@ async function loginOrCreate(endpoint) {
 
   if (response.ok) {
     localStorage.setItem("username", username);
-    window.location.href = "play.html";
+    window.location.href = "game.html";
   } else {
     const body = await response.json();
     const modalEl = document.querySelector("#msgModal");
