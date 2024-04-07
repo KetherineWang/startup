@@ -93,14 +93,6 @@ function getLastEmojiClicked() {
       console.error("Error fetching the last emoji clicked:", error);
       return "";
     });
-
-  // if(lastEmojiClicked) {
-  //     console.log(`The last emoji clicked was: ${lastEmojiClicked}`);
-  // } else {
-  //     console.log('No emoji reaction has been stored.');
-  // }
-
-  return lastEmojiClicked;
 }
 
 function skipQuestion() {

@@ -149,17 +149,12 @@ let scores = {};
 let lastEmojiClicked = "";
 
 // Endpoint to get lyrics data
-apiRouter.get("/lyrics", (req, res) => {
+secureApiRouter.get("/lyrics", (req, res) => {
   res.json(lyricsData);
 });
 
-// Endpoint to get current player username
-apiRouter.get("/username", (req, res) => {
-  res.send(currentPlayerUsername);
-});
-
 // Endpoint to get and set the last emoji clicked
-apiRouter
+secureApiRouter
   .route("/emoji")
   .get((req, res) => res.send(lastEmojiClicked))
   .post((req, res) => {
@@ -168,7 +163,7 @@ apiRouter
   });
 
 // Endpoint to get and update scores
-apiRouter
+secureApiRouter
   .route("/scores")
   .get((req, res) => res.json(scores))
   .post((req, res) => {
@@ -184,7 +179,7 @@ apiRouter
   });
 
 // Endpoint to rest scores to zero
-apiRouter.post("/reset", (req, res) => {
+secureApiRouter.post("/reset", (req, res) => {
   const { username } = req.body;
   if (scores[username]) {
     scores[username].score = 0;

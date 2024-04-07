@@ -1,7 +1,7 @@
 (async () => {
   const username = localStorage.getItem("username");
   if (username) {
-    document.querySelector("#playerName").textContent = username;
+    document.querySelector("#playerUsername").textContent = username;
     setDisplay("loginControls", "none");
     setDisplay("playControls", "block");
   } else {
@@ -39,6 +39,10 @@ async function loginOrCreate(endpoint) {
     const msgModal = new bootstrap.Modal(modalEl, {});
     msgModal.show();
   }
+}
+
+function play() {
+  window.location.href = 'play.html';
 }
 
 function logout() {
