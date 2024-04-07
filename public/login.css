@@ -15,6 +15,11 @@ header {
 }
 
 .login-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
     background-color: rgb(50, 60, 50);
     padding: 20px;
     border-radius: 10px;
@@ -26,14 +31,21 @@ header {
     justify-content: center;
 }
 
+#loginControls {
+  padding: 0 20%;
+}
+
 .login-button {
   font-family: 'Open Sans', sans-serif;
+  display: block;
+  margin: auto;
 }
   
 #signup-prompt {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 20px;
+    text-align: center;
 }
 
 @keyframes pulse {

@@ -1,71 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <title>Echoes of keshi: A Lyric Odyssey</title>
+    <title>Echoes of keshi: A Lyric Odyssey</title>
 
-        <script src="signup.js"></script>
-        
-        <link 
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" 
-            rel="stylesheet" 
-            integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" 
-            crossorigin="anonymous"
-        />
-        <link rel="stylesheet" href="main.css" />
-        <link rel="stylesheet" href="signup.css" />
-        <link 
-            href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Caveat:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rock+Salt&display=swap" 
-            rel="stylesheet"
-        />
-    </head>
+    <script src="signup.js"></script>
 
-    <body>
-        <header class="header-title container-fluid text-center text-white">
-            <h1>Echoes of keshi: A Lyric Odyssey</h1>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="signup.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Caveat:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rock+Salt&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-            <nav>
-                <ul class="nav justify-content-center">
-                    <li class="nav-item nav-tabs"><a class="nav-link text-white" href="index.html">Home</a></li>
-                    <li class="nav-item nav-tabs"><a class="nav-link text-white" href="play.html">Play</a></li>
-                    <li class="nav-item nav-tabs"><a class="nav-link text-white" href="rank.html">Rank</a></li>
-                </ul>
-            </nav>
-        </header>
+  <body>
+    <header class="header-title container-fluid text-center text-white">
+      <h1>Echoes of keshi: A Lyric Odyssey</h1>
 
-        <main>
-            <div class="signup-box justify-content-center">
-                <form method="get" action="index.html" class="login-signup-form mt-2 mb-2 text-white">
-                    <h2>Signup</h2>
+      <nav>
+        <ul class="nav justify-content-center">
+          <li class="nav-item nav-tabs">
+            <a class="nav-link text-white" href="index.html">Home</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-                    <div style="width: 80%" class="mb-3">
-                        <label for="newUsername" class="form-label">New Username</label>
-                        <input type="text" id="newUsername" class="form-control" placeholder="Create a new username">
-                    </div>
+    <main>
+      <div class="signup-box justify-content-center">
+        <form
+          method="get"
+          class="login-signup-form mt-2 mb-2 text-white"
+        >
+          <h2>Signup</h2>
 
-                    <div style="width: 80%" class="mb-3">
-                        <label for="newPassword" class="form-label">New Password</label>
-                        <input type="password" id="newPassword" class="form-control" placeholder="Create a new password">
-                    </div>
+          <div style="width: 80%" class="mb-3">
+            <label for="newUsername" class="form-label">Email</label>
+            <input
+              type="text"
+              id="newUsername"
+              class="form-control"
+              placeholder="Create a new username"
+            />
+          </div>
 
-                    <div style="width: 80%" class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" class="form-control" placeholder="Enter your email">
-                    </div>
+          <div style="width: 80%" class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input
+              type="password"
+              id="newPassword"
+              class="form-control"
+              placeholder="Create a new password"
+            />
+          </div>
 
-                    <button type="submit" class="signup-button btn btn-secondary" onclick="signup()">Register</button>
-                </form>
-            </div>
-        </main>
+          <button
+            type="submit"
+            class="signup-button btn btn-secondary"
+            onclick="createUser(event)"
+          >
+            Register
+          </button>
+        </form>
+      </div>
+    </main>
 
-        <footer class="container-fluid text-center text-white">
-            <span class="authorName">Hongting (Ketherine) Wang</span>
+    <footer class="container-fluid text-center text-white">
+      <span class="authorName">Hongting (Ketherine) Wang</span>
 
-            <br />
+      <br />
 
-            <a href="https://github.com/KetherineWang/startup.git" class="text-white">GitHub</a>
-        </footer>
-    </body>
+      <a href="https://github.com/KetherineWang/startup.git" class="text-white"
+        >GitHub</a
+      >
+    </footer>
+  </body>
 </html>
