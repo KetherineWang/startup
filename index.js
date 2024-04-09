@@ -6,19 +6,19 @@ const app = express();
 
 const authCookieName = "token";
 
-// The service port may be set on the command line
+// The service port number may be set on the command line as a command line argument
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-// JSON body parsing using built-in middleware
+// JSON body parsing using Express built-in middleware function
 app.use(express.json());
 
-// Use the cookie parser middleware for tracking authentication tokens
+// Use the cookie parser Express built-in middleware function for tracking authentication tokens
 app.use(cookieParser());
 
-// Serve up the applications static content
+// Serve up the application's static content and files
 app.use(express.static("public"));
 
-// Trust headers that are forwarded from the proxy so we can determine IP addresses
+// Trust headers that are forwarded from the proxy, Caddy, so we can determine IP addresses
 app.set("trust proxy", true);
 
 // Router for service endpoints
@@ -47,7 +47,9 @@ apiRouter.post("/auth/login", async (req, res) => {
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user.token);
+
       res.send({ id: user._id });
+
       return;
     }
   }
@@ -57,6 +59,7 @@ apiRouter.post("/auth/login", async (req, res) => {
 // DeleteAuth token if stored in cookie
 apiRouter.delete("/auth/logout", (_req, res) => {
   res.clearCookie(authCookieName);
+
   res.status(204).end();
 });
 
@@ -65,18 +68,9 @@ apiRouter.get("/user/:email", async (req, res) => {
   const user = await DB.getUser(req.params.email);
   if (user) {
     const token = req?.cookies.token;
-    res.send({ email: user.email, authenticated: token === user.token });
-    return;
-  }
-  res.status(404).send({ msg: "Unknown" });
-});
 
-// GetUser returns information about a user
-apiRouter.get("/user/:email", async (req, res) => {
-  const user = await DB.getUser(req.params.email);
-  if (user) {
-    const token = req?.cookies.token;
     res.send({ email: user.email, authenticated: token === user.token });
+
     return;
   }
   res.status(404).send({ msg: "Unknown" });
@@ -88,7 +82,9 @@ apiRouter.use(secureApiRouter);
 
 secureApiRouter.use(async (req, res, next) => {
   authToken = req.cookies[authCookieName];
+
   const user = await DB.getUserByToken(authToken);
+
   if (user) {
     next();
   } else {
@@ -144,57 +140,53 @@ const lyricsData = [
   },
 ];
 
-let currentPlayerUsername = "Default Player";
-let scores = {};
-let lastEmojiClicked = "";
-
 // Endpoint to get lyrics data
 secureApiRouter.get("/lyrics", (req, res) => {
   res.json(lyricsData);
 });
+
+let lastEmojiClicked = "";
 
 // Endpoint to get and set the last emoji clicked
 secureApiRouter
   .route("/emoji")
   .get((req, res) => res.send(lastEmojiClicked))
   .post((req, res) => {
-    const lastEmojiClicked = req.body.emoji;
+    lastEmojiClicked = req.body.emoji;
+
     res.status(200).send({ message: "Emoji updated" });
   });
 
-
+// Endpoint to initializat, update, or reset the score
 secureApiRouter
   .route('/score')
   .post(async (req, res) => {
     const { username, score } = req.body;
 
     await DB.updateScore(username, score);
-  })
+  });
 
+// Endpoint to get the current user's score
 secureApiRouter
   .route('/score/:username')
   .get(async(req, res) => {    
     const currentUserScore = await DB.getCurrentUserScore(req.params.username);
-    
+
     res.send(currentUserScore)
   });
 
-secureApiRouter.route("/scores")
+// Endpoint to get the top ten highest scores
+secureApiRouter.route("/rank")
   .get(async (req, res) => {
   try {
-    const scores = await DB.getHighestScores();
-    res.send(scores);
+    const topTenScores = await DB.getHighestScores();
+
+    res.send(topTenScores);
   } catch (error) {
-    console.error("Failed to retrieve scores:", error);
-    res.status(500).send({ message: "Failed to retrieve scores" });
+    console.error("Failed to retrieve the top ten highest scores:", error);
+
+    res.status(500).send({ message: "Failed to retrieve the top ten highest scores" });
   }
-});
-
-// Endpoint to rest scores to zero
-secureApiRouter.post("/reset", async (req, res) => {
-  const { username } = req.body;
-
-  await DB.updateScore(username);
 });
 
 // Default error handler

@@ -1,7 +1,7 @@
 function loadScores() {
   console.log("Entered loadScores function");
 
-  fetch("/api/scores")
+  fetch("/api/rank")
     .then((response) => response.json())
     .then((data) => {
       // Assuming `data` is an array of objects [{ username, score, date }, ...]

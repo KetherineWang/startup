@@ -7,13 +7,13 @@ function getPlayerUsername() {
 function getPlayerScore() {
   console.log("Entered getPlayerScore function");
 
-  const currentPlayer = getPlayerUsername();
+  const currentPlayerUsername = getPlayerUsername();
 
-  fetch("/api/score/" + currentPlayer)
+  fetch("/api/score/" + currentPlayerUsername)
     .then((response) => response.json())
     .then((data) => {
-      const playerScore = data.score ? data.score : 0;
-      displayPlayerScore(playerScore);
+      const currentPlayerScore = data.score ? data.score : 0;
+      displayPlayerScore(currentPlayerScore);
     })
     .catch((error) => console.error("Failed to fetch player score:", error));
 }
