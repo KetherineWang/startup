@@ -31,6 +31,7 @@ async function loginOrCreate(endpoint) {
 
   if (response.ok) {
     localStorage.setItem("username", username);
+    localStorage.setItem(`${username}_score`, 0);
     window.location.href = "game.html";
   } else {
     const body = await response.json();
@@ -46,7 +47,11 @@ function play() {
 }
 
 function logout() {
+  const username = localStorage.getItem("username");
+  localStorage.setItem(`${username}_score`, 0);
+
   localStorage.removeItem("username");
+
   fetch(`/api/auth/logout`, {
     method: "delete",
   }).then(() => (window.location.href = "/"));

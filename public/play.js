@@ -159,13 +159,20 @@ function updateScore(isCorrect) {
 
   if (isCorrect) {
     const username = getPlayerUsername();
+    // Retrieve the current score from Local Storage, or start at 0 if not set
+    let currentScore = parseInt(localStorage.getItem(`${username}_score`), 10);
+    // Increment the score
+    currentScore += 1;
+    // Update Local Storage with the new score
+    localStorage.setItem(`${username}_score`, currentScore.toString());
 
-    fetch("/api/scores", {
+    // Now, update the server with the new score
+    fetch("/api/score", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username: username, score: 1 }),
+      body: JSON.stringify({ username: username, score: currentScore }),
     })
       .then((response) => response.json())
       .then((data) => {

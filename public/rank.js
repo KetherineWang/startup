@@ -4,16 +4,12 @@ function loadScores() {
   fetch("/api/scores")
     .then((response) => response.json())
     .then((data) => {
-      const scores = data;
+      // Assuming `data` is an array of objects [{ username, score, date }, ...]
       const tableBodyEl = document.querySelector("#scores");
       tableBodyEl.innerHTML = "";
 
-      if (Object.keys(scores).length) {
-        const sortedScores = Object.entries(scores)
-          .sort((a, b) => b[1].score - a[1].score)
-          .slice(0, 10);
-
-        sortedScores.forEach(([playerUsername, playerInformation], i) => {
+      if (data.length) {
+        data.forEach((playerInformation, i) => {
           const tableRowEl = document.createElement("tr");
           const positionTdEl = document.createElement("td");
           const nameTdEl = document.createElement("td");
@@ -21,7 +17,7 @@ function loadScores() {
           const dateTdEl = document.createElement("td");
 
           positionTdEl.textContent = i + 1;
-          nameTdEl.textContent = playerUsername;
+          nameTdEl.textContent = playerInformation.username; // Adjusted for object structure
           scoreTdEl.textContent = playerInformation.score;
           dateTdEl.textContent = playerInformation.date;
 
@@ -34,7 +30,7 @@ function loadScores() {
         });
       } else {
         tableBodyEl.innerHTML =
-          '<tr><td colSpan="4">Be the first to score</td></tr>';
+          '<tr><td colSpan="4">Be the first to score!</td></tr>';
       }
     })
     .catch((error) => console.error("Error loading scores:", error));

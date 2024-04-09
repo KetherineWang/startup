@@ -158,36 +158,43 @@ secureApiRouter
   .route("/emoji")
   .get((req, res) => res.send(lastEmojiClicked))
   .post((req, res) => {
-    lastEmojiClicked = req.body.emoji;
+    const lastEmojiClicked = req.body.emoji;
     res.status(200).send({ message: "Emoji updated" });
   });
 
-// Endpoint to get and update scores
+
 secureApiRouter
-  .route("/scores")
-  .get((req, res) => res.json(scores))
-  .post((req, res) => {
+  .route('/score')
+  .post(async (req, res) => {
     const { username, score } = req.body;
-    if (!scores[username]) {
-      scores[username] = { score: 0, date: new Date().toLocaleString() };
-    }
-    if (score) {
-      scores[username].score += score;
-      scores[username].date = new Date().toLocaleString();
-    }
-    res.status(200).send({ message: "Score updated" });
+
+    await DB.updateScore(username, score);
+  })
+
+secureApiRouter
+  .route('/score/:username')
+  .get(async(req, res) => {    
+    const currentUserScore = await DB.getCurrentUserScore(req.params.username);
+    
+    res.send(currentUserScore)
   });
 
-// Endpoint to rest scores to zero
-secureApiRouter.post("/reset", (req, res) => {
-  const { username } = req.body;
-  if (scores[username]) {
-    scores[username].score = 0;
-    scores[username].date = new Date().toLocaleString();
-    res.status(200).send({ message: "Score reset to zero successfully." });
-  } else {
-    res.status(404).send({ message: "Username not found." });
+secureApiRouter.route("/scores")
+  .get(async (req, res) => {
+  try {
+    const scores = await DB.getHighestScores();
+    res.send(scores);
+  } catch (error) {
+    console.error("Failed to retrieve scores:", error);
+    res.status(500).send({ message: "Failed to retrieve scores" });
   }
+});
+
+// Endpoint to rest scores to zero
+secureApiRouter.post("/reset", async (req, res) => {
+  const { username } = req.body;
+
+  await DB.updateScore(username);
 });
 
 // Default error handler

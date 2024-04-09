@@ -7,11 +7,12 @@ function getPlayerUsername() {
 function getPlayerScore() {
   console.log("Entered getPlayerScore function");
 
-  fetch("/api/scores")
+  const currentPlayer = getPlayerUsername();
+
+  fetch("/api/score/" + currentPlayer)
     .then((response) => response.json())
     .then((data) => {
-      const currentPlayer = getPlayerUsername();
-      const playerScore = data[currentPlayer] ? data[currentPlayer].score : 0;
+      const playerScore = data.score ? data.score : 0;
       displayPlayerScore(playerScore);
     })
     .catch((error) => console.error("Failed to fetch player score:", error));
@@ -30,20 +31,22 @@ function resetScoreZero() {
 
   const currentPlayer = getPlayerUsername();
 
-  fetch("/api/resetScore", {
+  localStorage.setItem(`${currentPlayer}_score`, 0);
+
+  fetch("/api/score", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      username: currentPlayer,
-    }),
+    body: JSON.stringify({ username: currentPlayer, score: 0 }),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.message);
+      console.log("Score updated successfully", data);
     })
-    .catch((error) => console.error("Error resetting score:", error));
+    .catch((error) => {
+      console.error("Error updating score:", error);
+    });
 }
 
 function initScore() {
