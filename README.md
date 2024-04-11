@@ -124,3 +124,25 @@ journey through the lyrical landscapes of his songs.
   - The "Next>" button goes to the next question.
   - The "End..." button ends the game and will redirect the player to the "Score" page which displays the player's final score.
   - If the player chooses to start a new game by pressing the "New Game" button on the "Score" page, the player's preexisting score will be reset to zero, and it will redirect the player back to the "Play" page again to play a new game.
+
+# Service Deliverable
+*Note: The service deliverable is completed over the week of March 31st, 2024 and the week of April 7th, 2024. Please look for and refer to the git commits made for this deliverable during these two weeks.
+- **HTTP Services Using Node.js and Express**: `index.js` includes basic JavaScript code that uses the Express package, creates an Express instance, uses Express built-in middleware functions to parse JSON and serve up the application's frontend content and files, creates an Express router instance, returns the application's default page for uknown path, and listens to a specified port number. It also contains service endpoints defined and created using Node.js and Express.
+  - Service endpoints include:
+    - Endpoint to get lyrics data
+    - Enpoint to get and set the last emoji clicked
+    - Endpoint to initialize, update, or reset the score
+    - Endpoint to get the current user's score
+    - Endpoint to get the top ten highest scores
+- **Express Static File Middleware**: The application's frontent static content and files are served up using `app.use(express.static('public'));` in `index.js`.
+- **Third-Party API Call**: A service endpoint that makes a third party API call to `https://api.lyrics.ovh/v1/keshi/${randomSong}` to retrieve the lyrics of a random song by keshi upon refreshing and loading the page is implemented in `login.js`.
+- **Backend Providing Service Endpoints**: `index.js` serves as the backend server and provides the following service endpoints:
+  - Endpoint to get lyrics data
+  - Enpoint to get and set the last emoji clicked
+  - Endpoint to initialize, update, or reset the score
+  - Endpoint to get the current user's score
+  - Endpoint to get the top ten highest scores
+- **Frontend Calling Service Endpoints**: The application's frontend JavaScript interacts with the backend service endpoints by using `fetch` with either the `GET` or `POST` to provide web services.
+  - `play.js` calls the endpoints to get lyrics data to display as the game questions, to update and get the last emoji clicked to display as one of the real-time notifications, and to update the score by 1 upon a correct answer selected.
+  - `score.js` calls the endpoints to get the current player's score upon ending a game and to reset the current player's score to zero upon starting a new game.
+  - `rank.js` calls the endpoint to get the top ten highest scores among all players.
