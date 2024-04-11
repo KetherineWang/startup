@@ -2,7 +2,7 @@ const { WebSocketServer } = require('ws');
 const uuid = require('uuid');
 
 function peerProxy(httpServer) {
-  // Create a websocket object
+  // Create a WebSocket server instance and a WebSocket object
   const wss = new WebSocketServer({ noServer: true });
 
   // Handle the protocol upgrade from HTTP to WebSocket
@@ -30,10 +30,10 @@ function peerProxy(httpServer) {
 
     // Remove the closed connection so we don't try to forward anymore
     ws.on('close', () => {
-      const pos = connections.findIndex((o, i) => o.id === connection.id);
+      const position = connections.findIndex((o, i) => o.id === connection.id);
 
-      if (pos >= 0) {
-        connections.splice(pos, 1);
+      if (position >= 0) {
+        connections.splice(position, 1);
       }
     });
 

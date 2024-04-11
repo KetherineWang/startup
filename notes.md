@@ -3993,7 +3993,7 @@
           - `head`: A Buffer instance containing the first part of the request body that might have been received. This is important because a WebSocket client will send a part of the next WebSocket frame in its HTTP upgrade request.
         - `wss.handleUpgrade(request, socket, head, function done(ws) {...})`: This method is provided by the `ws` library to handle the upgrade manually. It processes the client’s upgrade request, and if successful, upgrades the connection to WebSocket.
           - `function done(ws)`: This callback is executed once the upgrade is successfully completed. The `ws` parameter represents the upgraded WebSocket.
-            - `wss.emit('connection', ws, request);`: This line manually emits the 'connection' event on the WebSocket server instance wss, passing it the new WebSocket (`ws`) and the upgrade request (`request`). This is needed because by setting `noServer: true`, the automatic emission of 'connection' events is disabled, so we must manually trigger them.
+            - `wss.emit('connection', ws, request);`: This line manually emits the 'connection' event on the WebSocket server instance `wss`, passing it the new WebSocket (`ws`) and the upgrade request (`request`). This is needed because by setting `noServer: true`, the automatic emission of 'connection' events is disabled, so we must manually trigger them.
         - When a WebSocket connection is established, the client sends an HTTP request to the server with an "Upgrade" header, indicating the request to switch protocols from HTTP to WebSockets. This initial request looks something like an HTTP GET request but specifies an upgrade:
           - `GET /socket HTTP/1.1`
           - `Host: localhost:9900`
