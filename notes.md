@@ -4074,3 +4074,16 @@
     4. We may need to select Node.js as the debugger the first time we run.
     5. Open multiple browser windows and point them to `http://localhost:3000` and start chatting.
     6. Use the browser's debugger to view the WebSocket communication.
+
+# Simon WebSocket
+- This deliverable demonstrates peer-to-peer communication using WebSocket.
+- The functionality that Simon provides for peer communication is itentionally limited to display notifications between users.
+- This was done so that the application would clearly demonstrate how WebSocket works rather than clutter the application with functionality that uses WebSockets.
+- Handling WebSocket Requests
+  - After installing the `ws` NPM package, the next step is to attach WebSocket listener to the HTTP server that was created in an earlier deliverable.
+  - This work is all one in the PeerProxy class implemented in the `peerProxy.js` file.
+  - The PeerProxy class contains the protocol upgrade from HTTP to WebSocket, tracks new WebSocket connections, passes (or proxies) requests between connections, and implements ping/pong to keep connections alive.
+- Displaying and Generating WebSocket Messages
+  - The `public/play.js` file contains the functions for connecting, broadcasting, receiving, and displaying events using WebSocket.
+  - Leveraging the concepts demonstrates in this deliverable, we can implement additional functionality that uses peer-to-peer interactions.
+  - For example, we could make it so each connected peer has to complete of the Simon patterns in turn.

@@ -127,22 +127,30 @@ journey through the lyrical landscapes of his songs.
 
 # Service Deliverable
 *Note: The service deliverable is completed over the week of March 31st, 2024 and the week of April 7th, 2024. Please look for and refer to the git commits made for this deliverable during these two weeks.
-- **HTTP Services Using Node.js and Express**: `index.js` includes basic JavaScript code that uses the Express package, creates an Express instance, uses Express built-in middleware functions to parse JSON and serve up the application's frontend content and files, creates an Express router instance, returns the application's default page for uknown path, and listens to a specified port number. It also contains service endpoints defined and created using Node.js and Express.
+- **HTTP Services Using Node.js and Express**: The `index.js` file includes basic JavaScript code that uses the Express package, creates an Express instance, uses Express built-in middleware functions to parse JSON and serve up the application's frontend content and files, creates an Express router instance, returns the application's default page for uknown path, and listens to a specified port number. It also contains service endpoints defined and created using Node.js and Express.
   - Service endpoints include:
     - Endpoint to get lyrics data
     - Enpoint to get and set the last emoji clicked
     - Endpoint to initialize, update, or reset the score
     - Endpoint to get the current user's score
     - Endpoint to get the top ten highest scores
-- **Express Static File Middleware**: The application's frontent static content and files are served up using `app.use(express.static('public'));` in `index.js`.
-- **Third-Party API Call**: A service endpoint that makes a third party API call to `https://api.lyrics.ovh/v1/keshi/${randomSong}` to retrieve the lyrics of a random song by keshi upon refreshing and loading the page is implemented in `login.js`.
-- **Backend Providing Service Endpoints**: `index.js` serves as the backend server and provides the following service endpoints:
+- **Express Static File Middleware**: The application's frontent static content and files are served up using `app.use(express.static('public'));` in the `index.js` file.
+- **Third-Party API Call**: A service endpoint that makes a third party API call to `https://api.lyrics.ovh/v1/keshi/${randomSong}` to retrieve the lyrics of a random song by keshi upon refreshing and loading the page is implemented in the `login.js` file.
+- **Backend Providing Service Endpoints**: The `index.js` file serves as the backend server and provides the following service endpoints:
   - Endpoint to get lyrics data
   - Enpoint to get and set the last emoji clicked
   - Endpoint to initialize, update, or reset the score
   - Endpoint to get the current user's score
   - Endpoint to get the top ten highest scores
-- **Frontend Calling Service Endpoints**: The application's frontend JavaScript interacts with the backend service endpoints by using `fetch` with either the `GET` or `POST` to provide web services.
-  - `play.js` calls the endpoints to get lyrics data to display as the game questions, to update and get the last emoji clicked to display as one of the real-time notifications, and to update the score by 1 upon a correct answer selected.
-  - `score.js` calls the endpoints to get the current player's score upon ending a game and to reset the current player's score to zero upon starting a new game.
-  - `rank.js` calls the endpoint to get the top ten highest scores among all players.
+- **Frontend Calling Service Endpoints**: The application's frontend JavaScript interacts with the backend service endpoints by using `fetch` with either the `GET` or `POST` method to provide web services.
+  - The `play.js` file calls the endpoints to get lyrics data to display as the game questions, to update and get the last emoji clicked to display as one of the real-time notifications, and to update the score by one upon each correct answer selected.
+  - The `score.js` file calls the endpoints to get the current player's score upon ending a game and to reset the current player's score to zero upon starting a new game.
+  - The `rank.js` file calls the endpoint to get the top ten highest scores among all players.
+
+# Login Deliverable
+*Note: The service deliverable is completed over the week of March 31st, 2024 and the week of April 7th, 2024. Please look for and refer to the git commits made for this deliverable during these two weeks.
+- **New User Registration**: The `signup.html`, `signup.js`, and `signup.css` files provide the signup user interface. The `loginOrCreate` function in the `singup.js` file calls the `authCreate` service endpoint in the `index.js` file which calls the corresponding database functions in the `database.js` file to create a new user and set the cookie authentication toke in the database.
+- **Existing User Authentication**: The `login.html`, `login.js`, and `login.css` files provide the signup user interface. The `loginOrCreate` function in the `login.js` file calls the `authLogin` service endpoint in the `index.js` file which calls the corresponding database functions in the `database.js` file to compare the provided credentials with the credentials stored in the database and set the cookie authentication token in the database if the user exists.
+- **Application Data Storage in MongoDB**: The `database.js` file contains functions for updating the curent user's score in the database (which includes initializing an object or a document for the current user's and his/her score to zero in the database if the user is not in the score collection when logged in, updating the current user's score by one in the database upon each correct answer selected, and resetting the current user's score to zero in the database upon starting a new game), getting the current user's score from the database, and getting the top ten highest scores from the database. The database functions are called from the endpoint to initialize, update, and reset the score and the endpoint to get the top ten highest scores found in the `index.js`. All users' scores data are persistently stored in the score collection of the startup database in MongoDB.
+- **Credentials Storage in and Retrieval from MongoDB**
+- **Application Functionality Restrictions Based on Authentication**: 

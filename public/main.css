@@ -64,7 +64,7 @@ footer {
   font-weight: bold;
 }
 
-@media (max-height: 800px) {
+/* @media (max-height: 800px) {
   header {
     display: none;
   }
@@ -74,4 +74,4 @@ footer {
   main {
     padding: 20px 0;
   }
-}
+} */
