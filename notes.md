@@ -1810,6 +1810,7 @@
   - FTP = File Transfer Protocol
   - SSH = Secure Shell
   - IRC = Internet Relay Chat
+  - TCP = Transmission Control Protocol
 
 # Web Servers
 
@@ -3383,50 +3384,7 @@
       - `});`
 
 - Using Mongo from Our Code
-
-  - `const { MongoClient } = require('mongodb');`
-  - `const config = require('./dbConfig.json');`
-
-  - `async function main() {`
-
-    - // Connect to the database cluster
-    - `` const url = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`; ``
-    - `const client = new MongoClient(url);`
-    - `const db = client.db('rental');`
-    - `const collection = db.collection('house');`
-
-    - // Test that you can connect to the database
-    - `(async function testConnection() {`
-      - `await client.connect();`
-      - `await db.command({ ping: 1 });`
-    - `})().catch((ex) => {`
-      - `` console.log(`Unable to connect to database with ${url} - because ${ex.message}`); ``
-      - `process.exit(1);`
-    - `});`
-
-    - // Insert a document
-    - `const house = {`
-      - `name: 'Beachfront views',`
-      - `summary: 'From your bedroom to the beach, no shoes - required',`
-      - `property_type: 'Condo',`
-      - `beds: 1,`
-    - `};`
-    - `await collection.insertOne(house);`
-
-    - // Query the documents
-    - `const query = { property_type: 'Condo', beds: { $lt: 2 } };`
-    - `const options = {`
-      - `sort: { score: -1 },`
-      - `limit: 10,`
-    - `};`
-
-    - `const cursor = collection.find(query, options);`
-    - `const rentals = await cursor.toArray();`
-    - `rentals.forEach((i) => console.log(i));`
-
-  - `}`
-
-  - `main().catch(console.error);`
+  - Refer to `mongoTest/indes.js`.
   - To execute the above example: do the following
     1. Create a directory called `mongoTest`.
     2. Save the above content to a file named `index.js`.
@@ -3445,10 +3403,6 @@
 
 - Acronyms and Terms
   - CPU = Central Processing Unit
-
-# Authorization Services
-
--
 
 # Account Creation and Login
 
@@ -3736,5 +3690,387 @@
       - `}`
       - `res.status(401).send({ msg: 'Unauthorized' });`
     - `});`
+- Final Code
+  - Refer to `authTest/main.js`.
+- Experiment
+  - With everything implemented, we can use `curl` to try it out.
+  - First, start up the web service from VS Code by pressing `F5` and selecting `node.js` as the debugger if we have not already done that.
+  - We can set breakpoints on all of the different endpoints to see what they do and inspect the different variables.
+  - Then, open a console window and run the following `curl` commands.
+  - We should see similar results as what is shown below.
+  - Note that `-c` and `-b` parameters tell curl to store and use cookies with the given file.
+    - `curl -X POST localhost:8080/auth/create -H 'Content-Type:application/json' -d '{"email":"지안@id.com", "password":"toomanysecrets"}'`
+      - `{"id":"639bb9d644416bf7278dde44"}`
+    - `curl -c cookie.txt -X POST localhost:8080/auth/login -H 'Content-Type:application/json' -d '{"email":"지안@id.com", "password":"toomanysecrets"}'`
+      - `{"id":"639bb9d644416bf7278dde44"}`
+    - `curl -b cookie.txt localhost:8080/user/me`
+      - `{"email":"지안@id.com"}`
 - Acronyms and Terms
   - UUID = Universally Unique Identifier
+
+# Simon Login
+- Database Support
+  - This version of Simon calls the database service to save high scores and authorization tokens.
+  - This creates a third layer in our Simon technology stack.
+    1. Client application - Simple HTML/CSS/JavaScript
+    2. Web service - Caddy, Node.js, Express
+    3. Database service - MongoDB
+  - Connecting to the Database
+    - We used a cloud service called MongoDB Atlast for our database service.
+    - Once we are connected to Atlas, we can make service calls to MongoDB from our web service.
+    - This involves specifying the database service endpoint and making database calls like the following.
+      - `const { MongoClient } = require('mongodb');`
+
+      - ``const url = `mongodb+srv://${userName}:${password}@${hostname}`;``
+      - `const client = new MongoClient(url);`
+      - `client.connect(err => {`
+        - `const collection = client.db("test").collection("devices");`
+
+        - // ... perform actions on the DB collection
+
+        - `client.close();`
+      - `});`
+  - Create A MongoDB Atlast Cluster
+    - We need to get a MongoDB Atlas account and create a database cluster that we can use as our database service.
+  - Handling Credentials
+    - Make sure we follow the instructions given previously about providing and protecting our MongoDB credentials in a file named `dbConfig.json`.
+    - This file will get deployed to production with the `deployService.sh` script.
+  - Working with the Database
+    - The `database.js` file contains the functions for getting and adding high scores.
+    - The database functions are called from the `getScroes` and `submitScores` endpoints found in `index.js`.
+- Authorization
+  - Authorization UI
+    - The `public/index.html`, `public/login.js`, `public/login.css` files provide all the login UI.
+    - Bootstrap provides the styling for the controls.
+    - When `index.html` is loaded, an anonymous function in `login.hs` determines if the user is already authenticated and uses that state to hide or show the login controls.
+    - When a user logs in, logs out, or creates credentials, the service endpoints are called.
+  - Authorization Cookie
+    - The application service uses a secure cookie to store the authorization token for an authenticated user.
+      - `function setAuthCookie(res, authToken) {`
+        - `res.cookie(authCookieName, authToken, {`
+          - `secure: true,`
+          - `httpOnly: true,`
+          - `sameSite: 'strict',`
+        - `});`
+      - `}`
+    - Note the use of `secure`, `httpOnly`, and `sameSite`.
+    - Make sure we are familiar with what each of these mean.
+    - When a user is logged in, the cookie is added.
+    - When a user makes a secure request, the cookie is checked.
+    - When a user logs out, the cookie is removed.
+  - Application Service Endpoints
+    - The service endpoints are contained in `index.js`.
+    - The endpoints include `authCreate`, `authLogin`, `authLogout`, and `userGet`.
+    - These all work with the database to store and get credentials and update the authorization cookie.
+    - A new Express router, `secureApiRouter` wraps the existing router to add a middleware function that verifies that the authorization cookie is valid before passing the request to endpoints that require authorization.
+    - That makes it easy to create secure endpoints by just registering them with `secureApiRouter`.
+
+# WebSocket
+- HTTP is based on a client-server architecture.
+- A client always initiates the request and the server responds.
+- This is great if we are building a global document library connected by hyperlinks, but for many other use cases, it just does not work.
+- Applications for notifications, distributed task processing, peer-to-peer communication, or asynchronous events need communication that is initiated by two or more connected devices.
+- For years, web developers created hacks to work around the limitation of the client/serve model.
+- This included solutions like having the client frequently pinging the server to see if the server had anything to say, or keeping client-initiated connections open for a very long time as the client waited for some event to happen on the server.
+- Needless to say, none of these solutions were elegant or efficient.
+- Finally, in 2011, the communication protocol, WebSocket, was created to solve this problem.
+- The core feature of WebSocket is that it is fully duplexed.
+- This means that after the initial connection is made from a client, using vanilla HTTP, and then upgraded by the server to a WebSocket connection, the relationship changes to a peer-to-peer connection where either party can efficiently send data at any time.
+- WebSocket connections are still only between two parties.
+- So if we want to facilitate a conversation between a group of users, the server must act as the intermediary.
+- Each peer first connects to the server, and then the server forwards messages amongst the peers.
+- Creating A WebSocket Connection
+  - JavaScript running on a browser can initiate a WebSocket connection with the browser's WebSocket API.
+  - First, we create a WebSocket object by specifying the port we want to communicate on.
+  - We can then send messages with the `send` function, and register a callback using the `onmessage` function to receive messages.
+    - `const socket = new WebSocket('ws://localhost:9900');`
+
+    - `socket.onmessage = (event) => {`
+      - `console.log('received: ', event.data);`
+    - `};`
+
+    - `socket.send('I am listening');`
+  - The server uses the `ws` package to create a WebSocketServer that is listening on the same port the browser is using.
+  - By specifying a port when we create the WebSocketServer, we are telling the server to listen for HTTP connections on that port and to automatically upgrade them to a WebSocket connection if the request has a `connection: Upgrade` header.
+  - When a connection is detected, it calls the server's `on connection` callback.
+  - The server can then send messages with the `send` function, and register a callback using the `on message` function to receive messages.
+    - `const { WebSocketServer } = require('ws');`
+
+    - `const wss = new WebSocketServer({ port: 9900 });`
+
+    - `wss.on('connection', (ws) => {`
+      - `ws.on('message', (data) => {`
+          - `const msg = String.fromCharCode(...data);`
+          - `console.log('received: %s', msg);`
+
+          - ``ws.send(`I heard you say "${msg}"`);``
+      - `});`
+
+      - `ws.send('Hello webSocket');`
+    - `});`
+      - `const wss = new WebSocketServer({ port: 9900 });`: Here, we create an instance of WebSocketServer, listening on TCP port 9900. This means the server will accept WebSocket connections on ws://localhost:9900/.
+      - `wss.on('connection', (ws) => {...});`: This sets up an event listener for the `connection` event, which is emitted whenever a new client connects to the server. The callback function receives a `ws` (WebSocket object) representing the connection to the client.
+      - `ws.on('message', (data) => {...});`: Inside the connection event handler, another event listener is set up on the WebSocket object (`ws`) to listen for message events. These events are triggered whenever the server receives a new message from the connected client. The `data` argument contains the raw message data. This data is typically in a format that can include text or binary data (like Buffer objects in Node.js).
+      - `const msg = String.fromCharCode(...data);`: This line converts the message data (`data`) to a string. The `...data` syntax spreads the elements of data (which can be a Buffer or an array of byte values) as arguments to the `String.fromCharCode` method, which converts Unicode values into characters. This assumes that the incoming message data is in a byte format where each byte corresponds to an ASCII character.
+      - `console.log('received: %s', msg);`: This simply logs the received message to the console. The `%s` in the string is a placeholder for string substitution where `msg` will be inserted.
+      - `ws.send(`I heard you say "${msg}"`);`: This sends a message back to the client, acknowledging receipt of their message. The message being sent is constructed using a template literal, embedding the received message `msg` within a string.
+      - `ws.send('Hello WebSocket');`: As soon as a client connects, before any other interaction, the server sends a "Hello WebSocket" message to the client.
+
+# Debugging WebSocket
+- We can debug both sides of the WebSocket communication with VS Code to debug the server, and Chrome to debug the client.
+- When we do this, we will notice that Chrome's debugger has support specifically for working with WebSocket communication.
+- Debugging the Server
+  1. Create a directory named `textWebSocket` and change to that directory.
+  2. Run `npm init -y`.
+  3. Run `npm install ws`.
+  4. Open VS Code and create a file named `main.js`.
+  4. Paste the following code.
+    - Refer to `testWebSocket/main.js`.
+  5. Set breakpoints on the `ws.send` lines so we can inspect the code executing.
+  6. Start debugging by pressing `F5`.
+  6. The first time we may need to choose Node.js as the debugger.
+- Debugging the Client
+  1. Open the Chrome debugger by pressing `F12`.
+  2. Paste this code into the debugger console window and press enter to execute it.
+  2. Executing this code will immediately hit the server breakpoint.
+  2. Take a look at what is going on and then remove the breakpoint from the server.
+    - `const socket = new WebSocket('ws://localhost:9900');`
+
+    - `socket.onmessage = (event) => {`
+      - `console.log('received: ', event.data);`
+    - `};`
+  3. Select the `Network` tab and then select the HTTP message that was generated by the execution of the above client code.
+  4. With the HTTP message selected, we then click the `Messages` tab to view the WebSocket messages.
+  5. Send a message to the server by executing the following in the debugger console window.
+  5. This will cause the second server breakpoint to hit.
+  5. Explore and then remove the breakpoint from the server.
+    - `socket.send('I am listening');`
+  6. We should see the messages in the `Messages` debugger window.
+  7. Send some more messages and observe the communication back and forth without stopping at the breakpoints.
+
+# WebSocket Chat
+- With the understanding of what WebSockets are, the basics of using them from Node and the browser, and the ability to debug the communication, it is time to use WebSocket to build a simple chat application.
+- In this example, we will create an HTML page that uses WebSockets and displays the resulting chat.
+- The server will forward the WebSocket communication from the different clients.
+- Chat Client
+  - The HTML for the client provides an input for the user's name, an input for creating messages, and an element to display the messages that are sent and received.
+    - Refer to `testWebSocket/index.html`.
+    - `<!DOCTYPE html>`
+    - `<html lang="en">`
+      - `<head>`
+        - `<meta charset="UTF-8" />`
+        - `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`
+        - `<title>WebSocket Chat</title>`
+        - `<link rel="stylesheet" href="main.css" />`
+      - `</head>`
+      - `<body>`
+        - `<div class="name">`
+          - `<fieldset id="name-controls">`
+            - `<legend>My Name</legend>`
+            - `<input id="my-name" type="text" />`
+          - `</fieldset>`
+        - `</div>`
+
+        - `<fieldset id="chat-controls" disabled>`
+          - `<legend>Chat</legend>`
+          - `<input id="new-msg" type="text" />`
+          - `<button onclick="sendMessage()">Send</button>`
+        - `</fieldset>`
+
+        - `<div id="chat-text"></div>`
+      - `</body>`
+      - `<script src="chatClient.js"></script>`
+    - `</html>`
+  - The JavaScript for the application provides the interaction with the DOM for creating and displaying messages and manages the WebSockets in order to connect, send, and receive messages.
+    - Refer to `testWebSocket/index.js`.
+  - DOM Interaction
+    - We do not want to be able to send messages if the user has not specified a name. So we add an event listener on the name input and disable the chat controls if the name ever is empty.
+      - `const chatControls = document.querySelector('#chat-controls');`
+      - `const myName = document.querySelector('#my-name');`
+      - `myName.addEventListener('keyup', (e) => {`
+        - `chatControls.disabled = myName.value === '';`
+      - `});`
+        - `addEventListener('keyup', (e) => {...})`: This method is used to attach an event listener to the `myName` input element. The event that triggers the listener is `keyup`, which occurs whenever the user releases a key that they press while focused on the input element.
+        - `(e)`: This is the event object that contains details about the keyup event. It is often used to get information like which key was pressed.
+        - `chatControls.disabled = myName.value === '';`:
+          - `myName.value`: Accesses the current value (the text) inside the `myName` input field.
+          - `=== ''`: This checks whether the input field is empty (`myName.value` is an empty string).
+          - `chatControls.disabled`: Sets the `disabled` property of `chatControls`. If `myName.value` is an empty string (meaning the input field is empty), `chatControls.disabled` is set to `true` (disabling the control). Otherwise, it is set to `false` (enabling the control).
+    - We then create a function that will update the displayed messages by selecting the element with the `chat-text` ID and appending the new message to its HTML.
+    - Security-minded developers will realize that manipulating the DOM in this way will allow any chat user to execute code in the context of the application.
+    - After we get everything working, if we are interested, see if we can exploit this weakness.
+      - `function appendMsg(cls, from, msg) {`
+        - `const chatText = document.querySelector('#chat-text');`
+        - ``chatText.innerHTML = `<div><span class="${cls}">${from}</span>: ${msg}</div>` + chatText.innerHTML;``
+      - `}`
+        - `chatText.innerHTML = ... + chatText.innerHTML;`: This line prepends the new message HTML to the existing HTML of `chatText`. By adding the new message before the current `innerHTML`, it ensures that the latest message appears at the top of the chat container.
+    - When a user presses the `Enter` key in the message input, we want to send the message over the socket.
+    - We do this by selecting the DOM element with the `new-msg` ID and adding a listener that watches for the `Enter` keystroke.
+      - `const input = document.querySelector('#new-msg');`
+      - `input.addEventListener('keydown', (e) => {`
+        - `if (e.key === 'Enter') {`
+          - `sendMessage();`
+        - `}`
+      - `});`
+    - When `Enter` is pressed, the `sendMessage` function is called.
+    - This selects the text out of the `new-msg` element and the name out of the `my-name` element and sends that over the WebSocket.
+    - The value of the message element is then cleared so that it is ready for the next message.
+      - `function sendMessage() {`
+        - `const msgEl = document.querySelector('#new-msg');`
+        - `const msg = msgEl.value;`
+        - `if (!!msg) {`
+          - `appendMsg('me', 'me', msg);`
+          - `const name = document.querySelector('#my-name').value;`
+          - ``socket.send(`{"name":"${name}", "msg":"${msg}"}`);``
+          - `msgEl.value = '';`
+        - `}`
+      - `}`
+        - `!!msg`: This expression converts `msg` to a boolean. If `msg` is an empty string (""), `!!msg` will be `false`, otherwise `true`. It effectively checks whether the user has typed anything.
+        - `appendMsg('me', 'me', msg)`;: Calls the `appendMsg` function, which we have defined elsewhere, to add the message to the chat display. This function is used here to show the user's message in the chat interface immediately, without waiting for a round trip to and from the server.
+          - The parameters `'me', 'me'` suggest that the message's sender class and sender name are both labeled as "me", probably indicating that it is the message sent by the user at this client.
+  - WebSockect Connection
+    - Now we can set up our WebSocket.
+    - We want to be able to support both secure and non-secure WebSocket connections.
+    - To do this, we look at the protocol that is currently being used as represented by the `window.location.protocol` variable.
+    - If it is non-secure HTTP, then we set our WebSocket protocol to be non-secure WebSocket (`ws`).
+    - Otherwise, we use secure WebSocket(`wss`).
+    - We use that to then connect the WebSocket to the same location that we loaded the HTML from by referencing the `window.location.host` variable.
+      - // Adjust the WebSocket protocol to what is being used for HTTP
+      - `const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';`
+      - ``const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);``
+
+      - // Display that we have opened the webSocket
+      - `socket.onopen = (event) => {`
+        - `appendMsg('system', 'websocket', 'connected');`
+      - `};`
+    - When the WebSocket receives a message from a peer, it displays it using the `appendMsg` function.
+      - `socket.onmessage = async (event) => {`
+        - `const text = await event.data.text();`
+        - `const chat = JSON.parse(text);`
+        - `appendMsg('friend', chat.name, chat.msg);`
+      - `};`
+    - And if the WebSocket closes for any reason, we also display that to the user and disable the controls.
+      - `socket.onclose = (event) => {`
+        - `appendMsg('system', 'websocket', 'disconnected');`
+        - `document.querySelector('#name-controls').disabled = true;`
+        - `document.querySelector('#chat-controls').disabled = true;`
+      - `};`
+- Chat Server
+  - The chat server runs the web service, serves up the client code, manages the WebSocket connections, and forwards messages from peers.
+  - Web Service
+    - The web service is established using a simple Express application.
+    - Note that we serve up our client HTML, CSS, and JavaScript files using the `static` middleware.
+      - `const { WebSocketServer } = require('ws');`
+      - `const express = require('express');`
+      - `const app = express();`
+
+      - // Serve up our WebSocket client HTML
+      - `app.use(express.static('./public'));`
+
+      - `const port = process.argv.length > 2 ? process.argv[2] : 3000;`
+      - `server = app.listen(port, () => {`
+        - ``console.log(`Listening on ${port}`);``
+      - `});`
+  - WebSocket Server
+    - When we create our WebSocket, we do things a little differently than we did with the simple connection example.
+    - Instead of letting the WebSocketServer control both the HTTP connection and the upgrading to WebSocket, we want to use the HTTP connection that Express is providing and handle the upgrading to WebSocket ourselves.
+    - This is done by specifying the `noServer` option when creating the WebSocketServer and then handling the `upgrade` notification that occurs when a client requests the upgrade of the protocol from HTTP to WebSocket.
+      - // Create a WebSocket object
+      - `const wss = new WebSocketServer({ noServer: true });`
+
+      - // Handle the protocol upgrade from HTTP to WebSocket
+      - `server.on('upgrade', (request, socket, head) => {`
+        - `wss.handleUpgrade(request, socket, head, function done(ws) {`
+          - `wss.emit('connection', ws, request);`
+        - `});`
+      - `});`
+        - `const wss`: This declares a constant `wss`, which will reference the WebSocket server instance.
+        - `new WebSocketServer({ noServer: true })`: This constructs a new WebSocket server with the configuration `{ noServer: true }`.
+          - `noServer: true`: This option tells the `ws` library not to create a standalone server but to allow the developer to manually handle the server logic. This setup requires manual upgrading of the HTTP connection to a WebSocket connection, which is why the `server.on('upgrade', ...)` part is necessary.
+        - `server.on('upgrade', (request, socket, head) => { ... })`: This listens for 'upgrade' events on an existing HTTP server (`server`). The 'upgrade' event is triggered when the client requests an upgrade of the HTTP connection to a different protocol, WebSocket in this case.
+          - `request`: The HTTP upgrade request sent by the client. This includes headers that will negotiate the WebSocket connection, such as the `Sec-WebSocket-Key` header.
+          - `socket`: The network socket between the server and client. This is not yet a WebSocket; it is the raw socket that the HTTP connection was using, which can be converted to a WebSocket.
+          - `head`: A Buffer instance containing the first part of the request body that might have been received. This is important because a WebSocket client will send a part of the next WebSocket frame in its HTTP upgrade request.
+        - `wss.handleUpgrade(request, socket, head, function done(ws) {...})`: This method is provided by the `ws` library to handle the upgrade manually. It processes the client’s upgrade request, and if successful, upgrades the connection to WebSocket.
+          - `function done(ws)`: This callback is executed once the upgrade is successfully completed. The `ws` parameter represents the upgraded WebSocket.
+            - `wss.emit('connection', ws, request);`: This line manually emits the 'connection' event on the WebSocket server instance wss, passing it the new WebSocket (`ws`) and the upgrade request (`request`). This is needed because by setting `noServer: true`, the automatic emission of 'connection' events is disabled, so we must manually trigger them.
+        - When a WebSocket connection is established, the client sends an HTTP request to the server with an "Upgrade" header, indicating the request to switch protocols from HTTP to WebSockets. This initial request looks something like an HTTP GET request but specifies an upgrade:
+          - `GET /socket HTTP/1.1`
+          - `Host: localhost:9900`
+          - `Connection: Upgrade`
+          - `Upgrade: websocket`
+          - `Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==`
+          - `Sec-WebSocket-Version: 13`
+          - ...
+            - `Connection: Upgrade` & `Upgrade: websocket`: These headers tell the server that the client wishes to establish a WebSocket connection starting from this HTTP connection.
+            - `Sec-WebSocket-Key`: A base64-encoded random value that the server will use to form a response key to establish a WebSocket connection. This proves that the server understands the WebSocket protocol.
+            - The `head` parameter specifically refers to the first packet of the WebSocket frame that might already be part of the HTTP upgrade request. This is technically the beginning of the WebSocket communication which the client might send immediately after the headers, thinking the server will switch protocols quickly.
+              - Here is a slightly more detailed look at how the `head` might be used internally by `handleUpgrade`:
+                - Parse the Upgrade Request: The server reads and parses the HTTP headers.
+                - Detect Immediate Frame Data: The server checks if the `head` contains data (i.e., part of a WebSocket frame sent immediately after the HTTP request).
+                - Prevent Data Loss: It prepends this data to the socket's stream or handles it immediately as the first WebSocket message, ensuring no initial messages are lost or ignored.
+  - Forwarding Messages
+    - With the WebSocket server, we can use the `connection`, `message`, and `close` events to forward messages between peers.
+    - On connection, we insert an object representing the connection into a list of all connections from the chat peers.
+    - Then when a message is received, we loop through the peer connections and forward it on to everyone except the peer who initiated the request.
+    - Finally, we remove a connection from the peer connection list when it is closed.
+      - // Keep track of all the connections so we can forward messages
+      - `let connections = [];`
+
+      - `wss.on('connection', (ws) => {`
+        - `const connection = { id: connections.length + 1, alive: true, ws: ws };`
+        - `connections.push(connection);`
+
+        - // Forward messages to everyone except the sender
+        - `ws.on('message', function message(data) {`
+          - `connections.forEach((c) => {`
+            - `if (c.id !== connection.id) {`
+              - `c.ws.send(data);`
+            - `}`
+          - `});`
+        - `});`
+
+        - // Remove the closed connection so we don't try to forward any more
+        - `ws.on('close', () => {`
+          - `connections.findIndex((o, i) => {`
+            - `if (o.id === connection.id) {`
+              - `connections.splice(i, 1);`
+              - `return true;`
+            - `}`
+          - `});`
+        - `});`
+      - `});`
+        - `ws.on('close', () => {...})`: Adds an event listener for the 'close' event, which triggers when a client disconnects or their connection is otherwise closed.
+        - `connections.findIndex((o, i) => {...})`: Finds the index `i` of the connection `o` in the connections array where `o.id` matches the ID of the connection that just closed
+        - `connections.splice(i, 1)`;: Removes the closed connection from the connections array using `splice`, which deletes elements from an array starting from index `i`, removing 1 element in this case.
+        - `return true;`: Once the matching connection is found and removed, returns `true` to stop the search (though the `findIndex` method will stop after finding the first match by default).
+  - Keeping Connections Alive
+    - A WebSocket connection will eventually close automatically if no data is sent across it.
+    - In order to prevent that from happening, the WebSocket protocol supports the ability to send a `ping` message to see if the peer is still there and receive `pong` responses to indicate the affirmative.
+    - To make this work, we use `setInterval` to send out a `ping` every 10 seconds to each of our peer connections and clean up any connections that did not respond to our previous `ping`.
+      - `setInterval(() => {`
+        - `connections.forEach((c) => {`
+          - // Kill any connection that didn't respond to the ping last time
+          - `if (!c.alive) {`
+            - `c.ws.terminate();`
+          - `} else {`
+            - `c.alive = false;`
+            - `c.ws.ping();`
+          - `}`
+        - `});`
+      - `}, 10000);`
+    - In our `connection` handler, we listen for the `pong` response and mark the connection as alive.
+      - // Respond to pong messages by marking the connection alive
+      - `ws.on('pong', () => {`
+        - `connection.alive = true;`
+      - `});`
+    - Any connection that did not respond will remain in the not alive state and get cleaned up on the next pass.
+- Experiment
+  - We can find the complete example described above in the GitHub repository (refer to WebSocket Chat instructions).
+    1. Clone the repository.
+    2. Run `npm install` from a console window in the example directory.
+    3. Open up the code in VS Code and review what it is doing.
+    4. Run and debug the example by pressing `F5`.
+    4. We may need to select Node.js as the debugger the first time we run.
+    5. Open multiple browser windows and point them to `http://localhost:3000` and start chatting.
+    6. Use the browser's debugger to view the WebSocket communication.

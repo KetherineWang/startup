@@ -8,8 +8,6 @@ function getPlayerUsername() {
   console.log("Entered getPlayerUsername function");
 
   return localStorage.getItem("username") || "Unknown Player";
-
-  // return fetch("/api/username").then((response) => response.text());
 }
 
 function displayPlayerUsername() {
@@ -17,7 +15,7 @@ function displayPlayerUsername() {
 
   const username = getPlayerUsername();
 
-  const playerUsernameEl = document.querySelector(".playerUsername");
+  const playerUsernameEl = document.querySelector("#playerUsername");
   playerUsernameEl.textContent = username || "Unknown Player";
 }
 

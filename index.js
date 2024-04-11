@@ -157,7 +157,7 @@ secureApiRouter
     res.status(200).send({ message: "Emoji updated" });
   });
 
-// Endpoint to initializat, update, or reset the score
+// Endpoint to initialize, update, or reset the score
 secureApiRouter
   .route('/score')
   .post(async (req, res) => {

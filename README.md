@@ -55,12 +55,12 @@ journey through the lyrical landscapes of his songs.
   - Efficiently updating and rendering components based on user interactions and real-time data.
 
 ### Design
-![Login Page Design](/Images/LoginPageDesign.png)
-![Signup Page Design](/Images/SignupPageDesign.png)
-![Game Entrance Page Design](/Images/GameEntrancePageDesign.png)
-![Game Play Page Design](/Images/GamePlayPageDesign.png)
-![User Score Page Design](/Images/UserScorePageDesign.png)
-![Player Rank Page Design](/Images/PlayerRankPageDesign.png)
+![Login Page Design](/public/Images/LoginPageDesign.png)
+![Signup Page Design](/public/Images/SignupPageDesign.png)
+![Game Entrance Page Design](/public/Images/GameEntrancePageDesign.png)
+![Game Play Page Design](/public/Images/GamePlayPageDesign.png)
+![User Score Page Design](/public/Images/UserScorePageDesign.png)
+![Player Rank Page Design](/public/Images/PlayerRankPageDesign.png)
 
 ## HTML Deliverable
 - **HTML Pages**: six HTML pages that represent:
