@@ -149,14 +149,14 @@ secureApiRouter.get("/lyrics", (req, res) => {
 let lastEmojiClicked = "";
 
 // Endpoint to get and set the last emoji clicked
-secureApiRouter
-  .route("/emoji")
-  .get((req, res) => res.send(lastEmojiClicked))
-  .post((req, res) => {
-    lastEmojiClicked = req.body.emoji;
+// secureApiRouter
+//   .route("/emoji")
+//   .get((req, res) => res.send(lastEmojiClicked))
+//   .post((req, res) => {
+//     lastEmojiClicked = req.body.emoji;
 
-    res.status(200).send({ message: "Emoji updated" });
-  });
+//     res.status(200).send({ message: "Emoji updated" });
+//   });
 
 // Endpoint to initialize, update, or reset the score
 secureApiRouter

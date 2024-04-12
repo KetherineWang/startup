@@ -1,7 +1,7 @@
 // Event messages
 const gameEndEvent = 'gameEnd';
 const gameStartEvent = 'gameStart';
-const emojiReaction = "emojiClick"
+const emojiReaction = "emojiClick";
 
 const socket = configureWebSocket();
 
@@ -78,31 +78,31 @@ function handleEmojiClick() {
       localStorage.setItem("lastEmojiClicked", lastEmojiClicked);
       broadcastEvent(currentPlayerUsername, emojiReaction, lastEmojiClicked);
 
-      fetch("/api/emoji", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ emoji: lastEmojiClicked }),
-      });
+      // fetch("/api/emoji", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ emoji: lastEmojiClicked }),
+      // });
     });
   });
 }
 
-function getLastEmojiClicked() {
-  // console.log("Entered getLastEmojiClicked function")
+// function getLastEmojiClicked() {
+//   // console.log("Entered getLastEmojiClicked function")
 
-  return fetch("/api/emoji")
-    .then((response) => response.text())
-    .then((emoji) => {
-      console.log(`The last emoji clicked was: ${emoji}`);
-      return emoji;
-    })
-    .catch((error) => {
-      console.error("Error fetching the last emoji clicked:", error);
-      return "";
-    });
-}
+//   return fetch("/api/emoji")
+//     .then((response) => response.text())
+//     .then((emoji) => {
+//       console.log(`The last emoji clicked was: ${emoji}`);
+//       return emoji;
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching the last emoji clicked:", error);
+//       return "";
+//     });
+// }
 
 function skipQuestion() {
   console.log("Entered skipQuestion function");
@@ -202,8 +202,11 @@ function updateScore(isCorrect) {
 function configureWebSocket() {
   const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
   let socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
-  socket.onopen = (event) => {
+  socket.onopen = async (event) => {
     displayMsg('system', 'game', 'connected');
+
+    const currentPlayerUsername = await getPlayerUsername();
+    broadcastEvent(currentPlayerUsername, gameStartEvent, {});
   };
   socket.onclose = (event) => {
     displayMsg('system', 'game', 'disconnected');
@@ -218,9 +221,6 @@ function configureWebSocket() {
       displayMsg('player', msg.from, `${msg.value}`);
     }
   };
-
-  const currentPlayerUsername = getPlayerUsername();
-  socket.send(currentPlayerUsername + "started new game")
 
   return socket;
 }
