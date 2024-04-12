@@ -1,6 +1,7 @@
 // Event messages
-const GameEndEvent = 'gameEnd';
-const GameStartEvent = 'gameStart';
+const gameEndEvent = 'gameEnd';
+const gameStartEvent = 'gameStart';
+const emojiReaction = "emojiClick"
 
 const socket = configureWebSocket();
 
@@ -19,10 +20,10 @@ function getPlayerUsername() {
 function displayPlayerUsername() {
   console.log("Entered displayPlayerUsername function");
 
-  const username = getPlayerUsername();
+  const currentPlayerUsername = getPlayerUsername();
 
   const playerUsernameEl = document.querySelector("#playerUsername");
-  playerUsernameEl.textContent = username || "Unknown Player";
+  playerUsernameEl.textContent = currentPlayerUsername || "Unknown Player";
 }
 
 let counter = 0;
@@ -69,16 +70,20 @@ function handleEmojiClick() {
 
   document.querySelectorAll(".emoji").forEach((emoji) => {
     emoji.addEventListener("click", function (event) {
-      const reaction = emoji.textContent;
+      const lastEmojiClicked = emoji.textContent;
       //const reaction = this.textContent;
-      console.log(`Emoji ${reaction} clicked`);
+      console.log(`Emoji ${lastEmojiClicked} clicked`);
+
+      const currentPlayerUsername = getPlayerUsername();
+      localStorage.setItem("lastEmojiClicked", lastEmojiClicked);
+      broadcastEvent(currentPlayerUsername, emojiReaction, lastEmojiClicked);
 
       fetch("/api/emoji", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ emoji: reaction }),
+        body: JSON.stringify({ emoji: lastEmojiClicked }),
       });
     });
   });
@@ -114,9 +119,9 @@ function nextQuestion() {
 function endGame() {
   console.log("Entered endGame function");
 
-  let currentPlayerUsername = getPlayerUsername();
+  const currentPlayerUsername = getPlayerUsername();
   const currentPlayerScore = localStorage.getItem(`${currentPlayerUsername}_score`);
-  broadcastEvent(currentPlayerUsername, GameEndEvent, currentPlayerScore);
+  broadcastEvent(currentPlayerUsername, gameEndEvent, currentPlayerScore);
 
   document.querySelector("#end").addEventListener("click", () => {
     window.location.href = "score.html";
@@ -205,12 +210,17 @@ function configureWebSocket() {
   };
   socket.onmessage = async (event) => {
     const msg = JSON.parse(await event.data.text());
-    if (msg.type === GameEndEvent) {
+    if (msg.type === gameEndEvent) {
       displayMsg('player', msg.from, `scored ${msg.value}`);
-    } else if (msg.type === GameStartEvent) {
+    } else if (msg.type === gameStartEvent) {
       displayMsg('player', msg.from, `started a new game`);
+    } else if (msg.type === emojiReaction) {
+      displayMsg('player', msg.from, `${msg.value}`);
     }
   };
+
+  const currentPlayerUsername = getPlayerUsername();
+  socket.send(currentPlayerUsername + "started new game")
 
   return socket;
 }
