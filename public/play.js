@@ -240,56 +240,56 @@ function initPlay() {
 
 document.addEventListener("DOMContentLoaded", initPlay);
 
-let messageState = 0;
+// let messageState = 0;
 
-setInterval(() => {
-  addNewMessage();
-}, 1500);
+// setInterval(() => {
+//   addNewMessage();
+// }, 1500);
 
-async function addNewMessage() {
-  const notifications = document.querySelector("#notifications");
+// async function addNewMessage() {
+//   const notifications = document.querySelector("#notifications");
 
-  let newMessage;
-  if (messageState === 0) {
-    newMessage = createStartMessage();
-  } else if (messageState === 1) {
-    newMessage = createScoreMessage();
-  } else if (messageState === 2) {
-    newMessage = await createEmojiMessage();
-  }
+//   let newMessage;
+//   if (messageState === 0) {
+//     newMessage = createStartMessage();
+//   } else if (messageState === 1) {
+//     newMessage = createScoreMessage();
+//   } else if (messageState === 2) {
+//     newMessage = await createEmojiMessage();
+//   }
 
-  if (newMessage) {
-    notifications.insertBefore(newMessage, notifications.firstChild);
-    if (notifications.children.length > 15) {
-      notifications.removeChild(notifications.lastChild);
-    }
-  }
+//   if (newMessage) {
+//     notifications.insertBefore(newMessage, notifications.firstChild);
+//     if (notifications.children.length > 15) {
+//       notifications.removeChild(notifications.lastChild);
+//     }
+//   }
 
-  messageState = (messageState + 1) % 3;
-}
+//   messageState = (messageState + 1) % 3;
+// }
 
-function createStartMessage() {
-  const newStartMessage = document.createElement("div");
-  newStartMessage.className = "message";
-  newStartMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
-  return newStartMessage;
-}
+// function createStartMessage() {
+//   const newStartMessage = document.createElement("div");
+//   newStartMessage.className = "message";
+//   newStartMessage.innerHTML = `<span class="playerEvent">keshi</span> started a new game`;
+//   return newStartMessage;
+// }
 
-function createScoreMessage() {
-  const score = Math.floor(Math.random() * 100);
-  const newScoreMessage = document.createElement("div");
-  newScoreMessage.className = "message";
-  newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
-  return newScoreMessage;
-}
+// function createScoreMessage() {
+//   const score = Math.floor(Math.random() * 100);
+//   const newScoreMessage = document.createElement("div");
+//   newScoreMessage.className = "message";
+//   newScoreMessage.innerHTML = `<span class="playerEvent">keshi</span> scored ${score}`;
+//   return newScoreMessage;
+// }
 
-async function createEmojiMessage() {
-  const lastEmojiClicked = await getLastEmojiClicked();
-  if (lastEmojiClicked) {
-    const newEmojiMessage = document.createElement("div");
-    newEmojiMessage.className = "message";
-    newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${lastEmojiClicked}`;
-    return newEmojiMessage;
-  }
-  return null;
-}
+// async function createEmojiMessage() {
+//   const lastEmojiClicked = await getLastEmojiClicked();
+//   if (lastEmojiClicked) {
+//     const newEmojiMessage = document.createElement("div");
+//     newEmojiMessage.className = "message";
+//     newEmojiMessage.innerHTML = `<span class="playerEvent">keshi</span> ${lastEmojiClicked}`;
+//     return newEmojiMessage;
+//   }
+//   return null;
+// }
