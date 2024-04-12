@@ -114,6 +114,10 @@ function nextQuestion() {
 function endGame() {
   console.log("Entered endGame function");
 
+  let currentPlayerUsername = getPlayerUsername();
+  const currentPlayerScore = localStorage.getItem(`${currentPlayerUsername}_score`);
+  broadcastEvent(currentPlayerUsername, GameEndEvent, currentPlayerScore);
+
   document.querySelector("#end").addEventListener("click", () => {
     window.location.href = "score.html";
   });
@@ -202,7 +206,7 @@ function configureWebSocket() {
   socket.onmessage = async (event) => {
     const msg = JSON.parse(await event.data.text());
     if (msg.type === GameEndEvent) {
-      displayMsg('player', msg.from, `scored ${msg.value.score}`);
+      displayMsg('player', msg.from, `scored ${msg.value}`);
     } else if (msg.type === GameStartEvent) {
       displayMsg('player', msg.from, `started a new game`);
     }
