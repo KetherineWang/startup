@@ -2939,7 +2939,7 @@
          - `const apiRouter = express.Router();`
            - This line creates a new router object. Think of it as a mini-application capable only of performing middleware and routing functions. We have not defined any routes yet at this point; we have simply created an instance of a router that we will define routes on.
          - `` app.use(`/api`, apiRouter); ``
-           - Here, we are telling our main Express application (`app`) to use the router (`apiRouter`) for any requests that start with `/api`. This is a way of modularizing your routes and can be particularly useful for separating different API versions (e.g., `/api/v1`, `/api/v2`) or categorizing routes (e.g., `/api/users`, `/api/posts`).
+           - Here, we are telling our main Express application (`app`) to use the router (`apiRouter`) for any requests that start with `/api`. This is a way of modularizing our routes and can be particularly useful for separating different API versions (e.g., `/api/v1`, `/api/v2`) or categorizing routes (e.g., `/api/users`, `/api/posts`).
            - `app.use()` is a method to configure middleware in our Express application. When we pass `/api` as the first argument, we are specifying a path prefix. Therefore, the router `apiRouter` becomes active only for paths that start with `/api`.
            - After this line, any routes we define on `apiRouter` will be prefixed with `/api`. For example, if we define a route like `apiRouter.get('/users', callback)`, it will be accessible at `/api/users` in our application.
          - `apiRouter.get('/scores', (_req, res) => {`
@@ -3055,7 +3055,7 @@
           - `filename: (req, file, cb) => {`
             - `const filetype = file.originalname.split('.').pop();`
             - `const id = Math.round(Math.random() * 1e9);`
-            - `const filename = `${id}.${filetype}`;`
+            - ``const filename = `${id}.${filetype}`;``
             - `cb(null, filename);`
           - `},`
         - `}),`
@@ -3088,9 +3088,9 @@
       - `app.listen(3000, () => {`
         - `console.log('Server is running on port 3000');`
       - `});`
-        - `const upload = multer({...})`: This initializes `multer` with a specific configuration provided in the object. The resulting `upload` object is a middleware that can be used in your Express routes to handle file uploads.
-        - `storage: multer.diskStorage({...})`: This specifies that the uploaded files should be stored on the server's disk. The `diskStorage` engine gives you full control over storing files to disk.
-        - `destination: 'uploads/'`: This is a property of `diskStorage` that defines the folder where the files will be stored. In this case, files are saved in a folder named `uploads` at the root of your project directory.
+        - `const upload = multer({...})`: This initializes `multer` with a specific configuration provided in the object. The resulting `upload` object is a middleware that can be used in our Express routes to handle file uploads.
+        - `storage: multer.diskStorage({...})`: This specifies that the uploaded files should be stored on the server's disk. The `diskStorage` engine gives us full control over storing files to disk.
+        - `destination: 'uploads/'`: This is a property of `diskStorage` that defines the folder where the files will be stored. In this case, files are saved in a folder named `uploads` at the root of our project directory.
         - `filename: (req, file, cb) => {...}`: This function determines the name of the file on disk. It receives the request (`req`), the file object (`file`), and a callback function (`cb`) as arguments.
           - Inside the filename function:
             - `const filetype = file.originalname.split('.').pop();`: This extracts the file extension from the original filename by splitting the name at the period character and taking the last element of the resulting array (i.e., the file extension).
@@ -3290,7 +3290,7 @@
       - `const rentals = await cursor.toArray();`
       - `rentals.forEach((i) => console.log(i));`
         - `collection.find()`: This method is used to query documents from the MongoDB collection referred to by the `collection` variable. Without any arguments, `find()` retrieves all documents in the collection.
-        - The result of `find()` is not the documents themselves but a cursor. A cursor is a MongoDB concept that allows you to iterate over the results of a query. This is efficient for handling large datasets because it does not load all documents into memory at once.
+        - The result of `find()` is not the documents themselves but a cursor. A cursor is a MongoDB concept that allows us to iterate over the results of a query. This is efficient for handling large datasets because it does not load all documents into memory at once.
         - `await cursor.toArray()`: This line converts the cursor into an array of documents. The `await` keyword is used because `toArray()` returns a Promise. This operation fetches all documents the cursor points to and stores them in the `rentals` array. This step is where the actual database operation to retrieve documents occurs.
         - Note: Converting a cursor to an array is practical for relatively small datasets. For handling large collections, it is more efficient to use the cursor to iterate over documents one by one to avoid high memory usage.
         - `rentals.forEach(...)`: This iterates over each document in the `rentals` array. The `forEach` method takes a callback function as an argument, which is executed once for each document in the array.
@@ -3591,7 +3591,7 @@
 
   - Next, we need to securely store our passwords.
   - Failing to do so is a major security concern.
-  - If, and it has happened to many major companies, a hacker is able to access the database, they will have the passwords for all of your users.
+  - If, and it has happened to many major companies, a hacker is able to access the database, they will have the passwords for all of our users.
   - This may not seem like a big deal if our application is not very valuable, but users can often reuse passwords.
   - That means we will also provide the hacker with the means to attack the user on many other websites.
   - So instead of storing the password directly, we want to cryptographically hash the password so that we never store the actual password.
@@ -3813,7 +3813,7 @@
       - `ws.on('message', (data) => {...});`: Inside the connection event handler, another event listener is set up on the WebSocket object (`ws`) to listen for message events. These events are triggered whenever the server receives a new message from the connected client. The `data` argument contains the raw message data. This data is typically in a format that can include text or binary data (like Buffer objects in Node.js).
       - `const msg = String.fromCharCode(...data);`: This line converts the message data (`data`) to a string. The `...data` syntax spreads the elements of data (which can be a Buffer or an array of byte values) as arguments to the `String.fromCharCode` method, which converts Unicode values into characters. This assumes that the incoming message data is in a byte format where each byte corresponds to an ASCII character.
       - `console.log('received: %s', msg);`: This simply logs the received message to the console. The `%s` in the string is a placeholder for string substitution where `msg` will be inserted.
-      - `ws.send(`I heard you say "${msg}"`);`: This sends a message back to the client, acknowledging receipt of their message. The message being sent is constructed using a template literal, embedding the received message `msg` within a string.
+      - ``ws.send(`I heard you say "${msg}"`);``: This sends a message back to the client, acknowledging receipt of their message. The message being sent is constructed using a template literal, embedding the received message `msg` within a string.
       - `ws.send('Hello WebSocket');`: As soon as a client connects, before any other interaction, the server sends a "Hello WebSocket" message to the client.
 
 # Debugging WebSocket
@@ -4077,13 +4077,560 @@
 
 # Simon WebSocket
 - This deliverable demonstrates peer-to-peer communication using WebSocket.
-- The functionality that Simon provides for peer communication is itentionally limited to display notifications between users.
+- The functionality that Simon provides for peer communication is intentionally limited to displaying notifications between users.
 - This was done so that the application would clearly demonstrate how WebSocket works rather than clutter the application with functionality that uses WebSockets.
 - Handling WebSocket Requests
-  - After installing the `ws` NPM package, the next step is to attach WebSocket listener to the HTTP server that was created in an earlier deliverable.
+  - After installing the `ws` NPM package, the next step is to attach the WebSocket listener to the HTTP server that was created in an earlier deliverable.
   - This work is all one in the PeerProxy class implemented in the `peerProxy.js` file.
   - The PeerProxy class contains the protocol upgrade from HTTP to WebSocket, tracks new WebSocket connections, passes (or proxies) requests between connections, and implements ping/pong to keep connections alive.
 - Displaying and Generating WebSocket Messages
   - The `public/play.js` file contains the functions for connecting, broadcasting, receiving, and displaying events using WebSocket.
-  - Leveraging the concepts demonstrates in this deliverable, we can implement additional functionality that uses peer-to-peer interactions.
+  - Leveraging the concepts demonstrated in this deliverable, we can implement additional functionality that uses peer-to-peer interactions.
   - For example, we could make it so each connected peer has to complete of the Simon patterns in turn.
+
+# Web Frameworks
+- Web frameworks seek to make the job of writing web applications easier by providing tools for completing common application tasks.
+- This includes things like modularizing code, creating single-page applications, simplifying reactivity, and supporting diverse hardware devices.
+- Some frameworks take things beyond the standard web technologies (HTML, CSS, JavaScript) and create new hybrid file formats that combine things like HTML and JavaScript into a single file.
+- Examples of this include React, JSX, Vue SFC, and Svelte files.
+- Abstracting away the core web file formats puts the focus on functional components rather than files.
+- There are lots of web frameworks to choose from and they evolve all the time.
+- Each framework has advantages and disadvantages.
+- Some are very prescriptive (opinionated) about how to do things, some have major institutional backing, and others have a strong open source community.
+- Other factors we want to consider include how easy it is to learn, how it impacts productivity, how performant it is, how long it takes to build, and how actively the framework is evolving.
+- Hello World Examples
+  - For our class, we will use the web framework React.
+  - However, before we dig into React, let us look at how the major frameworks would render a simple hello world application.
+  - Vue
+    - Vue combines HTML, CSS, and JavaScript into a single file.
+    - HTML is represented by a `template` element that can be aggregated into other templates.
+    - SFC
+      - `<script>`
+        - `export default {`
+          - `data() {`
+            - `return {`
+              - `name: 'world',`
+            - `};`
+          - `},`
+        - `};`
+      - `</script>`
+
+      - `<style>`
+        - `p {`
+          - `color: green;`
+        - `}`
+      - `</style>`
+
+      - `<template>`
+        - `<p>Hello {{ name }}!</p>`
+      - `</template>`
+        - `export default` indicates that this is a Vue component definition being exported. This definition will include objects, methods, data, and other components.
+        - `data()` is a function that returns an object. The properties of this object represent the data that the component maintains. In Vue 2.x, `data` must always be a function in a component, to ensure each instance can maintain an independent copy of the returned data object
+        - Inside the returned object, `{ name: 'world' }` initializes a data property `name` with the value `'world'`. This data property `name` can be used in the template part of the SFC which would typically be found inside a `<template>` tag.
+  - Svelte
+    - Like Vue, Svelte combines HTML, CSS, and JavaScript into a single file.
+    - The difference here is that Svelte requires a transpiler to generate browser-ready code, instead of a runtime virtual DOM.
+    - Svelte File
+      - `<script>`
+        - `let name = 'world';`
+      - `</script>`
+
+      - `<style>`
+        - `p {`
+          - `color: green;`
+        - `}`
+      - `</style>`
+
+      - `<p>Hello {name}!</p>`
+  - React
+    - React combines JavaScript and HTML into its component format.
+    - CSS must be declared outside of the JSX file.
+    - The component itself highly leverages the functionality of JavaScript and can be represented as a function or class.
+    - JSX
+      - `import 'hello.css';`
+
+      - `const Hello = () => {`
+        - `let name = 'world';`
+
+        - `return <p>Hello {name}</p>;`
+      - `};`
+    - CSS
+      - `p {`
+        - `color: green;`
+      - `}`
+  - Angular Component
+    - An Angular component defines what JavaScript, HTML, and CSS are combined together.
+    - This keeps a fairly strong separation of files that are usually grouped together in a directory rather than using the single file representation.
+    - JS
+      - `@Component({`
+        - `selector: 'app-hello-world',`
+        - `templateUrl: './hello-world.component.html',`
+        - `styleUrls: ['./hello-world.component.css'],`
+      - `})`
+      - `export class HelloWorldComponent {`
+        - `name: string;`
+        - `constructor() {`
+          - `this.name = 'world';`
+        - `}`
+      - `}`
+        - The `selector` property is a string that specifies a CSS selector for an HTML element where the component will be instantiated. Essentially, it tells Angular what HTML tag to associate with this component. When Angular renders a component, it looks for an HTML element in the DOM that matches the component’s selector and then inserts the component’s template into that element.
+    - HTML
+      - `<p>hello {{name}}</p>`
+    - CSS
+      - `p {`
+        - `color: green;`
+      - `}`
+- Acronyms and Terms
+  - JSX = JavaScript XML
+  - Vue SFC = Vue Single-File Components
+  - Component/Component Format
+    - In the realm of software development, particularly in web and application development, the concept of a component or component format refers to a modular and reusable block of code that encapsulates a part of the user interface (UI).
+
+# React
+- React, and its associated projects, provide a powerful web programming framework.
+- The name React comes from its focus on making reactive web page components that automatically update based on user interactions or changes in the underlying data.
+- React abstracts HTML into a JavaScript variant called JSX.
+- JSX is converted into valid HTML and JavaScript using a preprocessor called Babel.
+- For example, the following is a JSX file.
+- Notice that it mixes both HTML and JavaScript into a single representation.
+  - `const i = 3;`
+  - `const list = (`
+    - `<ol class='big'>`
+      - `<li>Item {i}</li>`
+      - `<li>Item {3 + i}</li>`
+    - `</ol>`
+  - `);`
+- Babel will convert that into valid JavaScript:
+  - `const i = 3;`
+  - `const list = React.createElement(`
+    - `'ol',`
+    - `{ class: 'big' },`
+    - `React.createElement('li', null, 'Item ', i),`
+    - `React.createElement('li', null, 'Item ', 3 + i)`
+  - `);`
+- The `React.createElement` function will then generate DOM elements and monitor the data they represent for changes.
+- When a change is discovered, React will trigger dependent changes.
+
+# Components
+- React components allow us to modularize the functionality of our application.
+- This allows the underlying code to directly represent the components that a user interacts with.
+- It also enables code reuse as common application components often show up repeatedly.
+- The Render Function
+  - One of the primary purposes of a component is to generate the user interface.
+  - This is done with the component's `render` function.
+  - Whatever is returned from the `render` function is inserted into the component HTML element.
+  - As a simple example, a JSX file containing a React component element named `Demo` would cause React to load the `Demo` component, call the `render` function, and insert the result into the place of the `Demo` element.
+  - JSX
+    - `<div>`
+      - `Component: <Demo />`
+    - `</div>`
+  - Notice that `Demo` is not a valid HTML element.
+  - The transpiler will replace this tag with the resulting rendered HTML.
+  - React Component
+    - `function Demo() {`
+      - `const who = 'world';`
+      - `return <b>Hello {who}</b>;`
+    - `}`
+  - Resulting HTML
+    - `<div>Component: <b>Hello world</b></div>`
+- Properties
+  - React components also allow us to pass information to them in the form of element properties.
+  - The component receives the properties in its constructor and then can display them when it renders.
+  - JSX
+    - `<div>Component: <Demo who="Walke" /><div>`
+  - React Component
+    - `function Demo(props) {`
+      - `return <b>Hello {props.who}</b>;`
+    - `}`
+  - Resulting HTML
+    - `<div>Component: <b>Hello Walke</b></div>`
+- State
+  - In addition to properties, a component can have an internal state.
+  - Component state is created by calling the `React.useState` hook function.
+  - The `useState` function returns a variable that contains the current state and a function to update the state.
+  - The following example creates a state variable called `clicked` and toggles the click state in the `updateClicked` function that gets called when the paragraph text is clicked.
+    - `const Clicker = () => {`
+      - `const [clicked, updateClicked] = React.useState(false);`
+
+      - `const onClicked = (e) => {`
+        - `updateClicked(!clicked);`
+      - `};`
+
+      - ``return <p onClick={(e) => onClicked(e)}>clicked: {`${clicked}`}</p>;``
+    - `};`
+
+    - `const root = ReactDOM.createRoot(document.getElementById('root'));`
+    - `root.render(<Clicker />);`
+      1. Component Definition: `const Clicker = () => {...}`: This defines a functional component named `Clicker`. Functional components are simpler and more concise compared to class components.
+      2. useState Hook: `const [clicked, updateClicked] = React.useState(false);`: This line initializes a state variable `clicked` with the default value of `false`. The `useState` hook returns two items: the current state value (`clicked`) and a function that can update that value (`updateClicked`).
+      3. Event Handler Function:
+        - `const onClicked = (e) => {...}`: Defines an event handler that toggles the `clicked` state. Whenever the paragraph `<p>` is clicked, this function is executed.
+        - `updateClicked(!clicked)`;: This updates the `clicked` state to its opposite value (`true` if it is currently `false`, and vice versa).
+      4. Return Statement (JSX): `return <p onClick={(e) => onClicked(e)}>clicked: {${clicked}}</p>;`: This JSX code returns a paragraph element that displays the text `clicked:` followed by the current state of `clicked` (either `true` or `false`). The `onClick` attribute adds an event listener to the paragraph that calls `onClicked` when the paragraph is clicked.
+      5. Render the Component in the DOM:
+        - `ReactDOM.createRoot(document.getElementById('root'))`: This line finds an HTML element with the id `root` and creates a React root inside it. This root is where our React component will be rendered.
+        - `root.render(<Clicker />)`;: This method renders the `<Clicker />` component inside the root container. The rendered content (the `<p>` tag) will be inserted into the DOM inside the element with the id `root`.
+  - We should note that we can use JSX even without a function.
+  - A simple variable representing JSX will work any place we would otherwise provide a component.
+    - `const hello = <div>Hello</div>;`
+
+    - `ReactDOM.render(hello, document.getElementById('root'));`
+- Class Style Components
+  - In addition to the preferred `function style` components demonstrated above, React also supports `class style` components.
+  - However, we should note that the React team is moving away from the class style representation, and for that reason, we should probably not use it.
+  - With that said, we are likely to see class style components, so we should be aware of the syntax.
+  - Below is the equivalent class style component for the `Clicker` component that we created above.
+  - The major difference is that properties are loaded on the constructor and the state is set using a `setState` function on the component object,
+    - `class Clicker extends React.Component {`
+      - `constructor(props) {`
+        - `super(props);`
+        - `this.state = {`
+          - `clicked: false,`
+        - `};`
+      - `}`
+      - `onClicked() {`
+        - `this.setState({`
+          - `clicked: !this.state.clicked,`
+        - `});`
+      - `}`
+      - `render() {`
+        - ``return <p onClick={(e) => this.onClicked(e)}>clicked: {`${this.state.clicked}`}</p>;``
+      - `}`
+    - `}`
+
+    - `const root = ReactDOM.createRoot(document.getElementById('root'));`
+    - `root.render(<Clicker />);`
+      1. Class Definition: `class Clicker extends React.Component`: Defines a class `Clicker` that extends `React.Component`, inheriting functionality from the React framework for class components.
+      2. Constructor and State Initialization:
+        - `constructor(props)`: The constructor is a special method for creating and initializing an object created with a class. In React, if we implement the constructor for a class component, we should start with a call to `super(props)` to include React’s Component functionality and pass `props` to the base constructor.
+        - `this.state = { clicked: false };`: Initializes the state of the component with `clicked` set to `false`. The state is an object where we can store property values that belong to the component. When the state object changes, the component re-renders.
+- Reactivity
+  - A component's properties and state are used by the React framework to determine the reactivity of the interface.
+  - Reactivity controls how a component reacts to actions taken by the user or events that happen within the application.
+  - Whenever a component's state or properties change, the `render` function for the component and all of its dependent component `render` functions are called.
+- Assignment
+  - `function App() {`
+    - `return (`
+      - `<div>`
+        - `Function Style Component: <Demo who='function' initialColor='yellow' />`
+      - `</div>`
+    - `);`
+  - `}`
+
+  - `const Demo = ({ who, initialColor }) => {`
+    - `const [color, setColor] = React.useState(initialColor);`
+    - `const [outlook, setOutlook] = React.useState('beautiful');`
+
+    - `function changeOutlook() {`
+      - `setOutlook(outlook === 'exciting' ? 'beautiful' : 'exciting');`
+    - `}`
+
+    - `function changeColor() {`
+      - `var randomColor = Math.floor(Math.random() * 16777215).toString(16);`
+      - `setColor('#' + randomColor);`
+    - `}`
+
+    - `return (`
+      - `<div className='component' onMouseOver={changeColor} style={{ background: color }}>`
+        - `<p>`
+          - `Hello {outlook} {who}`
+        - `</p>`
+        - `<button onClick={changeOutlook}>change</button>`
+      - `</div>`
+    - `);`
+  - `};`
+  
+  - `ReactDOM.render(<App />, document.getElementById("root"));`
+
+# Toolchains
+- As web programming becomes more and more complex, it becomes necessary to abstract away some of that complexity with a series of tools.
+- Some common functional pieces in a web application toolchain include:
+  - Code repository: Stores code in a shared, versioned location.
+  - Linter: Removes, or warns of, non-idiomatic code usage.
+  - Prettier: Formats code according to a shared standard.
+  - Transpiler: Compiles code into a different format.
+    - For example, from JSX to JavaScript, TypeScript to JavaScript, or SCSS to CSS.
+  - Polyfill - Generates backward compatible code for supporting old browser versions that do not support the latest standards.
+  - Bundler - Packages code into bundles for delivery to the browser.
+    - This enables compatibility (for example with ES6 module support), or performance (with lazy loading).
+  - Minifier - Removes whitespace and renames variables in order to make code smaller and more efficient to deploy.
+  - Testing - Automated tests at multiple levels to ensure correctness.
+  - Deployment - Automated packaging and delivery of code from the development environment to the production environment.
+- The toolchain that we use for our React project consists of GitHub as the code repository, Vite for JSX, TS, development and debugging support, ESBuild for converting ES6 modules and transpiling (with Babel underneath), Rollup for bundling and tree shaking, PostCSS for CSS transpiling, and finally a simple bash script (`deployReact.sh`) for deployment.
+- We do not have to fully understand what each of these pieces in the chain is accomplishing, but the more we know about them the more we can optimize our development efforts.
+- In the following instructions, we will show how to use Vite to create a simple web application using the tools mentioned above.
+- We will then demonstrate how to convert our startup into a modern web application by converting Simon to use Vite and React.
+- Acronyms and Terms
+  - SCSS = Sassy Cascading Style Sheets
+  - ES6 = ECMAScript 6: JavaScript 6
+  - TS = TypeScript: It is a strongly typed programming language that builds on JavaScript.
+  - Lazy Loading: It means waiting to render content on a webpage until the user or the browser needs it.
+  - Tree Shaking: It is a term commonly used within a JavaScript context to describe the removal of dead code.
+  - Bash Script: It is a plain text file that contains a series of commands.
+
+# Vite
+- Now that we have covered the basics of React, we want to extend our usage to include a full web framework toolchain that allows us to use JSX, minification, polyfills, and bundling for our Simon and startup applications.
+- One common way for configuring our project to take advantage of these technologies is to use a Command Line Interface (CLI) to initially set up a web application.
+- Using a CLI saves us the trouble of configuring the toolchain parameters and gets us quickly started with a default application.
+- For our toolchain, we are going to use Vite.
+- Vite bundles our code quickly, has great debugging support, and allows us to easily support JSX, TypeScript, and different CSS flavors.
+- To get started with Vite, let us first build a simple web application.
+- Later, we will convert Simon over to React using Vite.
+- This will teach us what we need to know in order to move our startup to React.
+- To create a new React-based web application using Vite, open our console and run the following commands:
+  - `npm create vite@latest demoVite -- --template react`
+  - `cd demoVite`
+  - `npm install`
+  - `npm run dev`
+- This will create a new web application in the `demoVite` directory, download the required 3rd party packages, and start up the application using a local HTTP debugging server.
+- We can tell Vite to open our browser to the URL that is hosting our application by pressing `o`, or press `h` to see all of the Vite CLI options.
+- Once we have played around with the application in our browser, we can return to our console and stop Vite from hosting the application by pressing `q`.
+- Generated Project
+  - Now, let us explore the application files that Vite created.
+  - From the console, use VS Code (`code .`) to open the project directory and take a look at the files. 
+  - Directory: `./`
+    - File: `index.html`
+      - Purpose: Primary page for the application. This is the starting point to load all of the JSX components beginning with `main.jsx`.
+    - File: `package.json`
+      - Purpose: NPM definition for package dependencies and script commands. This is what maps `npm run dev` to actually start up Vite.
+    - File: `package-lock.json`
+      - Purpose: Version constraints for included packages (do not edit this).
+    - File: `vite.config.js`
+      - Purpose: Configuration setting for Vite. Specifically, this sets up React for development.
+  - Directory: `./public`
+    - File: `vite.svg`
+      - Purpose: Vite logo for use as a favicon and for display in the app.
+  - Directory: `./src`
+    - File: `main.jsx`
+      - Purpose: Entry point for code execution. This simply loads the App component found in `App.jsx`.
+      - `<React.StrictMode>` is a wrapper component that checks the code of its children components for unsafe lifecycles, deprecated patterns, and other potential issues that could lead to suboptimal performance and bugs, especially as React libraries evolve. It is only active in the development build; it does not impact the production build, meaning none of its checks run in production. This helps to catch problems early without affecting  performance for end users.
+    - File: `index.css`
+      - Purpose: CSS for the entire application.
+    - File: `App.jsx`
+      - Purpose: JSX for top-level application component. This displays the logs and implements the click counter.
+    - File: `App.css`
+      - Purpose: CSS for the top-level application component.
+  - Directory: `./src/assets`
+    - File: `react.svg`
+      - Purpose: React logo for display in the app.
+  - The main files in the application are `index.html`, `main.jsx`, and `App.jsx`.
+  - The browser loads `index.html` which provides the HTML element (`#root`) that the React application will be injected into.
+  - It also includes the script element to load `main.jsx`.
+  - `main.jsx` creates the React application by associating the `#root` element with the `App` component found in `App.jsx`.
+  - This causes all of the component render functions to execute and the generated HTML, CSS, and JavaScript to be executed in `index.html`.
+- JSX vs. JS
+  - The Vite CLI uses the `.jsx` extension for JSX files instead of the JavaScipt `.js` extension.
+  - The Babel transpiler will work with either one, but some editor tools will work differently based on the extension.
+  - For this reason, we should prefer `.jsx` for files that contain JSX.
+- Building A Production Release
+  - When we execute `npm run dev`, we are bundling the code to a temporary directory that the Vite debug HTTP server loads from.
+  - When we want to bundle our application so that we can deploy it to a production environment, we need to run `npm run build`.
+  - This executes the `build` script found in our `package.json` and invokes the Vite CLI.
+  - `vite build` transpiles, minifies, injects the proper JavaScript, and then outputs everything to a deployment-ready version contained in a distribution subdirectory named `dist`.
+- Deploying A Production Release
+  - The deployment script for Simon React (`deployReact.sh`) creates a production distribution by calling `npm run build` and then copying the resulting `dist` directory to our production server.
+  - Take some time to build a production release by running `npm run build`.
+  - Then examine what Vite actually builds by examining the `dist` directory.
+  - For example, if we look at the `dist/assets` directory, we will see the bundled and minified JavaScript and CSS files.
+
+# Router
+- A web framework router provides essential functionality for single-page applications.
+- With a multiple-webpage application, the headers, footers, navigation, and common components must be either duplicated in each HTML page or injected before the server sends the page to the browser.
+- With a single-page application, the browser only loads one HTML page and then JavaScript is used to manipulate the DOM and give it the appearance of multiple pages.
+- The router defines the routes a user can take through the application and automatically manipulates the DOM to display the appropriate framework components.
+- React does not have a standard router package, and there are many that we can choose from.
+- We will use react-router-dom version 6.
+- The simplified routing functionality of react-router-dom derives from the project react-router for its core functionality.
+- Do not confuse the two, or versions of react-router-dom before version 6, when reading tutorials and documentation.
+- A basic implementation of the router consists of a `BrowserRouter` component that encapsulates the entire application and controls the routing action.
+- The `link`, or `NavLink`, component captures user navigation events and modifies what is rendered by the `Routes` component by matching up the `to` and `path` attributes.
+  - // Inject the router into the application root DOM element
+  - `const root = ReactDOM.createRoot(document.getElementById('root'));`
+  - `root.render(`
+    - // BrowserRouter component that controls what is rendered
+    - // NavLink component captures user navigation requests
+    - // Routes component defines what component is routed to
+    - `<BrowserRouter>`
+      - `<div className='app'>`
+        - `<nav>`
+          - `<NavLink to='/'>Home</Link>`
+          - `<NavLink to='/about'>About</Link>`
+          - `<NavLink to='/users'>Users</Link>`
+        - `</nav>`
+
+        - `<main>`
+          - `<Routes>`
+            - `<Route path='/' element={<Home />} exact />`
+            - `<Route path='/about' element={<About />} />`
+            - `<Route path='/users' element={<Users />} />`
+            - `<Route path='*' element={<Navigate to='/' replace />} />`
+          - `</Routes>`
+        - `</main>`
+      - `</div>`
+    - `</BrowserRouter>`
+  - `);`
+    1. `<BrowserRouter>`:
+      - Purpose: The `<BrowserRouter>` component uses the HTML5 history API (pushState, replaceState, and the popstate event) to keep our UI in sync with the URL. It listens to changes in the URL and updates the page content accordingly without reloading the page.
+      - Functionality: It wraps around the entire part of the app that should respond to route changes. In our case, it wraps the navigation links and the route definitions.
+    2. `<NavLink>`:
+      - Purpose: `<NavLink>` is a special version of the `<Link>` component that will add styling attributes to the rendered element when it matches the current URL.
+      - Functionality: In our code, `<NavLink>` is used to create links that users can click to navigate different pages (Home, About, Users). It behaves like an `<a>` tag in HTML but is enhanced to work with React Router's in-app navigation system.
+        - `to`: This prop indicates the path that the link goes to.
+    3. `<Routes>` and `<Route>`:
+      - `<Routes>` Component:
+        - Purpose: This component is a container for Route components and manages which route should render based on the current URL.
+      - `<Route>` Component:
+        - `path`: Specifies the path of the URL.
+        - `element`: React component that will be rendered when the route is matched.
+        - `exact` (if provided, which it is not in react-router-dom version 6 anymore): Ensures that the path must be exactly matched. In our code snippet, `exact` seems to be mistakenly placed; it was necessary in react-router-dom version 5 and below but is not needed and not valid in version 6 because `<Routes>` now naturally uses exact matching by default.
+      - Handling 404 or Redirects:
+        - The last `<Route>` uses the path `' * '` which matches anything that has not already been matched by earlier routes.
+        - `<Navigate to='/' replace />`: This will redirect any unknown URLs to the home route. The `replace` prop makes sure that the redirection will replace the current entry in the history stack instead of adding a new one.
+
+# Reactivity
+- Making the UI react to changes in user input or data, is one of the architectural foundations of React.
+- React enables reactivity with three major pieces of a React component: `props`, `state`, and `render`.
+- When a component's JSX is rendered, React parses the JSX and creates a list of any references to the component's `state` or `prop` objects.
+- React then monitors those objects and if it detects that they have changed, it will call the component's `render` function so that the impact of the change is visualized.
+- The following example contains two components: a parent `<Survey/>` component and a child `<Question/>` component.
+- The `<Survey/>` has a state named `color`.
+- The `<Question/>` has a property named `answer`.
+- The `<Survey/>` passes its `color` state to the `<Question/>` as a property.
+- This means that any change to the `<Survey/>`'s color will also be reflected in the `<Question>`'s color.
+- This is a powerful means for a parent to control a child's functionality.
+- Be careful about our assumptions of when the state is updated.
+- Just because we called `updateState` does not mean that we can access the updated state on the next line of the code.
+- The update happens asynchronously, and therefore we never really know when it is going to happen.
+- We only know that it will eventually happen.
+  - `const Survey = () => {`
+    - `const [color, updateColor] = React.useState('#737AB0');`
+
+    - // When the color changes update the state
+    - `const onChange = (e) => {`
+      - `updateColor(e.target.value);`
+    - `};`
+
+    - `return (`
+      - `<div>`
+        - `<h1>Survey</h1>`
+
+        - {/* Pass the `<Survey/>` color as a parameter to the `<Question/>`.
+            - When the color changes, the `<Question/>` parameter will also be updated and rendered. */}
+        - `<Question answer={color} />`
+
+        - `<p>`
+          - `<span>Pick a color: </span>`
+          - {/* Set the `<Survey/>` color state as the value of the color picker.
+              - When the color changes, the value will also be updated and rendered. */}
+          - `<input type='color' onChange={(e) => onChange(e)} value={color} />`
+        - `</p>`
+      - `</div>`
+    - `);`
+  - `};`
+
+  - // The Question component
+  - `const Question = ({ answer }) => {`
+    - `return (`
+      - `<div>`
+        - {/* Answer rerendered whenever the parameter changes */}
+        - `<p>Your answer: {answer}</p>`
+      - `</div>`
+    - `);`
+  - `};`
+
+  - `ReactDOM.render(<Survey />, document.getElementById('root'));`
+
+# React Hooks
+- React hooks allow React function style components to be able to do everything that a class style component can do and more.
+- Additionally, as new features are added to React, they are included as hooks.
+- This makes function style components the preferred way of doing things in React.
+- We have already seen one use of hooks to declare and update state in a function component with the `useState` hook.
+  - `function Clicker({initialCount}) {`
+    - `const [count, updateCount] = React.useState(initialCount);`
+    - `return <div onClick={() => updateCount(count + 1)}>Click count: {count}</div>;`
+  - `}`
+
+  - `ReactDOM.render(<Clicker initialCount={3} />, document.getElementById('root'));`
+- useEffect Hook
+  - The `useEffect` hook allows us to represent lifecycle events.
+  - For example, if we want to run a function every time the component completes rendering, we could do the following.
+    - `function UseEffectHookDemo() {`
+      - `React.useEffect(() => {`
+        - `console.log('rendered');`
+      - `});`
+
+      - `return <div>useEffectExample</div>;`
+    - `}`
+
+    - `ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));`
+  - We can also take action when the component cleans up by returning a cleanup function from the function registered with `useEffect`.
+  - In the following example, every time the component is clicked, the state changes and so the component is re-rendered.
+  - This causes both the cleanup function to be called in addition to the hook function.
+  - If the function was not rendered, then only the cleanup function would be called.
+    - `function UseEffectHookDemo() {`
+      - `const [count, updateCount] = React.useState(0);`
+      - `React.useEffect(() => {`
+        - `console.log('rendered');`
+
+        - `return function cleanup() {`
+          - `console.log('cleanup');`
+        - `};`
+      - `});`
+
+      - `return <div onClick={() => updateCount(count + 1)}>useEffectExample {count}</div>;`
+    - `}`
+
+    - `ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));`
+  - This is useful when we want to create side effects for things such as tracking when a component is displayed or hidden, or creating and disposing of resources.
+- Hook Dependencies
+  - We can control what triggers a `useEffect` hook by specifying its dependencies.
+  - In the following example, we have two state variables, but we only want the `useEffect` hook to be called when the component is initially called and when the first variable is clicked.
+  - To accomplish this, we pass an array of dependencies as a second parameter to the `useEffect` call.
+    - `function UseEffectHookDemo() {`
+      - `const [count1, updateCount1] = React.useState(0);`
+      - `const [count2, updateCount2] = React.useState(0);`
+
+      - `React.useEffect(() => {`
+        - ``console.log(`count1 effect triggered ${count1}`);``
+      - `}, [count1]);`
+
+      - `return (`
+        - `<ol>`
+          - `<li onClick={() => updateCount1(count1 + 1)}>Item 1 - {count1}</li>`
+          - `<li onClick={() => updateCount2(count2 + 1)}>Item 2 - {count2}</li>`
+        - `</ol>`
+      - `);`
+    - `}`
+
+    - `ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));`
+  - If we specify an empty array `[]` as the hook dependency, then it is only called when the component is first rendered.
+  - Note that hooks can only be used in function style components and must be called at the top scope of the function.
+  - That means a hook cannot be called inside of a loop or conditional.
+  - This restriction ensures that hooks are always called in the same order when a component is rendered.
+
+# Simon React
+- This deliverable demonstrates using React as a web framework and Vite as our frontend tooling.
+- This helps with tasks such as building modular components, providing reactive UI elements, supporting sessions, lazy loading, and reducing (minifying) the size of our application.
+- As part of the move to React, we convert Simon from a multi-page application to a single-page application.
+- In a single-page application, the browser only loads a single HTML file (`index.html`), and then we use JavaScript to interactively change the rendered content and components.
+- This is a significant architectural shift to the application and will require us to recognize our code to fit the single-page, component driven, mode.
+- Steps to Convert Simon to React
+  - The following section discusses the general steps taken to convert the Simon application from a simple HTML/CSS/JavaScript application to a React application.
+  - We will need to take similar steps for our startup project, so it is important to understand what is happening at each step of the conversion process.
+  - We do not necessarily have to go through this process with the Simon demonstration application, but it is a safe place to try since we have both the starting version (simon-websocket) and the ending version (simon-react) to reference.
+  - We begin by introducing `Vite`, our frontend tooling.
+  - The HTML, CSS, and JavaScript is then reworked into React components.
+  - The React components are then reworked to take advantage of functionality that React provides.
+  - This includes function style components, modularization, reactive interactions, and a React representation of Bootstrap.
+  - Here is a complete list of all the steps involved to convert Simon to a React application.
+  - When we port our startup to React, we will want to commit our changes as we complete each step in the process.
+    1. Clone the `simon-websocket` repository.
+    2. Reorganize the code
+    3. Install and configure Vite
+    4. Convert to React Bootstrap
+    5. Enable React
+    6. Create app component
+    7. Create view components
+    8. Create the router
+    9. Convert sores component
+    10. Convert other components
