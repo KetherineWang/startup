@@ -4613,14 +4613,14 @@
 - This helps with tasks such as building modular components, providing reactive UI elements, supporting sessions, lazy loading, and reducing (minifying) the size of our application.
 - As part of the move to React, we convert Simon from a multi-page application to a single-page application.
 - In a single-page application, the browser only loads a single HTML file (`index.html`), and then we use JavaScript to interactively change the rendered content and components.
-- This is a significant architectural shift to the application and will require us to recognize our code to fit the single-page, component driven, mode.
+- This is a significant architectural shift to the application and will require us to recognize our code to fit the single-page, component-driven, model.
 - Steps to Convert Simon to React
   - The following section discusses the general steps taken to convert the Simon application from a simple HTML/CSS/JavaScript application to a React application.
   - We will need to take similar steps for our startup project, so it is important to understand what is happening at each step of the conversion process.
   - We do not necessarily have to go through this process with the Simon demonstration application, but it is a safe place to try since we have both the starting version (simon-websocket) and the ending version (simon-react) to reference.
   - We begin by introducing `Vite`, our frontend tooling.
-  - The HTML, CSS, and JavaScript is then reworked into React components.
-  - The React components are then reworked to take advantage of functionality that React provides.
+  - The HTML, CSS, and JavaScript are then reworked into React components.
+  - The React components are then reworked to take advantage of the functionality that React provides.
   - This includes function style components, modularization, reactive interactions, and a React representation of Bootstrap.
   - Here is a complete list of all the steps involved to convert Simon to a React application.
   - When we port our startup to React, we will want to commit our changes as we complete each step in the process.
@@ -4629,8 +4629,26 @@
     3. Install and configure Vite
     4. Convert to React Bootstrap
     5. Enable React
-    6. Create app component
+    6. Create an app component
     7. Create view components
     8. Create the router
     9. Convert sores component
     10. Convert other components
+    - Reorganize the Code
+      - Because we are hosting both the Simon React application and the Simon web service in the same project, we need to put them each in separate directories.
+      - We want the service code in a `service` directory and the React code in the `src` directory.
+      - To accomplish this, first delete the `node_modules` directory from the `simon` directory.
+      - Then move the service code (`package.json`, `package-lock.json`, `index.js`, `database.js`, `peerProxy.js`, and `dbConfig.json`) in to a subdirectory named `service`.
+      - Then run `npm install` in the `service` directory in order to get the NPM pacakges for the service.
+      - Once we move the service to the `service` directory, we can test that the service is still working by running `node index.js` from a console window in the `service` directory, or by pressing `F5` in VS Code.
+      - Try it out and make sure we can hist the service endpoints using `curl`.
+        - `curl 'localhost:3000/api/user/joe'`
+
+        - `{"msg":"Unknown"}`
+      - Next, we want to move the existing UI code to a location where Vite expects to find it.
+      - To do this, we move all of the files out of `public` into the project root directory.
+      - This will allow us to run our existing code under Vite to make sure everything is working.
+      - Once we start porting over to React, we will convert each of these files to React components located in a directory called `src`.
+      - From the root project directory, run:
+        - `mv public/* .`
+        - `rm -r public`
