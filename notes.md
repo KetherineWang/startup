@@ -4476,6 +4476,7 @@
       - Purpose: `<NavLink>` is a special version of the `<Link>` component that will add styling attributes to the rendered element when it matches the current URL.
       - Functionality: In our code, `<NavLink>` is used to create links that users can click to navigate different pages (Home, About, Users). It behaves like an `<a>` tag in HTML but is enhanced to work with React Router's in-app navigation system.
         - `to`: This prop indicates the path that the link goes to.
+      - Note: There is a typo in our code: `<NavLink to='/'>Home</Link>` should be `<NavLink to='/'>Home</NavLink>`.
     3. `<Routes>` and `<Route>`:
       - `<Routes>` Component:
         - Purpose: This component is a container for Route components and manages which route should render based on the current URL.
@@ -4486,6 +4487,17 @@
       - Handling 404 or Redirects:
         - The last `<Route>` uses the path `' * '` which matches anything that has not already been matched by earlier routes.
         - `<Navigate to='/' replace />`: This will redirect any unknown URLs to the home route. The `replace` prop makes sure that the redirection will replace the current entry in the history stack instead of adding a new one.
+- Assignment
+  - `function Home() {`
+    - `return <div className="home comp">Home</div>;`
+  - `}`
+    - This `<div>` would be styled with both the general `.comp` styles (flex display, centered text, thick dashed black border) and the specific `.home` styles (green border and background), and similarly for other component classes like `.users`, `.about`, and `.scores`.
+  - `<nav>`
+    - `<NavLink to="/">Home</NavLink>`
+    - `<NavLink to="/users">Users</NavLink>`
+    - `<NavLink to="/about">About</NavLink>`
+  - `</nav>`
+    - In CSS, we cannot directly use a `NavLink{}` selector because `NavLink` is a React component and not an HTML element or a standard CSS selector. However, we can style a `NavLink` component indirectly by targeting the underlying HTML element it renders as, usually an `<a>` tag, or by using class names. Since `NavLink` components render as `<a>` elements by default, we can use the `a{}` selector in our CSS to style them.
 
 # Reactivity
 - Making the UI react to changes in user input or data, is one of the architectural foundations of React.
@@ -4651,11 +4663,13 @@
       - Once we start porting over to React, we will convert each of these files to React components located in a directory called `src`.
       - From the root project directory, run:
         - `mv public/* .`
+          - `.`: This refers to the current directory. In Unix/Linux, `.` is a shorthand for the current working directory.
         - `rm -r public`
+          - `-r`: This option tells `rm` to be recursive, which is necessary when deleting directories. It means that `rm` should delete the directory and all its contents recursively.
     - Install and Configure Vite
       - While in our project root directory, install Vite as a development dependency by running:
         - `npm install vite@latest -D`
-          - `-D` means that `Vite` is only used to development purpose for debugging in the development environment.
+          - `-D` means that `Vite` is only used for development purposes for debugging in the development environment.
       - Then insert/replace the `scripts` found in the newly created `package.json` file located in our project root directory to include the commands for running Vite.
         - `"scripts": {`
           - `"dev": "vite",`
@@ -4689,3 +4703,62 @@
         - Without this, we will not be able to debug our React application in our development environment.
         - With our server running, and our files in the place where Vite expects them, we can test that everything still works.
         - We can start Vite in dev mode with the command `npm run dev`, followed by pressing the `o` key to open the application in the browser.
+    - Convert to React Bootstrap
+      - There is an NPM package called React Bootstrap that wraps the Bootstrap CSS framework in React components.
+      - This allows us to treat the Bootstrap widgets, such as Button and Model, as a React component instead of just imported CSS and JavaScript.
+      - To use the React version of Bootstrap, import the NPM package.
+        - `npm install bootstrap react-bootstrap`
+      - Now, in the components where we want to refer to the Bootstrap styles, we can import the Bootstrap style sheet from the imported NPM package just like we would other CSS files.
+        - `import 'bootstrap/dist/css/bootstrap.min.css';`
+      - To use a React Bootstrap component, we would import and reference the specific component we want to use.
+      - Here is an example of using the `Button` component.
+        - `import Button from 'react-bootstrap/Button';`
+
+        - `export function NavButton({ text, url }) {`
+          - `const navigate = useNavigate();`
+          - `return (`
+            - `<Button variant='primary' onClick={() => navigate({ url })}>`
+              - `{text}`
+            - `</Button>`
+          - `);`
+        - `}`
+      - For Simon, we converted the modal dialog and button implementations to use the React Bootstrap components.
+    - Enabling React
+      - We now have everything set up to start using React for the application.
+      - To make this happen, we need to install the React components for the basic functionality, DOM manipulation, and request routing to display individual components.
+      - React is installed by running the following console command:
+        - `npm install react react-dom react-router-dom`
+      - `index.html` and `index.jsx`
+        - With React, we have a single HTML file that dynamically loads all of the other application components into its DOM using JavaScript.
+        - We replace the existing `index.html` file with the following React version.
+          - `index.html`
+            - `<!DOCTYPE html>`
+            - `<html lang="en">`
+              - `<head>`
+                - `<meta charset="utf-8" />`
+                - `<link rel="icon" href="/favicon.ico" />`
+                - `<meta name="viewport" content="width=device-width, initial-scale=1" />`
+                - `<meta name="theme-color" content="#000000" />`
+
+                - `<title>Simon React</title>`
+              - `</head>`
+              - `<body>`
+                - `<noscript>You need to enable JavaScript to run this app.</noscript>`
+                - `<div id="root"></div>`
+                - `<script type="module" src="/index.jsx"></script>`
+              - `</body>`
+            - `</html>`
+              - `<meta name="theme-color" content="#000000" />`
+                - `name="theme-color"`: This attribute and value pair tells the browser that the metadata being specified is the theme color of the site. This is used by various browsers to enhance the display of the page or the surrounding user interface.
+                - `content="#000000"`: This attribute specifies the value associated with the `name` attribute. Here, `#000000 `represents the color black in hexadecimal color code format. This color value will be used by the browser as suggested.
+              - Content inside the `<noscript>` tag will only be displayed if JavaScript is disabled in the user's browser. If JavaScript is enabled, the browser will ignore the content inside the `<noscript>` tag.
+        - Notice that the `<div>` with an `id` of `root` is where all the content will be injected.
+        - The script reference for `index.jsx` causes an injection of the top level component named `App`.
+        - To hook the `index.html` to our top level `App` component, we create the following `index.jsx` file.
+        - `index.jsx`
+          - `import React from 'react';`
+          - `import ReactDOM from 'react-dom/client';`
+          - `import App from './src/app';`
+
+          - `const root = ReactDOM.createRoot(document.getElementById('root'));`
+          - `root.render(<App />);`
