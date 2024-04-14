@@ -4637,9 +4637,9 @@
     - Reorganize the Code
       - Because we are hosting both the Simon React application and the Simon web service in the same project, we need to put them each in separate directories.
       - We want the service code in a `service` directory and the React code in the `src` directory.
-      - To accomplish this, first delete the `node_modules` directory from the `simon` directory.
-      - Then move the service code (`package.json`, `package-lock.json`, `index.js`, `database.js`, `peerProxy.js`, and `dbConfig.json`) in to a subdirectory named `service`.
-      - Then run `npm install` in the `service` directory in order to get the NPM pacakges for the service.
+      - To accomplish this, first, delete the `node_modules` directory from the `Simon` directory.
+      - Then move the service code (`package.json`, `package-lock.json`, `index.js`, `database.js`, `peerProxy.js`, and `dbConfig.json`) into a subdirectory named `service`.
+      - Then run `npm install` in the `service` directory in order to get the NPM packages for the service.
       - Once we move the service to the `service` directory, we can test that the service is still working by running `node index.js` from a console window in the `service` directory, or by pressing `F5` in VS Code.
       - Try it out and make sure we can hist the service endpoints using `curl`.
         - `curl 'localhost:3000/api/user/joe'`
@@ -4652,3 +4652,40 @@
       - From the root project directory, run:
         - `mv public/* .`
         - `rm -r public`
+    - Install and Configure Vite
+      - While in our project root directory, install Vite as a development dependency by running:
+        - `npm install vite@latest -D`
+          - `-D` means that `Vite` is only used to development purpose for debugging in the development environment.
+      - Then insert/replace the `scripts` found in the newly created `package.json` file located in our project root directory to include the commands for running Vite.
+        - `"scripts": {`
+          - `"dev": "vite",`
+          - `"build": "vite build",`
+          - `"preview": "vite preview"`
+        - `}`
+      - Configuring Vite for Debugging
+        - When running in production, the Simon web service running under Node.js on port 3000 serves up the Simon React application code when the browser requests `index.html`.
+        - This is the same as we did with previous Simon deliverables.
+        - The service pulls those files from the application's static HTML, CSS, and JavaScript files located in the `public` directory that we set up when we build the production distribution package.
+        - However, when the application is running in debug mode in our development environment, we actually need two HTTP servers running: one for the Node.js backend HTTP server, and one for the Vite frontend HTTP server.
+        - This allows us to develop and debug both our backend and our frontend while viewing the results in the browser.
+        - By default, Vite uses port 5173 when running in development mode.
+        - Vite starts up the debugging HTTP server when we run `npm run dev`.
+        - That means the browser is going to send network requests to port 5173. 
+        - We can configure the Vite HTTP server to proxy service HTTP and WebSocket requests to the Node.js HTTP server by providing a configuration file named `vite.config.js` with the following contents.
+          - Refer to `startup/vite.config.js`.
+          - `import { defineConfig } from 'vite';`
+
+          - `export default defineConfig({`
+            - `server: {`
+              - `proxy: {`
+                - `'/api': 'http://localhost:3000',`
+                - `'/ws': {`
+                  - `target: 'ws://localhost:3000',`
+                  - `ws: true,`
+                - `},`
+              - `},`
+            - `},`
+          - `});`
+        - Without this, we will not be able to debug our React application in our development environment.
+        - With our server running, and our files in the place where Vite expects them, we can test that everything still works.
+        - We can start Vite in dev mode with the command `npm run dev`, followed by pressing the `o` key to open the application in the browser.
