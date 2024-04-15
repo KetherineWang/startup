@@ -1981,7 +1981,7 @@
   - Buying, or sub-leasing, an existing domain name from a private party can be very expensive, and so we are better off buying something obscure like `idigfor.gold` (currently available for only $101).
   - This is one reason why companies have such strange names these days.
 - Acronyms and Terms
-  - TLD = Top Level Domain
+  - TLD = Top-Level Domain
   - ICANN = Internet Corporation for Assigned Names and Numbers
   - CNAME = Canonical Name
   - TTL = Time to Live
@@ -4275,11 +4275,11 @@
     - `const hello = <div>Hello</div>;`
 
     - `ReactDOM.render(hello, document.getElementById('root'));`
-- Class Style Components
-  - In addition to the preferred `function style` components demonstrated above, React also supports `class style` components.
-  - However, we should note that the React team is moving away from the class style representation, and for that reason, we should probably not use it.
-  - With that said, we are likely to see class style components, so we should be aware of the syntax.
-  - Below is the equivalent class style component for the `Clicker` component that we created above.
+- Class-Style Components
+  - In addition to the preferred `function-style` components demonstrated above, React also supports `class-style` components.
+  - However, we should note that the React team is moving away from the class-style representation, and for that reason, we should probably not use it.
+  - With that said, we are likely to see class-style components, so we should be aware of the syntax.
+  - Below is the equivalent class-style component for the `Clicker` component that we created above.
   - The major difference is that properties are loaded on the constructor and the state is set using a `setState` function on the component object,
     - `class Clicker extends React.Component {`
       - `constructor(props) {`
@@ -4312,7 +4312,7 @@
   - `function App() {`
     - `return (`
       - `<div>`
-        - `Function Style Component: <Demo who='function' initialColor='yellow' />`
+        - `Function-Style Component: <Demo who='function' initialColor='yellow' />`
       - `</div>`
     - `);`
   - `}`
@@ -4553,9 +4553,9 @@
   - `ReactDOM.render(<Survey />, document.getElementById('root'));`
 
 # React Hooks
-- React hooks allow React function style components to be able to do everything that a class style component can do and more.
+- React hooks allow React function-style components to be able to do everything that a class-style component can do and more.
 - Additionally, as new features are added to React, they are included as hooks.
-- This makes function style components the preferred way of doing things in React.
+- This makes function-style components the preferred way of doing things in React.
 - We have already seen one use of hooks to declare and update state in a function component with the `useState` hook.
   - `function Clicker({initialCount}) {`
     - `const [count, updateCount] = React.useState(initialCount);`
@@ -4616,7 +4616,7 @@
 
     - `ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));`
   - If we specify an empty array `[]` as the hook dependency, then it is only called when the component is first rendered.
-  - Note that hooks can only be used in function style components and must be called at the top scope of the function.
+  - Note that hooks can only be used in function-style components and must be called at the top scope of the function.
   - That means a hook cannot be called inside of a loop or conditional.
   - This restriction ensures that hooks are always called in the same order when a component is rendered.
 
@@ -4633,7 +4633,7 @@
   - We begin by introducing `Vite`, our frontend tooling.
   - The HTML, CSS, and JavaScript are then reworked into React components.
   - The React components are then reworked to take advantage of the functionality that React provides.
-  - This includes function style components, modularization, reactive interactions, and a React representation of Bootstrap.
+  - This includes function-style components, modularization, reactive interactions, and a React representation of Bootstrap.
   - Here is a complete list of all the steps involved to convert Simon to a React application.
   - When we port our startup to React, we will want to commit our changes as we complete each step in the process.
     1. Clone the `simon-websocket` repository.
@@ -4753,8 +4753,8 @@
                 - `content="#000000"`: This attribute specifies the value associated with the `name` attribute. Here, `#000000 `represents the color black in hexadecimal color code format. This color value will be used by the browser as suggested.
               - Content inside the `<noscript>` tag will only be displayed if JavaScript is disabled in the user's browser. If JavaScript is enabled, the browser will ignore the content inside the `<noscript>` tag.
         - Notice that the `<div>` with an `id` of `root` is where all the content will be injected.
-        - The script reference for `index.jsx` causes an injection of the top level component named `App`.
-        - To hook the `index.html` to our top level `App` component, we create the following `index.jsx` file.
+        - The script reference for `index.jsx` causes an injection of the top-level component named `App`.
+        - To hook the `index.html` to our top-level `App` component, we create the following `index.jsx` file.
         - `index.jsx`
           - `import React from 'react';`
           - `import ReactDOM from 'react-dom/client';`
@@ -4762,3 +4762,9 @@
 
           - `const root = ReactDOM.createRoot(document.getElementById('root'));`
           - `root.render(<App />);`
+    - Create App Component
+      - To begin the transformation to using React components in our application, we create a top-level component, stored in `src/app.jsx`, and add some placeholder content that will get replaced later.
+      - In order for the styling to show up, we include Bootstrap, move the `main.css` content into a file named `src/app.css`, and import the CSS file into the `app.jsx` file.
+      - Because we do not have a `body` element in our `App` component, we modify the `app.css` so that the selector for the `body` element is changed to a class selector `.body`.
+
+      client, server, API, difference between Linux kernel and Linux shell, virtual machine, three major public cloud services, AWS S3 bucket, difference between primary key and foreign key, container, two dashboarding tools, DBMS, the concept of a minimal viable product
