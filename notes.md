@@ -4755,25 +4755,25 @@
         - Notice that the `<div>` with an `id` of `root` is where all the content will be injected.
         - The script reference for `index.jsx` causes an injection of the top-level component named `App`.
         - To hook the `index.html` to our top-level `App` component, we create the following `index.jsx` file.
-        - `index.jsx`
-          - `import React from 'react';`
-          - `import ReactDOM from 'react-dom/client';`
-          - `import App from './src/app';`
+          - `index.jsx`
+            - `import React from 'react';`
+            - `import ReactDOM from 'react-dom/client';`
+            - `import App from './src/app';`
 
-          - `const root = ReactDOM.createRoot(document.getElementById('root'));`
-          - `root.render(<App />);`
+            - `const root = ReactDOM.createRoot(document.getElementById('root'));`
+            - `root.render(<App />);`
     - Create App Component
       - To begin the transformation to using React components in our application, we create a top-level component, stored in `src/app.jsx`, and add some placeholder content that will get replaced later.
       - In order for the styling to show up, we include Bootstrap, move the `main.css` content into a file named `src/app.css`, and import the CSS file into the `app.jsx` file.
       - Because we do not have a `body` element in our `App` component, we modify the `app.css` so that the selector for the `body` element is changed to a class selector `.body`.
-      - `app.jsx`
-        - `import React from 'react';`
-        - `import 'bootstrap/dist/css/bootstrap.min.css';`
-        - `import './app.css';`
+        - `app.jsx`
+          - `import React from 'react';`
+          - `import 'bootstrap/dist/css/bootstrap.min.css';`
+          - `import './app.css';`
 
-        - `export default function App() {`
-          - `return <div className='body bg-dark text-light'>App will display here</div>;`
-        - `}`
+          - `export default function App() {`
+            - `return <div className='body bg-dark text-light'>App will display here</div>;`
+          - `}`
       - The result would not be very exciting, but this successfully demonstrates the first visible step towards moving to React.
       - To make `app.jsx` represent the actual Simon content, we enhance the `app.jsx` file to contain the header and footer HTML in each of our previous HTML files, into the return value for the `App` component function.
       - Next, we rename the `class` attribute to `className` so that it does not conflict with the JavaScript `class` keyword.
@@ -4833,12 +4833,88 @@
       - We place each of the stubbed components in a separate directory (e.g. `src/login/login.jsx`) so that we can keep all of the component files together.
       - Here is the `login.jsx` stub before any code is converted over.
       - The other components are similar.
-      - `import React from 'react';`
+        - `import React from 'react';`
 
-      - `export function Login() {`
-        - `return (`
-          - `<main className='container-fluid bg-secondary text-center'>`
-            - `<div>login displayed here</div>`
-          - `</main>`
+        - `export function Login() {`
+          - `return (`
+            - `<main className='container-fluid bg-secondary text-center'>`
+              - `<div>login displayed here</div>`
+            - `</main>`
+          - `);`
+        - `}`
+    - Create the Router
+      - With `app.jsx` containing the header and footer, and all the application view component stubs created, we can now create the router that will display each component as the navigation UI requests it.
+      - The router controls the whole application by determining what component to display based upon what navigation the user chooses.
+      - To implement the router, we import the router component into the `App` component, and wrap all of the `App` component's elements with the `BrowserRouter` component.
+      - We also import all of our view components.
+        - `import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';`
+        - `import { Login } from './login/login';`
+        - `import { Play } from './play/play';`
+        - `import { Scores } from './scores/scores';`
+        - `import { About } from './about/about';`
+
+        - `const root = ReactDOM.createRoot(document.getElementById('root'));`
+        - `root.render(`
+          - `<BrowserRouter>`
+            - `<div className='body bg-dark text-light'><!-- sub-elements here --></div>`
+          - `</BrowserRouter>`
         - `);`
-      - `}`
+      - Navigating Routes
+        - We then replace the `a` elements with the router's `NavLink` component.
+        - The anchor element's `href` attribute is replaced with the router's `to` attribute.
+        - The `NavLink` component prevents the browser's default navifation functionality and instead handles it by replacing the currrently displayed component.
+          - `<a className="nav-link" href="play.html">Play</a>`
+
+          - // to
+
+          - `<NavLink className='nav-link' to='play'>Play</NavLink>`
+        - The `nav` element's code now looks like the following.
+          - `<nav className='navbar fixed-top navbar-dark'>`
+            - `<div className='navbar-brand'>`
+              - `Simon<sup>&reg;</sup>`
+            - `</div>`
+            - `<menu className='navbar-nav'>`
+              - `<li className='nav-item'>`
+                - `<NavLink className='nav-link' to=''>`
+                  - `Login`
+                - `</NavLink>`
+              - `</li>`
+              - `<li className='nav-item'>`
+                - `<NavLink className='nav-link' to='play'>`
+                  - `Play`
+                - `</NavLink>`
+              - `</li>`
+              - `<li className='nav-item'>`
+                - `<NavLink className='nav-link' to='scores'>`
+                  - `Scores`
+                - `</NavLink>`
+              - `</li>`
+              - `<li className='nav-item'>`
+                - `<NavLink className='nav-link' to='about'>`
+                  - `About`
+                - `</NavLink>`
+              - `</li>`
+            - `</menu>`
+          - `</nav>`
+      - Injecting the Routed Component
+        - The router definitions are then inserted so that the router knows what component to display for a given path.
+        - The router changes the rendered component; it appers in the place of the `Routes` element.
+        - The `Routes` element replaces the `main` element in the component HTML.
+          - `<main>App components go here</main>`
+
+          - // to
+
+          - `<Routes>`
+            - `<Route path='/' element={<Login />} exact />`
+            - `<Route path='/play' element={<Play />} />`
+            - `<Route path='/scores' element={<Scores />} />`
+            - `<Route path='/about' element={<About />} />`
+            - `<Route path='*' element={<NotFound />} />`
+          - `</Routes>`
+        - Notice that the `*` (default matcher) was added to handle the case where an unknown path is requested.
+        - We handle this by creating a component for a path that is not found.
+        - We place this component at the bottom of our `src/app.jsx` file.
+          - `function NotFound() {`
+            - `return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;`
+          - `}`
+        - At this point, the application should support navigating to the different components.
