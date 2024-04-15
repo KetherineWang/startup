@@ -1,6 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
+import { Login } from './login/login'
+import { Play } from './play/play'
+import { Rank } from './rank/rank'
+
 
 export default function App() {
   return (
@@ -17,7 +21,9 @@ export default function App() {
             </nav>
         </header>
 
-        <main>App components go here</main>
+        <Login />
+        <Play />
+        <Rank />
 
         <footer className="container-fluid text-center text-black">
             <span className="authorName">Hongting (Ketherine) Wang</span>

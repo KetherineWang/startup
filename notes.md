@@ -4766,5 +4766,79 @@
       - To begin the transformation to using React components in our application, we create a top-level component, stored in `src/app.jsx`, and add some placeholder content that will get replaced later.
       - In order for the styling to show up, we include Bootstrap, move the `main.css` content into a file named `src/app.css`, and import the CSS file into the `app.jsx` file.
       - Because we do not have a `body` element in our `App` component, we modify the `app.css` so that the selector for the `body` element is changed to a class selector `.body`.
+      - `app.jsx`
+        - `import React from 'react';`
+        - `import 'bootstrap/dist/css/bootstrap.min.css';`
+        - `import './app.css';`
 
-      client, server, API, difference between Linux kernel and Linux shell, virtual machine, three major public cloud services, AWS S3 bucket, difference between primary key and foreign key, container, two dashboarding tools, DBMS, the concept of a minimal viable product
+        - `export default function App() {`
+          - `return <div className='body bg-dark text-light'>App will display here</div>;`
+        - `}`
+      - The result would not be very exciting, but this successfully demonstrates the first visible step towards moving to React.
+      - To make `app.jsx` represent the actual Simon content, we enhance the `app.jsx` file to contain the header and footer HTML in each of our previous HTML files, into the return value for the `App` component function.
+      - Next, we rename the `class` attribute to `className` so that it does not conflict with the JavaScript `class` keyword.
+      - The `className` keyword will get transpiled to valid HTML by our toolchain.
+      - When completed, the `App` component should look like this:
+        - `app.jsx`
+          - `export default function App() {`
+            - `return (`
+              - `<div className='body bg-dark text-light'>`
+                - `<header className='container-fluid'>`
+                  - `<nav className='navbar fixed-top navbar-dark'>`
+                    - `<div className='navbar-brand'>`
+                      - `Simon<sup>&reg;</sup>`
+                    - `</div>`
+                    - `<menu className='navbar-nav'>`
+                      - `<li className='nav-item'>`
+                        - `<a className='nav-link' href='index.html'>`
+                          - `Home`
+                        - `</a>`
+                      - `</li>`
+                      - `<li className='nav-item'>`
+                        - `<a className='nav-link' href='play.html'>`
+                          - `Play`
+                        - `</a>`
+                      - `</li>`
+                      - `<li className='nav-item'>`
+                        - `<a className='nav-link' href='scores.html'>`
+                          - `Scores`
+                        - `</a>`
+                      - `</li>`
+                      - `<li className='nav-item'>`
+                        - `<a className='nav-link' href='about.html'>`
+                          - `About`
+                        - `</a>`
+                      - `</li>`
+                    - `</menu>`
+                  - `</nav>`
+                - `</header>`
+
+                - `<main>App components go here</main>`
+
+                - `<footer className='bg-dark text-white-50'>`
+                  - `<div className='container-fluid'>`
+                    - `<span className='text-reset'>Author Name(s)</span>`
+                    - `<a className='text-reset' href='https://github.com/webprogramming260/simon-react'>`
+                      - `Source`
+                    - `</a>`
+                  - `</div>`
+                - `</footer>`
+              - `</div>`
+            - `);`
+          - `}`
+      - This will display the header, navigation elements, placeholder content, and the footer.
+    - Create View Components
+      - We now create React component files `login.jsx`, `play.jsx`, `scores.jsx`, and `about.jsx` to represent each of the application views.
+      - To begin with, these are just stubs that we will populate as we move functionality from the old `js` files into the `jsx` components.
+      - We place each of the stubbed components in a separate directory (e.g. `src/login/login.jsx`) so that we can keep all of the component files together.
+      - Here is the `login.jsx` stub before any code is converted over.
+      - The other components are similar.
+      - `import React from 'react';`
+
+      - `export function Login() {`
+        - `return (`
+          - `<main className='container-fluid bg-secondary text-center'>`
+            - `<div>login displayed here</div>`
+          - `</main>`
+        - `);`
+      - `}`
