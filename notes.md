@@ -4844,8 +4844,8 @@
         - `}`
     - Create the Router
       - With `app.jsx` containing the header and footer, and all the application view component stubs created, we can now create the router that will display each component as the navigation UI requests it.
-      - The router controls the whole application by determining what component to display based upon what navigation the user chooses.
-      - To implement the router, we import the router component into the `App` component, and wrap all of the `App` component's elements with the `BrowserRouter` component.
+      - The router controls the whole application by determining what component to display based on what navigation the user chooses.
+      - To implement the router, we import the router component into the `App` component and wrap all of the `App` component's elements with the `BrowserRouter` component.
       - We also import all of our view components.
         - `import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';`
         - `import { Login } from './login/login';`
@@ -4862,7 +4862,7 @@
       - Navigating Routes
         - We then replace the `a` elements with the router's `NavLink` component.
         - The anchor element's `href` attribute is replaced with the router's `to` attribute.
-        - The `NavLink` component prevents the browser's default navifation functionality and instead handles it by replacing the currrently displayed component.
+        - The `NavLink` component prevents the browser's default navigation functionality and instead handles it by replacing the currently displayed component.
           - `<a className="nav-link" href="play.html">Play</a>`
 
           - // to
@@ -4898,7 +4898,7 @@
           - `</nav>`
       - Injecting the Routed Component
         - The router definitions are then inserted so that the router knows what component to display for a given path.
-        - The router changes the rendered component; it appers in the place of the `Routes` element.
+        - The router changes the rendered component; it appears in the place of the `Routes` element.
         - The `Routes` element replaces the `main` element in the component HTML.
           - `<main>App components go here</main>`
 
@@ -4918,3 +4918,21 @@
             - `return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;`
           - `}`
         - At this point, the application should support navigating to the different components.
+    - Converting to React Components
+      - The code of each of the HTML pages needs to now be converted to the different React components.
+      - Each of the components is a bit different, and so we want to review them to determine what they look like as a React component.
+      - The basic steps for converting the component include the following.
+        - Copy the `main` element HTML over and put it in the return value of the component. Do not copy the header and footer HTML since they are now represented in `app.jsx`.
+        - Rename the `class` to `className` so that it does not conflict with the JavaScript keyword `class`.
+        - Copy the JavaScript over and turn the functions into inner functions of the React component.
+        - Move the CSS over to the component directory and use an `import` statement to bring it into the component's `jsx` file.
+        - Create React state variables for each of the stateful objects in the component.
+        - Replace DOM query selectors with React state variables.
+        - Move state up to parent components as necessary. For example, authentication state, or user name state.
+        - Create child components as necessary. For example, a `SimonGame` and `SimonButton` components.
+      - In order for us to have a feel of how this is done, we will demonstrate how this is done with the `scores` component.
+    - Convert `Scores` Component
+      - The first step to implementing the `scores` component is to create a state variable that will represent the scores that we read from the server.
+      - We will update the scores as a side effect when our `fetch` request to get the scores asynchronously completes.
+      - This is done with the following code:
+        - 

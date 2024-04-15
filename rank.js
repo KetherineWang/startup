@@ -4,7 +4,6 @@ function loadScores() {
   fetch("/api/rank")
     .then((response) => response.json())
     .then((data) => {
-      // Assuming `data` is an array of objects [{ username, score, date }, ...]
       const tableBodyEl = document.querySelector("#scores");
       tableBodyEl.innerHTML = "";
 
@@ -17,7 +16,7 @@ function loadScores() {
           const dateTdEl = document.createElement("td");
 
           positionTdEl.textContent = i + 1;
-          nameTdEl.textContent = playerInformation.username; // Adjusted for object structure
+          nameTdEl.textContent = playerInformation.username;
           scoreTdEl.textContent = playerInformation.score;
           dateTdEl.textContent = playerInformation.date;
 

@@ -1,9 +1,26 @@
 import React from 'react';
 
-export function Login() {
+import { Unauthenticated } from './unauthenticated';
+import { Authenticated } from './authenticated';
+import { AuthState } from './authState';
+
+export function Login({ username, authState, onAuthChange }) {
   return (
     <main>
-      <div>Login displayed here</div>
+      <div>
+        {authState !== AuthState.Unknown && <h1>Welcome to Simon</h1>}
+        {authState === AuthState.Authenticated && (
+          <Authenticated username={username} onLogout={() => onAuthChange(username, AuthState.Unauthenticated)} />
+        )}
+        {authState === AuthState.Unauthenticated && (
+          <Unauthenticated
+            username={username}
+            onLogin={(loginUsername) => {
+              onAuthChange(loginUsername, AuthState.Authenticated);
+            }}
+          />
+        )}
+      </div>
     </main>
   );
 }

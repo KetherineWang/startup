@@ -1,8 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Caveat:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rock+Salt&display=swap");
+
 .body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -19,6 +21,10 @@ header {
   font-weight: 500;
   font-size: 50px;
   margin-top: 15px;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: initial !important;
 }
 
 main {

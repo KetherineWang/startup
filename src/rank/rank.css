@@ -14,7 +14,7 @@ header {
 
 table {
     width: 80%;
-    background-color: rgba(80, 40, 40);
+    background-color: rgba(80, 40, 40) !;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.800);
 }
 
@@ -27,6 +27,10 @@ thead th {
     border-bottom: 5px solid white;
 }
 
+#scores tr {
+    background-color: rgba(80, 40, 40) !important;
+}
+
 tbody td {
     font-family: "Open Sans" sans-serif;
     color: white;
@@ -35,8 +39,8 @@ tbody td {
     border-bottom: 2px solid white;
 }
 
-tbody tr:hover {
-    background-color: rgba(50, 15, 15)
+#scores tr:hover {
+    background-color: rgba(50, 15, 15) !important;
 }
 
 
