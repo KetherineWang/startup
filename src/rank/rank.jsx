@@ -1,5 +1,4 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './rank.css';
 
 export function Rank() {
@@ -25,10 +24,10 @@ export function Rank() {
     for (const [i, score] of scores.entries()) {
       scoresRows.push(
         <tr key={i}>
-          <td>{i}</td>
-          <td>{score.usernname.split('@')[0]}</td>
+          <td>{i + 1}</td>
+          <td>{score.username}</td>
           <td>{score.score}</td>
-          <td>{score.date}</td>
+          <td>{new Date(new Date(score.date).getTime() + new Date(score.date).getTimezoneOffset() * 60000).toString()}</td>
         </tr>
       );
     }

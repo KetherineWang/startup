@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './login.css';
 
 import { Unauthenticated } from './unauthenticated';
@@ -6,6 +6,8 @@ import { Authenticated } from './authenticated';
 import { AuthState } from './authState';
 
 export function Login({ username, authState, onAuthChange }) {
+   console.log(authState);
+
   return (
     <main>
       <div>

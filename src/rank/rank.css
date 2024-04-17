@@ -1,5 +1,5 @@
 .body {
-    background-image: url("Images/Gabriel.png");
+    background-image: url("Images/Gabriel.png") !important;
 }
 
 header {

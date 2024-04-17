@@ -75,7 +75,7 @@ header {
   }
 }
   
-.lyrics {
+.apiLyrics {
     font-family: 'Caveat', cursive;
     text-align: center;
     color: #F5F5F5;
@@ -107,7 +107,7 @@ header {
     text-shadow: 5px 6px 7px rgba(255, 255, 255, 0.500);
 }
 
-.lyrics p {
+.apiLyrics p {
     padding: 30px;
     font-size: 2.0em;
     line-height: 1.5;

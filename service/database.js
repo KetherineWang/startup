@@ -50,7 +50,7 @@ async function updateScore(username, score) {
 
     const updatedScore = await scoreCollection.updateOne(
       { username: username },
-      { $set: { score: scoreToSet, date: new Date().toLocaleString() } },
+      { $set: { score: scoreToSet, date: new Date() } },
       { upsert: true }
     );
 

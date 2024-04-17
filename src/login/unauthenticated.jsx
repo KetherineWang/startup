@@ -1,24 +1,29 @@
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import {MessageDialog} from './messageDialog';
 
 import './login.css';
 
 export function Unauthenticated(props) {
+  console.log("Entered Unauthenticated component.");
+
+  const navigate = useNavigate();
+
   const [username, setUsername] = React.useState(props.username);
   const [password, setPassword] = React.useState('');
   const [displayError, setDisplayError] = React.useState(null);
+  const [displaySignup, setDisplaySignup] = React.useState(true);
 
-  async function loginUser() {
-    loginOrCreate(`/api/auth/login`);
+  async function loginOrCreateEndpoint() {
+    if (displaySignup) {
+      loginOrCreate(`/api/auth/login`);
+    } else {
+      loginOrCreate(`/api/auth/create`);
+    }
   }
 
-  async function createUser() {
-    loginOrCreate(`/api/auth/create`);
-  }
-
-  async function loginOrCreate(endpoint) {
+  async function loginOrCreate(endpoint) {    
     const response = await fetch(endpoint, {
       method: 'post',
       body: JSON.stringify({email: username, password: password}),
@@ -37,28 +42,31 @@ export function Unauthenticated(props) {
     }
   }
 
+  console.log(password)
+
   return (
     <>
-      <div class="login-box mt-5">
-        <div class="login-signup-form mt-2 mb-2 text-white" style="width: 100%">
+      <div className="login-box mt-5">
+        <div className="login-signup-form mt-2 mb-2 text-white" style={{width: '100%'}}>
           <div id="loginControls">
             <h2>Login</h2>
     
-            <div class="mb-3">
-              <label for="username" class="form-label">Email</label>
-              <input class="form-control" type="text" id="username" placeholder="Enter your email" />
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">Email</label>
+              <input className="form-control" type="text" id="username" onChange={(e) => setUsername(e.target.value)}
+ placeholder="Enter your email" />
             </div>
     
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input class="form-control" type="password" id="password" placeholder="Enter your password" />
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label" >Password</label>
+              <input className="form-control" type="password" id="password" onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
             </div>
-    
-            <Button type="button" class="login-button" variant="secondary" onClick={() => loginUser()}>Login</Button>
-    
-            <p class="mt-3" id="signup-prompt">
+
+            <Button type="button" className="login-button" variant="secondary" onClick={() => loginOrCreateEndpoint()}>{displaySignup ? "Login":"Signup"}</Button>
+        
+            <p className="mt-3" id="signup-prompt">
               Don't have an account?
-              <a href="signup.html" class="text-white">Sign up</a>
+              <a className="text-white" onClick={() => setDisplaySignup(!displaySignup)}>{displaySignup ? "Signup":"Login"}</a>
             </p>
           </div>
         </div>

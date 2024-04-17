@@ -7,6 +7,8 @@ import './login.css';
 import './authenticated.css';
 
 export function Authenticated(props) {
+  const navigate = useNavigate();
+  
   function logout() {
     fetch(`/api/auth/logout`, {
       method: 'delete',
@@ -25,11 +27,11 @@ export function Authenticated(props) {
   }
 
   return (
-    <div class="login-box mt-5">
+    <div className="login-box mt-5">
       <div id="playControls">
-        <div className='playerName'>{props.userName}</div>
+        <div className='playerName'>{props.username}</div>
         
-        <Button variant='light' onClick={() => useNavigate('/play')}>
+        <Button variant='light' onClick={() => navigate('/play')}>
           Continue to Play
         </Button>
         <Button variant='secondary' onClick={() => logout()}>

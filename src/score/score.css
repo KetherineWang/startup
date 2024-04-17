@@ -1,5 +1,5 @@
-body {
-    background-image: url("Images/AsLongAsItTakesYou.webp");
+.body {
+    background-image: url("Images/AsLongAsItTakesYou.webp") !important;
 }
 
 header {

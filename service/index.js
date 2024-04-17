@@ -28,6 +28,8 @@ app.use(`/api`, apiRouter);
 
 // CreateAuth token for a new user
 apiRouter.post("/auth/create", async (req, res) => {
+  console.log(req.body.password)
+  
   if (await DB.getUser(req.body.email)) {
     res.status(409).send({ msg: "Existing user" });
   } else {
@@ -45,6 +47,9 @@ apiRouter.post("/auth/create", async (req, res) => {
 // GetAuth token for the provided credentials
 apiRouter.post("/auth/login", async (req, res) => {
   const user = await DB.getUser(req.body.email);
+
+  console.log(req.body.email);
+  console.log(user)
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user.token);
@@ -100,8 +105,7 @@ const lyricsData = [
       "You never had a clue\nAll the days that I spent loving you\nWho am I supposed to give 'em to?",
     options: ["ANGEL", "GABRIEL", "LIMBO", "UNDERSTAND"],
     answer: "ANGEL",
-    soundCloud:
-      '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1234379731&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>',
+    soundCloud: "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1234379731&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
   },
   {
     isAnswered: false,
@@ -109,8 +113,7 @@ const lyricsData = [
       "'Cause you never know until you do\nIf I had to guess, I think it's you\nSo if I fake it\nWould it be true?",
     options: ["bandaids", "drunk", "blue", "us"],
     answer: "us",
-    soundCloud:
-      '<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/911450407&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>',
+    soundCloud: "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/911450407&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
   },
   {
     isAnswered: false,
@@ -165,6 +168,8 @@ secureApiRouter
     const { username, score } = req.body;
 
     await DB.updateScore(username, score);
+
+    res.sendStatus(200);
   });
 
 // Endpoint to get the current user's score
