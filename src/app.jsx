@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, NavLink, Route, Routes} from 'react-router-dom';
 
 import { Login } from './login/login'
+import { Signup } from './signup/signup'
 import { Play } from './play/play'
 import { Rank } from './rank/rank'
 import { Score } from './score/score'
@@ -47,6 +48,7 @@ function App() {
                         }
                         exact 
                     />
+                    <Route path='/signup' element={<Signup />} />
                     <Route path='/play' element={<Play />} />
                     <Route path='/score' element={<Score />} />
                     <Route path='/rank' element={<Rank />} />

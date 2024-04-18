@@ -1,10 +1,10 @@
-.body {
-    background-image: url("Images/AsLongAsItTakesYou.webp") !important;
+main.score {
+    background-image: url("/images/AsLongAsItTakesYou.webp");
 }
 
-header {
+/* header {
     background-color: rgba(3, 30, 30, 0.800);
-}
+} */
 
 @keyframes fly-in {
     0% {
@@ -37,14 +37,14 @@ header {
     }
 }
 
-.score {
+.playerScore {
     font-family: "Open Sans", sans-serif;
     color: white;
     width: 90%;
     animation: fly-in-bottom 1.5s ease-out;
 }
 
-.score h2 {
+.playScore h2 {
     font-size: 45px;
 }
 

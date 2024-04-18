@@ -9,9 +9,9 @@ export function Login({ username, authState, onAuthChange }) {
    console.log(authState);
 
   return (
-    <main>
+    <main className="login">
       <div>
-        {authState !== AuthState.Unknown && <h1>Welcome</h1>}
+        {authState === AuthState.Unknown && <h1>Welcome</h1>}
         {authState === AuthState.Authenticated && (
           <Authenticated username={username} onLogout={() => onAuthChange(username, AuthState.Unauthenticated)} />
         )}

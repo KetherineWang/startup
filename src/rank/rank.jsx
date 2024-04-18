@@ -40,7 +40,7 @@ export function Rank() {
   }
 
   return (
-    <main className="table text-center">
+    <main className="rank table text-center">
       <table>
           <thead>
               <tr>

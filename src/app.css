@@ -5,21 +5,19 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: "Open Sans", sans-serif !important;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   height: 100%;
   margin: 0;
 }
 
 header {
   flex: 0;
+  background-color: black;
 }
 
 .header-title h1 {
   font-family: 'Open Sans', sans-serif;
   font-weight: 500;
-  font-size: 50px;
+  font-size: 66px;
   margin-top: 15px;
 }
 
@@ -34,50 +32,24 @@ main {
   justify-content: center;
   align-items: center;
   padding: 20px;
-}
-
-.form-label {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-}
-
-.form-control {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-}
-
-.login-signup-form h2 {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 500;
-  font-size: 30px;
-  text-align: center
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-bottom: 0 !important;
 }
 
 footer {
   flex: 0;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
-  padding: 10px
+  padding: 10px;
+  background-color: black;
 }
 
 .nav-tabs {
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .authorName {
   font-weight: bold;
 }
-
-/* @media (max-height: 800px) {
-  header {
-    display: none;
-  }
-  footer {
-    display: none;
-  }
-  main {
-    padding: 20px 0;
-  }
-} */

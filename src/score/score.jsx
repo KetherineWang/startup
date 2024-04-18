@@ -41,11 +41,11 @@ export function Score() {
     };
 
     return (
-        <main>
+        <main className="score">
             <div className="congratulations mb-5">
                 <h1>Congratulations on your triumphal odyssey!</h1>
             </div>
-            <div className="score">
+            <div className="playerScore">
                 <h2 className="mb-3">Encore Performance!</h2>
                 <h3 className="mb-5">
                     With an impressive streak of 

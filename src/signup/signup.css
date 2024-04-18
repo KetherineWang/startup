@@ -1,10 +1,10 @@
-body {
-    background-image: url("Images/Skeletons.png");
+main.signup {
+    background-image: url("/images/Skeletons.png");
 }
 
-header {
+/* header {
     background-color: rgb(20, 60, 100, 0.800);
-}
+} */
 
 .signup-box {
     background-color: rgb(60, 100, 140);
@@ -16,6 +16,25 @@ header {
     align-items: center;
     justify-content: center;
     width: 50%;
+}
+
+.signup-form h2 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    text-align: center
+}
+
+.form-label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+}
+  
+.form-control {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
 }
 
 .signup-button {

@@ -1,10 +1,10 @@
-.body {
-    background-image: url("Images/BYS.png") !important;
+main.play {
+    background-image: url("/images/BYS.png");
 }
 
-header {
+/* header {
     background-color: rgb(200, 120, 10, 0.800);
-}
+} */
 
 .players {
     font-family: "Open Sans", sans-serif;

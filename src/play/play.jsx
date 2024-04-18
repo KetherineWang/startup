@@ -92,7 +92,7 @@ export function Play() {
   };
 
   return (
-    <main>
+    <main className="play">
       <PlayerInfo username={username} />
       <Lyrics lyric={lyricsData[counter] ? lyricsData[counter].lyric : "Loading..."} />
       <Emojis onEmojiClick={handleEmojiClick} emojis={['😍', '😭', '😂', '❤️', '👍', '👏']} />

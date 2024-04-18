@@ -1,10 +1,10 @@
-.body {
-    background-image: url("Images/Gabriel.png") !important;
+main.rank {
+    background-image: url("/images/Gabriel.png");
 }
 
-header {
+/* header {
     background-color: rgba(50, 15, 15, 0.8);
-}
+} */
 
 .table {
     display: flex;
